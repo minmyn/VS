@@ -78,19 +78,19 @@ public class UsuarioRepository {
 
     //Verificar usuario
     public Usuario findByEmailPsw(Usuario usuario) throws SQLException{
-        String sql = "SELECT correo_electronico, clave_acceso FROM usuario WHERE correo_electronico = ?";
+        String sql = "SELECT * FROM usuario WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql);
-        ) {
+             PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setString(1, usuario.getEmail());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    String email = resultSet.getString("correo_electronico");
-                    String clave = resultSet.getString("clave_acceso");
-                    return new Usuario(email, clave);
-                }
-                return null;
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Usuario usuarioBase = new Usuario();
+                usuarioBase.setIdUsuario(resultSet.getInt("usuario_id"));
+                usuarioBase.setEmail(resultSet.getString("correo_electronico"));
+                usuarioBase.setClave(resultSet.getString("clave_acceso"));
+                return usuarioBase;
             }
         }
+        return null;
     }
 }

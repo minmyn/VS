@@ -2,7 +2,6 @@ package org.vaquitas.repository;
 
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Animal;
-import org.vaquitas.model.Raza;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class AnimalRepository {
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
                 ganado.setEstatus(resultSet.getString("estado"));
                 ganado.setSexo(resultSet.getString("sexo"));
+                ganado.setIdRaza(resultSet.getInt("raza_id"));
                 animal.add(ganado);
             }
             return animal;
@@ -62,7 +62,7 @@ public class AnimalRepository {
                 ganado.setIdArete(resultSet.getInt("arete_id"));
                 ganado.setNombre(resultSet.getString("nombre"));
                 ganado.setPeso(resultSet.getDouble("peso"));
-                //ganado.setIdRaza(resultSet.getInt("raza_id"));
+                ganado.setIdRaza(resultSet.getInt("raza_id"));
                 java.sql.Date sqlDate;
                 sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
@@ -85,7 +85,7 @@ public class AnimalRepository {
                 ganado.setIdArete(resultSet.getInt("arete_id"));
                 ganado.setNombre(resultSet.getString("nombre"));
                 ganado.setPeso(resultSet.getDouble("peso"));
-                int idRazaNum = resultSet.getInt("raza_id");
+                ganado.setIdRaza(resultSet.getInt("raza_id"));
                 java.sql.Date sqlDate;
                 sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
@@ -110,7 +110,7 @@ public class AnimalRepository {
                 ganado.setIdArete(resultSet.getInt("arete_id"));
                 ganado.setNombre(resultSet.getString("nombre"));
                 ganado.setPeso(resultSet.getDouble("peso"));
-                int idRazaNum = resultSet.getInt("raza_id");
+                ganado.setIdRaza(resultSet.getInt("raza_id"));
                 java.sql.Date sqlDate;
                 sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());

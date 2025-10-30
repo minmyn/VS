@@ -7,6 +7,8 @@ public class Main {
         Javalin app = Javalin.create().start(8548);
         System.out.println("Corriendo ene el puerto 8548");
         app.get("/", ctx  -> ctx.result("Hello Vaquita"));
+
+        Inicio.initJwt().apply(app);
         Inicio.inicioUsuario().register(app);
         Inicio.inicioGanado().register(app);
         Inicio.inicioVenta().register(app);

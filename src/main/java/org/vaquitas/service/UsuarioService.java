@@ -29,17 +29,7 @@ public class UsuarioService {
         return usuarioRepository.deleter(idUsuario);
     }
 
-    public boolean autenticarUsuario(Usuario usuario) throws SQLException{
-        Usuario usuarioDataBase = usuarioRepository.findByEmailPsw(usuario);
-
-        if (usuarioDataBase == null) {
-            return false;
-        }
-
-        String claveIngresada = usuario.getClave();
-        String claveHashDB = usuarioDataBase.getClave();
-
-        boolean esValido = Password.check(claveIngresada, claveHashDB).withBcrypt();
-        return esValido;
+    public Usuario autenticarUsuario(Usuario usuario) throws SQLException{
+        return usuarioRepository.findByEmailPsw(usuario);
     }
 }

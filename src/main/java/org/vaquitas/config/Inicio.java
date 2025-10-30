@@ -10,7 +10,8 @@ public class Inicio {
     public static UsuarioRoute inicioUsuario(){
         UsuarioRepository usuarioRepository = new UsuarioRepository();
         UsuarioService usuarioService = new UsuarioService(usuarioRepository);
-        UsuarioControl usuarioControl = new UsuarioControl(usuarioService);
+        TokenManager tokenManager = new TokenManager();
+        UsuarioControl usuarioControl = new UsuarioControl(usuarioService, tokenManager);
         UsuarioRoute usuarioRoute = new UsuarioRoute(usuarioControl);
         return usuarioRoute;
     }

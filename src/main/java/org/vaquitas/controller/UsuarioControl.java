@@ -6,14 +6,17 @@ import org.vaquitas.service.UsuarioService;
 import io.javalin.http.Context;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.password4j.Password;
 
 public class UsuarioControl {
 
     private final UsuarioService usuarioService;
-    public UsuarioControl(UsuarioService usuarioService){
+    private final TokenManager tokenManager;
+    public UsuarioControl(UsuarioService usuarioService, TokenManager tokenManager){
         this.usuarioService=usuarioService;
+        this.tokenManager = tokenManager;
     }
 
     public void registrarUsuario(Context context){
@@ -77,19 +80,29 @@ public class UsuarioControl {
     }
 
     public void autenticarUsuario(Context context) {
-        Usuario usuarioAuth = context.bodyAsClass(Usuario.class);
+        Usuario usuarioLogin = context.bodyAsClass(Usuario.class);
         try {
-            boolean autenticacionExitosa = usuarioService.autenticarUsuario(usuarioAuth);
-
-            if (autenticacionExitosa) {
-                context.status(200);
-            } else {
-                context.status(401);
+            Usuario usuario = usuarioService.autenticarUsuario(usuarioLogin);
+            if (usuario == null){
+                throw new SQLException("Usuariono encontrado");
             }
-
+            boolean clave = Password.check(usuarioLogin.getClave(),usuario.getClave()).withBcrypt();
+            if (clave){
+                String token = tokenManager.issueToken(usuario.getIdUsuario()+"");
+                context.json(Map.of(
+                        "idUser",usuario.getIdUsuario(),
+                        "token", token,
+                        "estado", true,
+                        "mensaje", "Usuario encontrado"
+                ));
+            }else{
+                context.status(400).result("Usuario no encontrado");
+            }
         } catch (SQLException e) {
-            System.err.println("Error de base de datos durante la autenticación: " + e.getMessage());
-            context.status(500);
+            context.status(403).json(Map.of(
+                    "error", "usuario no valido",
+                    "estado", false
+            ));
         } catch (Exception e) {
             System.err.println("Error inesperado en la autenticación: " + e.getMessage());
             context.status(500);
