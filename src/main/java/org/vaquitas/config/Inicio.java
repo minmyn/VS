@@ -1,0 +1,57 @@
+package org.vaquitas.config;
+
+import org.vaquitas.controller.*;
+import org.vaquitas.repository.*;
+import org.vaquitas.route.*;
+import org.vaquitas.service.*;
+
+public class Inicio {
+
+    public static UsuarioRoute inicioUsuario(){
+        UsuarioRepository usuarioRepository = new UsuarioRepository();
+        UsuarioService usuarioService = new UsuarioService(usuarioRepository);
+        UsuarioControl usuarioControl = new UsuarioControl(usuarioService);
+        UsuarioRoute usuarioRoute = new UsuarioRoute(usuarioControl);
+        return usuarioRoute;
+    }
+
+    public static AnimalRoute inicioGanado(){
+        AnimalRepository animalRepository = new AnimalRepository();
+        AnimalService animalService = new AnimalService(animalRepository);
+        AnimalControl animalControl = new AnimalControl(animalService);
+        AnimalRoute animalRoute = new AnimalRoute(animalControl);
+        return animalRoute;
+    }
+
+    public static VentaRoute inicioVenta(){
+        VentaRepository ventaRepository = new VentaRepository();
+        VentaService ventaService = new VentaService(ventaRepository);
+        VentaControl ventaControl = new VentaControl(ventaService);
+        VentaRoute ventaRoute = new VentaRoute(ventaControl);
+        return ventaRoute;
+    }
+
+    public static RazaRoute inicioRaza(){
+        RazaRepository razaRepository = new RazaRepository();
+        RazaService razaService = new RazaService(razaRepository);
+        RazaControl razaControl = new RazaControl(razaService);
+        RazaRoute razaRoute = new RazaRoute(razaControl);
+        return razaRoute;
+    }
+
+    public static RanchoRoute inicioRancho(){
+        RanchoRepository ranchoRepository = new RanchoRepository();
+        RanchoService ranchoService = new RanchoService(ranchoRepository);
+        RanchoControl ranchoControl = new RanchoControl(ranchoService);
+        RanchoRoute ranchoRoute = new RanchoRoute(ranchoControl);
+        return ranchoRoute;
+    }
+
+    public static MedicamentoRoute inicioMedicina(){
+        MedicamentoRepository medicamentoRepository = new MedicamentoRepository();
+        MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository);
+        MedicamentoControl medicamentoControl = new MedicamentoControl(medicamentoService);
+        MedicamentoRoute medicamentoRoute = new MedicamentoRoute(medicamentoControl);
+        return medicamentoRoute;
+    }
+}

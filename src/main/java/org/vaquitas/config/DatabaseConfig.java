@@ -11,8 +11,7 @@ public class DatabaseConfig {
 
     public static DataSource getDataSource(){
         if (dataSource==null){
-            //Dotenv dotenv = Dotenv.load();
-            Dotenv dotenv = Dotenv.configure().directory("\"C:\\Users\\Bienvenido\\IdeaProjects\\VaquitaSS - copia\\src\\test\\resources\\.env\"").load();
+            Dotenv dotenv = Dotenv.load();
             String host = dotenv.get("DB_HOST");
             String dbName = dotenv.get("DB_SCHEMA");
             String user = dotenv.get("DB_USER");
