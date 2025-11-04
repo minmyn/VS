@@ -36,13 +36,14 @@ public class UsuarioRepository {
 
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        String sql = "SELECT nombre, telefono, sexo, edad FROM usuario";
+        String sql = "SELECT * FROM usuario";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
                 Usuario usuarios = new Usuario();//int usersql = resultSet.getInt("usuario_id");//if(usersql!=1) {
+                usuarios.setIdUsuario(resultSet.getInt("usuario_id"));
                 usuarios.setNombre(resultSet.getString("nombre"));
                 usuarios.setTelefono(resultSet.getString("telefono"));
                 usuarios.setSexo(resultSet.getString("sexo"));
@@ -67,7 +68,7 @@ public class UsuarioRepository {
     }
     //Borrar usuario.
     public int deleter(int idUsuario) throws SQLException{
-        String sql = "DELETE FROM usuario WHERE usuario_id=?";
+        String sql = "DELETE FROM usuario WHERE usuario_id = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
         {

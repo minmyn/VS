@@ -14,7 +14,7 @@ public class MedicamentoControl{
         this.medicamentoService = medicamentoService;
     }
 
-    public void registrarMedicamento(Context context) throws SQLClientInfoException {
+    public void registrarMedicamento(Context context){
         try {
             Medicamento nuevoMedicamento = context.bodyAsClass(Medicamento.class);
             medicamentoService.registrarMedicina(nuevoMedicamento);
@@ -24,7 +24,7 @@ public class MedicamentoControl{
         }
     }
 
-    public void verMedicinas(Context context) throws SQLClientInfoException{
+    public void verMedicinas(Context context){
         try {
             List<Medicamento> medicamentos = medicamentoService.verMedicinas();
             context.json(medicamentos);
@@ -33,7 +33,7 @@ public class MedicamentoControl{
         }
     }
 
-    public void actualizarMedicamento(Context context) throws SQLClientInfoException{
+    public void actualizarMedicamento(Context context){
         try {
             int idMedicamento = Integer.parseInt(context.pathParam("id"));
             Medicamento renombrarMedicina = context.bodyAsClass(Medicamento.class);

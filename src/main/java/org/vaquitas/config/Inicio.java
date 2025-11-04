@@ -55,4 +55,12 @@ public class Inicio {
         MedicamentoRoute medicamentoRoute = new MedicamentoRoute(medicamentoControl);
         return medicamentoRoute;
     }
+
+    public static AlimentoRoute inicioAlimento(){
+        AlimentoRepository alimentoRepository = new AlimentoRepository();
+        AlimentoService alimentoService = new AlimentoService(alimentoRepository);
+        AlimentoControl alimentoControl = new AlimentoControl(alimentoService);
+        AlimentoRoute alimentoRoute = new AlimentoRoute(alimentoControl);
+        return alimentoRoute;
+    }
 }

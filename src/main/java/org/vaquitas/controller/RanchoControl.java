@@ -13,7 +13,7 @@ public class RanchoControl {
         this.ranchoService = ranchoService;
     }
 
-    public void agregarRancho(Context context) throws SQLException{
+    public void agregarRancho(Context context){
         try {
             Rancho nuevoRancho = context.bodyAsClass(Rancho.class);
             ranchoService.agregarRancho(nuevoRancho);
@@ -23,7 +23,7 @@ public class RanchoControl {
         }
     }
 
-    public void verRanchos(Context context) throws SQLException{
+    public void verRanchos(Context context){
         try {
             List<Rancho> ranchos = ranchoService.verRanchos();
             context.json(ranchos);
@@ -32,7 +32,7 @@ public class RanchoControl {
         }
     }
 
-    public void editarRancho(Context context) throws SQLException{
+    public void editarRancho(Context context){
         try {
             int idRancho = Integer.parseInt(context.pathParam("id"));
             Rancho editarRancho = context.bodyAsClass(Rancho.class);
