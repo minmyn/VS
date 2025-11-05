@@ -3,7 +3,8 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 public class Alimento {
-    private int idCompra, cantidad, precio;
+    private int idCompra;
+    private double cantidad, precio;
     private String tipo, nombre;
     private int idRancho;
     private LocalDate fechaCompra;
@@ -16,19 +17,19 @@ public class Alimento {
         this.idCompra = idCompra;
     }
 
-    public int getCantidad() {
+    public double getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(int cantidad) {
+    public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
 
-    public int getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(int precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 

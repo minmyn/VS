@@ -15,7 +15,7 @@ public class UsuarioRepository {
 
     //Registrar usuario
     public void save(Usuario usuario)  throws SQLException {
-        String sql = "INSERT INTO usuario (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) VALUES (?, ?, ?, ?, ?, ?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
         {
@@ -36,7 +36,7 @@ public class UsuarioRepository {
 
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        String sql = "SELECT * FROM usuario";
+        String sql = "SELECT * FROM USUARIO";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()
@@ -56,7 +56,7 @@ public class UsuarioRepository {
 
     //Actualizar usuario
     public int update(Usuario usuario) throws SQLException{
-        String sql = "UPDATE usuario SET correo_electronico = ?, clave_acceso = ? WHERE usuario_id = ?";
+        String sql = "UPDATE USUARIO SET correo_electronico = ?, clave_acceso = ? WHERE usuario_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, usuario.getEmail());
@@ -68,7 +68,7 @@ public class UsuarioRepository {
     }
     //Borrar usuario.
     public int deleter(int idUsuario) throws SQLException{
-        String sql = "DELETE FROM usuario WHERE usuario_id = ?";
+        String sql = "DELETE FROM USUARIO WHERE usuario_id = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql))
         {
@@ -79,7 +79,7 @@ public class UsuarioRepository {
 
     //Verificar usuario
     public Usuario findByEmailPsw(Usuario usuario) throws SQLException{
-        String sql = "SELECT * FROM usuario WHERE correo_electronico = ?";
+        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setString(1, usuario.getEmail());

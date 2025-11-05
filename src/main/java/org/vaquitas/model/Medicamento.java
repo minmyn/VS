@@ -3,6 +3,7 @@ package org.vaquitas.model;
 public class Medicamento {
     private int idMedicamento;
     private String nombre;
+    private String descripcion;
 
     public int getIdMedicamento() {
         return idMedicamento;
@@ -18,5 +19,13 @@ public class Medicamento {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

@@ -34,7 +34,7 @@ public class VentaRepository {
 
     public List<Venta> findVendido() throws SQLException{
         List<Venta> animal = new ArrayList<>();
-        String sql="SELECT * FROM venta";
+        String sql="SELECT * FROM VENTA";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){

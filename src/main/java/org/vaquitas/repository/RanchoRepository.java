@@ -13,7 +13,7 @@ import java.util.List;
 public class RanchoRepository {
 
     public void save(Rancho rancho) throws SQLException{
-        String sql="INSERT INTO rancho (nombre, locacion) VALUES (?,?)";
+        String sql="INSERT INTO RANCHO (nombre, locacion) VALUES (?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,rancho.getNombre());
@@ -27,7 +27,7 @@ public class RanchoRepository {
 
     public List<Rancho> findAll() throws SQLException{
         List<Rancho> ranchos = new ArrayList<>();
-        String sql = "SELECT  * FROM rancho";
+        String sql = "SELECT  * FROM RANCHO";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery()){
@@ -43,7 +43,7 @@ public class RanchoRepository {
     }
 
     public int update(Rancho rancho) throws SQLException{
-        String sql = "UPDATE raza SET locacion = ?, nombre = ? WHERE rancho_id = ?";
+        String sql = "UPDATE RANCHO SET locacion = ?, nombre = ? WHERE rancho_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, rancho.getUbicacion());

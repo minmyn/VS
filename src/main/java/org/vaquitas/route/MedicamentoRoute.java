@@ -9,8 +9,8 @@ public class MedicamentoRoute {
         this.medicamentoControl=medicamentoControl;
     }
     public void register(Javalin app){
-        app.post("/medicamento", medicamentoControl::registrarMedicamento);
-        app.get("/medicamento", medicamentoControl::verMedicinas);
-        app.patch("/medicamento/{id}", medicamentoControl::actualizarMedicamento);
+        app.post("/medicamentos", medicamentoControl::registrarMedicamento);
+        app.get("/medicamentos", medicamentoControl::verMedicinas);
+        app.patch("/medicamentos/{id}", medicamentoControl::actualizarMedicamento);
     }
 }

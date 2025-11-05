@@ -15,7 +15,7 @@ public class AnimalControl {
         this.animalService=animalService;
     }
 
-    public void registrarGanado(Context context){
+    public void registrarGanado(Context context){       //Integer idUsuario = context.attribute("idUsuario");//        if(idUsuario == null){ //            context.status(401);         //            return;       //        }
         try{
             Animal nuevoGanado = context.bodyAsClass(Animal.class);
             animalService.registrarGanado(nuevoGanado);

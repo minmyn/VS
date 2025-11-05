@@ -2,6 +2,7 @@ package org.vaquitas.repository;
 
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Animal;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ public class AnimalRepository {
 
     //Registrar ganado
     public void save(Animal ganado) throws SQLException{
-        String sql="INSERT INTO animal(arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) VALUES(?,?,?,?,?,?)";
+        String sql="INSERT INTO ANIMAL(arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) VALUES(?,?,?,?,?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, ganado.getIdArete());
@@ -29,7 +30,7 @@ public class AnimalRepository {
     //Visualizar Ganado Activo
     public List<Animal> findAll() throws SQLException{
         List<Animal> animal = new ArrayList<>();
-        String sql = "SELECT * FROM animal";
+        String sql = "SELECT * FROM ANIMAL";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){
@@ -38,7 +39,6 @@ public class AnimalRepository {
                 ganado.setIdArete(resultSet.getInt("arete_id"));
                 ganado.setNombre(resultSet.getString("nombre"));
                 ganado.setPeso(resultSet.getDouble("peso"));
-                int idRazaNum = resultSet.getInt("raza_id");
                 java.sql.Date sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
                 ganado.setEstatus(resultSet.getString("estado"));
@@ -53,7 +53,7 @@ public class AnimalRepository {
 
     public List<Animal> findActivo()throws SQLException{
         List<Animal> ganadoActivo = new ArrayList<>();
-        String sql = "SELECT * FROM animal WHERE estado = 'Activo'";
+        String sql = "SELECT * FROM ANIMAL WHERE estado = 'Activo'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){
@@ -76,7 +76,7 @@ public class AnimalRepository {
     //Ver el ganado no activo
     public List<Animal> findNoActivo()throws SQLException{
         List<Animal> ganadoNoActivo = new ArrayList<>();
-        String sql = "SELECT * FROM animal WHERE estado = 'Muerto' OR estado = 'Vendido'";
+        String sql = "SELECT * FROM ANIMAL WHERE estado = 'Muerto' OR estado = 'Vendido'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){
@@ -86,12 +86,13 @@ public class AnimalRepository {
                 ganado.setNombre(resultSet.getString("nombre"));
                 ganado.setPeso(resultSet.getDouble("peso"));
                 ganado.setIdRaza(resultSet.getInt("raza_id"));
-                java.sql.Date sqlDate;
+                ganado.setSexo(resultSet.getString("sexo"));
+                ganado.setEstatus(resultSet.getString("estado"));
+                Date sqlDate;
                 sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
                 sqlDate = resultSet.getDate("fecha_baja");
                 ganado.setFechaBaja(sqlDate.toLocalDate());
-                ganado.setSexo(resultSet.getString("sexo"));
                 ganadoNoActivo.add(ganado);
             }
             return ganadoNoActivo;
@@ -101,7 +102,7 @@ public class AnimalRepository {
 
     public List<Animal> findVendido()throws SQLException{
         List<Animal> ganadoVendido = new ArrayList<>();
-        String sql = "SELECT * FROM animal WHERE estado = 'Vendido'";
+        String sql = "SELECT * FROM ANIMAL WHERE estado = 'Vendido'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){
@@ -125,10 +126,9 @@ public class AnimalRepository {
 
     //Dar de baja al ganado
     public int update(Animal animal) throws SQLException{
-        String sql="UPDATE animal SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
+        String sql="UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql))
-        {
+             PreparedStatement statement = connection.prepareStatement(sql)){
             Date sqlDate = Date.valueOf(animal.getFechaBaja());
             statement.setDate(1, sqlDate);
             statement.setInt(2,animal.getIdArete());

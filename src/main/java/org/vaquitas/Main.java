@@ -22,5 +22,8 @@ public class Main {
         Inicio.inicioRancho().register(app);
         Inicio.inicioMedicina().register(app);
         Inicio.inicioAlimento().register(app);
+        Inicio.inicioConsulta().register(app);
+
+
     }
 }

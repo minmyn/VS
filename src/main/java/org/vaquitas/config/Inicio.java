@@ -63,4 +63,16 @@ public class Inicio {
         AlimentoRoute alimentoRoute = new AlimentoRoute(alimentoControl);
         return alimentoRoute;
     }
+
+    public static ConsultaRoute inicioConsulta(){
+        RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
+        RecetaRepository recetaRepository = new RecetaRepository();
+        ConsultaRepository consultaRepository = new ConsultaRepository();
+        ConsultaService consultaService = new ConsultaService(recetaRepository, recordatorioRepository, consultaRepository);
+        ConsultaControl consultaControl = new ConsultaControl(consultaService);
+        ConsultaRoute consultaRoute = new ConsultaRoute(consultaControl);
+        return consultaRoute;
+    }
+
+
 }

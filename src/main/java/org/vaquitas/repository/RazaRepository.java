@@ -12,7 +12,7 @@ import java.util.List;
 
 public class RazaRepository {
     public void save(Raza raza) throws SQLException{
-        String sql="INSERT INTO raza (nombre) VALUES (?)";
+        String sql="INSERT INTO RAZA (nombre) VALUES (?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1,raza.getNombreRaza());
@@ -26,7 +26,7 @@ public class RazaRepository {
 
     public List<Raza> findAll() throws SQLException{
         List<Raza> razas = new ArrayList<>();
-        String sql = "SELECT * FROM raza";
+        String sql = "SELECT * FROM RAZA";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery()){
@@ -41,7 +41,7 @@ public class RazaRepository {
     }
 
     public int update(Raza raza) throws SQLException{
-        String sql = "UPDATE raza SET nombre = ? WHERE raza_id = ?";
+        String sql = "UPDATE RAZA SET nombre = ? WHERE raza_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql))
         {
