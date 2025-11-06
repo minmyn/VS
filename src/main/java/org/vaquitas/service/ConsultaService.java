@@ -10,6 +10,7 @@ import org.vaquitas.repository.RecordatorioRepository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 public class ConsultaService {
 
@@ -39,5 +40,9 @@ public class ConsultaService {
                 connection.setAutoCommit(true);
             }
         }
+    }
+
+    public List<Consulta> verConsultas() throws SQLException{
+        return consultaRepository.findAll();
     }
 }

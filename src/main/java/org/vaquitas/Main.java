@@ -20,10 +20,11 @@ public class Main {
         Inicio.inicioVenta().register(app);
         Inicio.inicioRaza().register(app);
         Inicio.inicioRancho().register(app);
-        Inicio.inicioMedicina().register(app);
         Inicio.inicioAlimento().register(app);
+        Inicio.inicioMedicina().register(app);
         Inicio.inicioConsulta().register(app);
-
+        Inicio.inicioReceta().register(app);
+        Inicio.inicioRecordatorio().register(app);
 
     }
 }

@@ -9,6 +9,8 @@ import org.vaquitas.service.ConsultaService;
 
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsultaControl {
 
@@ -27,6 +29,15 @@ public class ConsultaControl {
             context.status(201);
         }catch (SQLException e){
             e.printStackTrace();
+            context.status(500);
+        }
+    }
+
+    public void verConsultas(Context context){
+        try {
+            List<Consulta> consultas = consultaService.verConsultas();
+            context.json(consultas);
+        }catch (SQLException e){
             context.status(500);
         }
     }

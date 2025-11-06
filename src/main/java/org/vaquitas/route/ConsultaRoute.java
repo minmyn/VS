@@ -9,7 +9,8 @@ public class ConsultaRoute {
         this.consultaControl=consultaControl;
     }
     public void register(Javalin app){
-        app.post("/consulta", consultaControl::crearConsulta);
+        app.post("/consultas", consultaControl::crearConsulta);
+        app.get("/consultas", consultaControl::verConsultas);
     }
 
 }

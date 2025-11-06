@@ -4,6 +4,8 @@ import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Consulta;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConsultaRepository {
 
@@ -18,6 +20,22 @@ public class ConsultaRepository {
             if (resultSet.next()) return resultSet.getInt(1);
             throw new SQLException("No se genero la consula");
         }
+    }
 
+    public List<Consulta> findAll() throws SQLException{
+        List<Consulta> consultas = new ArrayList<>();
+        String sql = "SELECT * FROM CONSULTA";
+        try(Connection connection = DatabaseConfig.getDataSource().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()) {
+                Consulta consulta = new Consulta();
+                consulta.setIdConsulta(resultSet.getInt("consulta_id"));
+                consulta.setIdArete(resultSet.getInt("arete_id"));
+                consulta.setPadecimiento(resultSet.getString("padecimiento"));
+                consultas.add(consulta);
+            }
+            return consultas;
+        }
     }
 }

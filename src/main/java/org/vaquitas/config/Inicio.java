@@ -74,5 +74,19 @@ public class Inicio {
         return consultaRoute;
     }
 
+    public static RecetaRoute inicioReceta(){
+        RecetaRepository recetaRepository = new RecetaRepository();
+        RecetaService recetaService = new RecetaService(recetaRepository);
+        RecetaControl recetaControl = new RecetaControl(recetaService);
+        RecetaRoute recetaRoute = new RecetaRoute(recetaControl);
+        return recetaRoute;
+    }
 
+    public static RecordatorioRoute inicioRecordatorio(){
+        RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
+        RecordatorioService recordatorioService = new RecordatorioService(recordatorioRepository);
+        RecordatorioControl recordatorioControl = new RecordatorioControl(recordatorioService);
+        RecordatorioRoute recordatorioRoute= new RecordatorioRoute(recordatorioControl);
+        return recordatorioRoute;
+    }
 }
