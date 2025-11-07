@@ -14,7 +14,6 @@ public class Main {
         JwtMiddleware jwtMiddleware = new JwtMiddleware(tokenManager);
 
         jwtMiddleware.apply(app);
-
         Inicio.inicioUsuario().register(app);
         Inicio.inicioGanado().register(app);
         Inicio.inicioVenta().register(app);

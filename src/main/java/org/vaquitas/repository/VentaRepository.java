@@ -29,7 +29,6 @@ public class VentaRepository {
         }
     }
 
-
     //Visualizar Ganado
 
     public List<Venta> findVendido() throws SQLException{

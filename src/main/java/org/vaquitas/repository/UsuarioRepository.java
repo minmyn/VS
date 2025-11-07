@@ -62,7 +62,6 @@ public class UsuarioRepository {
             statement.setString(1, usuario.getEmail());
             statement.setString(2, usuario.getClave());
             statement.setInt(3, usuario.getIdUsuario());
-
             return statement.executeUpdate();
         }
     }
