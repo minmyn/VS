@@ -31,7 +31,7 @@ public class VentaRepository {
 
     //Visualizar Ganado
 
-    public List<Venta> findVendido() throws SQLException{
+    public List<Venta> findVendidos() throws SQLException{
         List<Venta> animal = new ArrayList<>();
         String sql="SELECT * FROM VENTA";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -39,6 +39,7 @@ public class VentaRepository {
              ResultSet resultSet = statement.executeQuery()){
             while (resultSet.next()) {
                 Venta ganado = new Venta();
+                ganado.setIdVenta(resultSet.getInt("venta_id"));
                 ganado.setIdArete(resultSet.getInt("arete_id"));
                 java.sql.Date sqlDate = resultSet.getDate("fecha_baja");
                 ganado.setFechaBaja(sqlDate.toLocalDate());
@@ -49,4 +50,17 @@ public class VentaRepository {
             return animal;
         }
     }
+
+    public boolean findVendido(int idArete)throws SQLException{
+        String sql = "SELECT * FROM VENTA WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, idArete);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
+
+
 }

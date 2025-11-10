@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.password4j.Password;
+import org.vaquitas.util.Error;
+import org.vaquitas.util.UsuarioValidator;
 
 public class UsuarioControl {
 
@@ -22,20 +24,24 @@ public class UsuarioControl {
     public void registrarUsuario(Context context){
         try{
             Usuario nuevoUsuario = context.bodyAsClass(Usuario.class);
+            UsuarioValidator usuarioValidator = new UsuarioValidator();
+            Map<String,String> errores = usuarioValidator.validarUsuario(nuevoUsuario);
+            if (!errores.isEmpty()){
+                context.status(400).json(Map.of("errores", errores));
+                return;
+            }
             String claveHash = Password.hash(nuevoUsuario.getClave()).withBcrypt().getResult();
             nuevoUsuario.setClave(claveHash);
-            usuarioService.registrarUsuario(nuevoUsuario);
-            context.status(201);
-            context.json(nuevoUsuario);
-        }catch (SQLException e) {
-            if (e.getMessage().contains("Duplicate entry")) {
-                context.status(409);
-            } else {
-                System.err.println("Error de SQL: " + e.getMessage());
-                context.status(500);
+            errores = usuarioService.registrarUsuario(nuevoUsuario);
+            if (!errores.isEmpty()){
+                context.status(400).json(Map.of("errores", errores));
+                return;
             }
+            context.status(201).json(nuevoUsuario);
+        } catch (SQLException e) {
+            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
         } catch (Exception e) {
-            context.status(400).result("Petición inválida: " + e.getMessage());
+            context.status(500).json(Error.getApiServiceError());
         }
     }
 
@@ -44,7 +50,9 @@ public class UsuarioControl {
             List<Usuario> usuarios= usuarioService.verUsuario();
             context.json(usuarios);
         } catch (SQLException e) {
-            context.status(500).result("Error al obtener la lista de usuarios" + e.getMessage());
+            context.status(500).json(Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
         }
     }
 
@@ -61,10 +69,9 @@ public class UsuarioControl {
         }catch (NumberFormatException e) {
             context.status(400);
         } catch (SQLException e) {
-            e.printStackTrace();
-            context.status(500); // 500 Internal Server Error
+            context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
-            context.status(400);
+            context.status(500).json(Error.getApiServiceError());
         }
     }
 
@@ -74,8 +81,9 @@ public class UsuarioControl {
             usuarioService.eliminarUsuario(idUsuario);
             context.status(204);
         } catch (SQLException e) {
-            e.printStackTrace();
-            context.status(500);
+            context.status(500).json(Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
         }
     }
 
@@ -98,14 +106,19 @@ public class UsuarioControl {
             }else{
                 context.status(400).result("Usuario no encontrado");
             }
+//        } catch (SQLException e) {
+//            context.status(403).json(Map.of(
+//                    "error", "usuario no valido",
+//                    "estado", false
+//            ));
+//        } catch (Exception e) {
+//            System.err.println("Error inesperado en la autenticación: " + e.getMessage());
+//            context.status(500);
+//        }
         } catch (SQLException e) {
-            context.status(403).json(Map.of(
-                    "error", "usuario no valido",
-                    "estado", false
-            ));
+            context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
-            System.err.println("Error inesperado en la autenticación: " + e.getMessage());
-            context.status(500);
+            context.status(500).json(Error.getApiServiceError());
         }
     }
 }

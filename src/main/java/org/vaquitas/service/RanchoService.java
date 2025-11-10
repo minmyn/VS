@@ -14,6 +14,9 @@ public class RanchoService {
     }
 
     public void agregarRancho(Rancho rancho) throws SQLException{
+        boolean validar;
+        validar = ranchoRepository.duplicateNombre(rancho.getNombre());
+        if (validar) throw new IllegalArgumentException("Nombre duplicado");
         ranchoRepository.save(rancho);
     }
 

@@ -14,6 +14,8 @@ public class RazaService {
     }
 
     public void registrarRaza(Raza raza) throws SQLException{
+        if (razaRepository.findRaza(raza.getNombreRaza()))
+            throw new IllegalArgumentException("Raza existente");
         razaRepository.save(raza);
     }
 

@@ -56,4 +56,15 @@ public class RanchoRepository {
             return statement.executeUpdate();
         }
     }
+
+    public boolean duplicateNombre(String nombre) throws SQLException{
+        String sql = "SELECT * FROM RANCHO WHERE nombre = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, nombre);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
 }

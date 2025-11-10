@@ -136,4 +136,17 @@ public class AnimalRepository {
         }
     }
     //No hay eliminar ganado
+
+    //Validarchione' de la selvicioooo
+
+    public boolean existsByIdArete (int idArete) throws SQLException{
+        String sql = "SELECT * FROM ANIMAL WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, idArete);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
 }

@@ -10,5 +10,6 @@ public class AlimentoRoute {
         app.post("/alimentos", alimentoControl::guardarAlimentos);
         app.get("/alimentos", alimentoControl::verAlimentos);
         app.patch("/alimentos/{id}", alimentoControl::editarAlimentos);
+        app.delete("/alimentos/{id}", alimentoControl::eliminarAlimento);
     }
 }

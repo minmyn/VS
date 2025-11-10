@@ -55,4 +55,15 @@ public class RazaRepository {
 
         }
     }
+
+    public boolean findRaza(String nombreRaza)throws SQLException{
+        String sql = "SELECT * FROM RAZA WHERE nombre = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, nombreRaza);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
 }

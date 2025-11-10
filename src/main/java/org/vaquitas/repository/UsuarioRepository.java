@@ -93,4 +93,36 @@ public class UsuarioRepository {
         }
         return null;
     }
+//SELECT * FROM rancho_db.usuario where correo_electronico = "ajsd@ajsha.com" OR telefono = 9611234567 ;
+    public boolean duplicateDatos( String telefono, String email ) throws SQLException{
+        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ? OR telefono =?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, email);
+            statement.setString(2, telefono);
+        }
+        return false;
+    }
+
+    public boolean findEmail(String email) throws SQLException{
+        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
+
+    public boolean findTelefono(String telefeno)throws SQLException{
+        String sql = "SELECT * FROM USUARIO WHERE telefono =?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, telefeno);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+        }
+        return false;
+    }
 }

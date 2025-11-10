@@ -3,9 +3,11 @@ package org.vaquitas.service;
 import com.password4j.Password;
 import org.vaquitas.model.Usuario;
 import org.vaquitas.repository.UsuarioRepository;
+import org.vaquitas.util.UsuarioValidator;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
@@ -13,8 +15,13 @@ public class UsuarioService {
         this.usuarioRepository=usuarioRepository;
     }
 
-    public void registrarUsuario(Usuario usuario) throws SQLException{
+    public Map<String,String> registrarUsuario(Usuario usuario) throws SQLException{
+        UsuarioValidator usuarioValidator = new UsuarioValidator();
+        Map<String,String> validar = usuarioValidator.validarDuplicados(usuario.getTelefono(), usuario.getEmail());
+        if (!validar.isEmpty())
+            return validar;
         usuarioRepository.save(usuario);
+        return validar;
     }
 
     public List<Usuario> verUsuario() throws SQLException{

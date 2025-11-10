@@ -26,7 +26,8 @@ public class Inicio {
 
     public static VentaRoute inicioVenta(){
         VentaRepository ventaRepository = new VentaRepository();
-        VentaService ventaService = new VentaService(ventaRepository);
+        AnimalRepository animalRepository = new AnimalRepository();
+        VentaService ventaService = new VentaService(ventaRepository, animalRepository);
         VentaControl ventaControl = new VentaControl(ventaService);
         VentaRoute ventaRoute = new VentaRoute(ventaControl);
         return ventaRoute;
@@ -68,7 +69,8 @@ public class Inicio {
         RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
         RecetaRepository recetaRepository = new RecetaRepository();
         ConsultaRepository consultaRepository = new ConsultaRepository();
-        ConsultaService consultaService = new ConsultaService(recetaRepository, recordatorioRepository, consultaRepository);
+        AnimalRepository animalRepository = new AnimalRepository();
+        ConsultaService consultaService = new ConsultaService(recetaRepository, recordatorioRepository, consultaRepository, animalRepository);
         ConsultaControl consultaControl = new ConsultaControl(consultaService);
         ConsultaRoute consultaRoute = new ConsultaRoute(consultaControl);
         return consultaRoute;

@@ -10,8 +10,10 @@ import java.util.List;
 
 public class VentaService {
     private final VentaRepository ventaRepository;
-    public VentaService(VentaRepository ventaRepository) {
+    private final AnimalRepository animalRepository;
+    public VentaService(VentaRepository ventaRepository, AnimalRepository animalRepository) {
         this.ventaRepository=ventaRepository;
+        this.animalRepository =animalRepository;
     }
 
     public void registrarVenta(Venta venta) throws SQLException {
@@ -19,6 +21,13 @@ public class VentaService {
     }
 
     public List<Venta> verVentas()throws SQLException{
-        return ventaRepository.findVendido();
+        return ventaRepository.findVendidos();
+    }
+
+    public boolean encontrarVacaVendida(int idArete) throws SQLException{
+        return ventaRepository.findVendido(idArete);
+    }
+    public boolean encontrarVaca (int idArete) throws SQLException{
+        return animalRepository.existsByIdArete(idArete);
     }
 }

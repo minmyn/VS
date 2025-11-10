@@ -13,6 +13,11 @@ public class AnimalService {
     }
 
     public void registrarGanado(Animal animal) throws SQLException {
+        boolean validar;
+        validar= animalRepository.existsByIdArete(animal.getIdArete());
+        if (validar){
+            throw new IllegalArgumentException("Arete duplicado");
+        }
         animalRepository.save(animal);
     }
 

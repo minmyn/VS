@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AlimentoRepository {
 
-    //Registrar ALimentos
+    //CRUD
     public void save(Alimento alimento) throws SQLException {
         String sql ="INSERT INTO ALIMENTO (alimento, tipo, cantidad, precio, fecha_compra) VALUES (?, ?, ?, ?, ?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -57,6 +57,50 @@ public class AlimentoRepository {
             statement.setDate(5, sqlDate);
             statement.setInt(6, alimento.getIdCompra());
             return statement.executeUpdate();
+        }
+    }
+
+    public int deleter (int idCompra) throws SQLException{
+        String sql = "DELETE FROM ALIMENTO WHERE compra_id = ? ";
+        try(Connection connection = DatabaseConfig.getDataSource().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, idCompra);
+            return statement.executeUpdate();
+        }
+    }
+
+    //Microservicios¿ xd
+
+    public boolean existById(int idCompra) throws SQLException{
+        String sql = "SELECT * FROM ALIMENTO WHERE compra_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setInt(1, idCompra);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) return true;
+            return false;
+        }
+    }
+
+    public Alimento findAlimento(int idCompra) throws SQLException{
+        String sql = "SELECT * FROM ALIMENTO WHERE compra_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idCompra);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Alimento alimentoDB = new Alimento();
+                    alimentoDB.setIdCompra(resultSet.getInt("compra_id"));
+                    alimentoDB.setNombre(resultSet.getString("alimento"));
+                    alimentoDB.setTipo(resultSet.getString("tipo"));
+                    alimentoDB.setCantidad(resultSet.getDouble("cantidad"));
+                    alimentoDB.setPrecio(resultSet.getDouble("precio"));
+                    java.sql.Date sqlDate = resultSet.getDate("fecha_compra");
+                    alimentoDB.setFechaCompra(sqlDate.toLocalDate());
+                    return alimentoDB;
+                }
+                return null;
+            }
         }
     }
 

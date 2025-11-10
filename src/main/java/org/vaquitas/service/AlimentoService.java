@@ -23,4 +23,16 @@ public class AlimentoService {
     public void editarAlimentos(Alimento alimento) throws SQLException{
         alimentoRepository.update(alimento);
     }
+
+    public void eliminarAlimento (int idCompra) throws SQLException{
+        alimentoRepository.deleter(idCompra);
+    }
+
+    public boolean existirId (int idCompra) throws SQLException{
+        return alimentoRepository.existById(idCompra);
+    }
+
+    public Alimento encontrarAlimento(int idCompra) throws SQLException{
+        return alimentoRepository.findAlimento(idCompra);
+    }
 }
