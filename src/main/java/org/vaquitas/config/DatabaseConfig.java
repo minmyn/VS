@@ -8,7 +8,6 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class DatabaseConfig {
     private static HikariDataSource dataSource;
-
     public static DataSource getDataSource(){
         if (dataSource==null){
             Dotenv dotenv = Dotenv.load();

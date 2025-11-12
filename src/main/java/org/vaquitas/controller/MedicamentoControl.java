@@ -6,7 +6,6 @@ import org.vaquitas.service.MedicamentoService;
 import org.vaquitas.util.Error;
 import org.vaquitas.util.MedicamentoValidator;
 
-import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,18 @@ public class MedicamentoControl{
             context.status(500).json(Error.getApiServiceError());
         }
     }
+    public void buscarMedicamentosPorAlgo(Context context){
+        String texto = context.queryParam("nombre"); // recibe ?nombre=XXX
+        try {
+            List<Medicamento> medicamentos = medicamentoService.buscarMedicamentos(texto);
+            context.status(200).json(medicamentos);
+        } catch (SQLException e) {
+            context.status(500).json(Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
 
     public void actualizarMedicamento(Context context){
         try {

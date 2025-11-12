@@ -4,6 +4,7 @@ import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Animal;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,5 +149,20 @@ public class AnimalRepository {
             if (resultSet.next()) return true;
         }
         return false;
+    }
+    public Animal validateFechaBaja(int idArete) throws SQLException{
+        String sql = "SELECT * FROM ANIMAL WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idArete);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()){
+                Animal ganado = new Animal();
+                Date sqlDate = resultSet.getDate("fecha_nacimiento");
+                ganado.setFechaNacimiento(sqlDate.toLocalDate());
+                return ganado;
+            }
+            return null;
+        }
     }
 }

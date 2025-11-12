@@ -4,8 +4,6 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
-mainClassName = 'org.vaquitas.Main'
-
 application {
     mainClass = 'org.vaquitas.Main'
 }
@@ -40,8 +38,15 @@ test {
     useJUnitPlatform()
 }
 
-jar{
+shadowJar {
+    archiveBaseName.set('untitled')
     manifest {
-        attributes('Main-Class' : 'org.vaquitas.Main.java')
+        attributes 'Main-Class': 'org.vaquitas.Main'
     }
 }
+
+task copyDependencies(type: Copy) {
+    from configurations.runtimeClasspath
+    into "$buildDir/lib"
+}
+

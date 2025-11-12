@@ -3,6 +3,7 @@ package org.vaquitas.service;
 import org.vaquitas.model.Animal;
 import org.vaquitas.repository.AnimalRepository;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class AnimalService {
@@ -38,6 +39,14 @@ public class AnimalService {
     }
 
     public void darBajaGanado(Animal animal) throws SQLException{
+        Animal animalBD = animalRepository.validateFechaBaja(animal.getIdArete());
+        if (animalBD == null){
+            throw new IllegalArgumentException();
+        }
+        LocalDate fechaNac = animalBD.getFechaNacimiento();
+        LocalDate fechBaja = animal.getFechaBaja();
+        if (fechBaja.isBefore(fechaNac))
+            throw new IllegalArgumentException();
         animalRepository.update(animal);
     }
 

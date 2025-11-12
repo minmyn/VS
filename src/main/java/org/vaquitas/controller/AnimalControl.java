@@ -82,14 +82,18 @@ public class AnimalControl {
         }
     }
 
-    public void darBajaGanado(Context context) throws SQLException{
+    public void darBajaGanado(Context context) throws SQLException {
         try {
-            int idArete=Integer.parseInt(context.pathParam("id"));
+            int idArete = Integer.parseInt(context.pathParam("id"));
             Animal ganadoMuerto = context.bodyAsClass(Animal.class);
             ganadoMuerto.setIdArete(idArete);
             animalService.darBajaGanado(ganadoMuerto);
             context.status(204).json("Exitoso");
-        } catch (SQLException e) {
+        }/*catch (NumberFormatException e){
+            context.status(404).json("Ganado ineistente");
+        }*/catch (IllegalArgumentException e){
+            context.status(404).json("fecha invalida");
+        }catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
             context.status(500).json(Error.getApiServiceError());

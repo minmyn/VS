@@ -36,6 +36,10 @@ public class UsuarioService {
         return usuarioRepository.deleter(idUsuario);
     }
 
+    public Usuario econtrarUsuaio(int idUsuario) throws SQLException{
+        return usuarioRepository.findUsuario(idUsuario);
+    }
+
     public Usuario autenticarUsuario(Usuario usuario) throws SQLException{
         return usuarioRepository.findByEmailPsw(usuario);
     }

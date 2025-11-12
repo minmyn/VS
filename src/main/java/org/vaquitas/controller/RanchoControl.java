@@ -28,7 +28,7 @@ public class RanchoControl {
             ranchoService.agregarRancho(nuevoRancho);
             context.status(201).json("Gurdado correctamentenete");
         }catch (IllegalArgumentException e){
-            context.status(404);
+            context.status(404).json("nombre duplicado");
         } catch (SQLException e) {
             context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
         } catch (Exception e) {

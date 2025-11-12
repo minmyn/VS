@@ -56,4 +56,39 @@ public class MedicamentoRepository {
             return statement.executeUpdate();
         }
     }
+
+    public List<Medicamento> findByNombre(String texto) throws SQLException {
+        List<Medicamento> medicamentos = new ArrayList<>();
+        String sql;
+        String param;
+
+        if (texto == null || texto.isEmpty()) {
+            sql = "SELECT * FROM MEDICAMENTO";
+            param = null;
+        } else if (texto.length() <= 1) {
+            sql = "SELECT * FROM MEDICAMENTO WHERE nombre LIKE ?";
+            param = texto + "%";
+        } else {
+            sql = "SELECT * FROM MEDICAMENTO WHERE nombre LIKE ?";
+            param = "%" + texto + "%";
+        }
+
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            if (param != null) {
+                statement.setString(1, param);
+            }
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Medicamento medicamento = new Medicamento();
+                    medicamento.setIdMedicamento(resultSet.getInt("medicamento_id"));
+                    medicamento.setNombre(resultSet.getString("nombre"));
+                    medicamento.setDescripcion(resultSet.getString("descripcion"));
+                    medicamentos.add(medicamento);
+                }
+            }
+        }
+        return medicamentos;
+    }
+
 }

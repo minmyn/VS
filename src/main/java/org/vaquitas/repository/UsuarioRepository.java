@@ -13,7 +13,7 @@ import java.util.List;
 
 public class UsuarioRepository {
 
-    //Registrar usuario
+    //AGREGAR O REGISTRAR USUARIO
     public void save(Usuario usuario)  throws SQLException {
         String sql = "INSERT INTO USUARIO (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) VALUES (?, ?, ?, ?, ?, ?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -32,8 +32,7 @@ public class UsuarioRepository {
         }
     }
 
-    //Ver usuarios
-
+    //VER TODOS LOS USUARIOS AGRAGADOS
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
         String sql = "SELECT * FROM USUARIO";
@@ -53,8 +52,27 @@ public class UsuarioRepository {
             return usuario;
         }
     }
-
-    //Actualizar usuario
+    //ENCONTRAR UN SOLO USUARIO Y VERLO
+    public Usuario findUsuario(int idUsuario)throws  SQLException{
+        String sql = "SELECT * FROM USUARIO WHERE usuario_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);){
+            statement.setInt(1, idUsuario );
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    Usuario usuarioBD = new Usuario();
+                    usuarioBD.setNombre(resultSet.getString("nombre"));
+                    usuarioBD.setTelefono(resultSet.getString("telefono"));
+                    usuarioBD.setSexo(resultSet.getString("sexo"));
+                    usuarioBD.setEdad(resultSet.getInt("edad"));
+                    usuarioBD.setEmail(resultSet.getString("correo_electronico"));
+                    return usuarioBD;
+                }
+                return null;
+            }
+        }
+    }
+    //ACTUALIZAR USUARIO
     public int update(Usuario usuario) throws SQLException{
         String sql = "UPDATE USUARIO SET correo_electronico = ?, clave_acceso = ? WHERE usuario_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -65,7 +83,7 @@ public class UsuarioRepository {
             return statement.executeUpdate();
         }
     }
-    //Borrar usuario.
+    //ELIMINAR UN USUARIO
     public int deleter(int idUsuario) throws SQLException{
         String sql = "DELETE FROM USUARIO WHERE usuario_id = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -76,7 +94,7 @@ public class UsuarioRepository {
         }
     }
 
-    //Verificar usuario
+    //AUTENTICACION DE USUARIO
     public Usuario findByEmailPsw(Usuario usuario) throws SQLException{
         String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -93,17 +111,8 @@ public class UsuarioRepository {
         }
         return null;
     }
-//SELECT * FROM rancho_db.usuario where correo_electronico = "ajsd@ajsha.com" OR telefono = 9611234567 ;
-    public boolean duplicateDatos( String telefono, String email ) throws SQLException{
-        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ? OR telefono =?";
-        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, email);
-            statement.setString(2, telefono);
-        }
-        return false;
-    }
 
+    //MICROSERVICIOS Y VALIDACIONES PARA USUARIOS
     public boolean findEmail(String email) throws SQLException{
         String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -114,7 +123,6 @@ public class UsuarioRepository {
         }
         return false;
     }
-
     public boolean findTelefono(String telefeno)throws SQLException{
         String sql = "SELECT * FROM USUARIO WHERE telefono =?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

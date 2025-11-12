@@ -1,5 +1,6 @@
 package org.vaquitas.controller;
 
+import kotlin.reflect.jvm.internal.impl.resolve.scopes.receivers.ContextClassReceiver;
 import org.vaquitas.model.Usuario;
 import org.vaquitas.service.UsuarioService;
 
@@ -64,8 +65,7 @@ public class UsuarioControl {
             usuarioUpdate.setClave(claveHash);
             usuarioUpdate.setIdUsuario(idUsuario);
             usuarioService.actualizarUsuario(usuarioUpdate);
-            context.status(200);
-            context.json(usuarioUpdate);
+            context.status(200).json("Usuario actualizado correctamente");
         }catch (NumberFormatException e) {
             context.status(400);
         } catch (SQLException e) {
@@ -87,12 +87,32 @@ public class UsuarioControl {
         }
     }
 
+    public void encontrarUsuario(Context context){
+        try {
+            int idUsuario=Integer.parseInt(context.pathParam("id"));
+             Usuario usuario = usuarioService.econtrarUsuaio(idUsuario);
+            if (usuario==null){
+                context.status(404).json("Usuario inexistente");
+                return;
+            }
+            context.status(200).json(usuario);
+        } catch (SQLException e) {
+            context.status(500).json(Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
     public void autenticarUsuario(Context context) {
         Usuario usuarioLogin = context.bodyAsClass(Usuario.class);
         try {
             Usuario usuario = usuarioService.autenticarUsuario(usuarioLogin);
             if (usuario == null){
-                throw new SQLException("Usuariono encontrado");
+                context.status(401).json(Map.of(
+                        "estado", false,
+                        "mensaje", "Usuario no encontrado"
+                ));
+                return;
             }
             boolean clave = Password.check(usuarioLogin.getClave(),usuario.getClave()).withBcrypt();
             if (clave){
@@ -104,17 +124,12 @@ public class UsuarioControl {
                         "mensaje", "Usuario encontrado"
                 ));
             }else{
-                context.status(400).result("Usuario no encontrado");
+                context.status(401).json(Map.of(
+                        "estado", false,
+                        "mensaje", "Contraseña incorrecta. Inténtalo de nuevo."
+                ));
             }
-//        } catch (SQLException e) {
-//            context.status(403).json(Map.of(
-//                    "error", "usuario no valido",
-//                    "estado", false
-//            ));
-//        } catch (Exception e) {
-//            System.err.println("Error inesperado en la autenticación: " + e.getMessage());
-//            context.status(500);
-//        }
+
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

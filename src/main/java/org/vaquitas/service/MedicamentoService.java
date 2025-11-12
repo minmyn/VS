@@ -21,6 +21,10 @@ public class MedicamentoService {
         return medicamentoRepository.findAll();
     }
 
+    public List<Medicamento> buscarMedicamentos(String texto) throws SQLException {
+        return medicamentoRepository.findByNombre(texto);
+    }
+
     public void actualizarMedicamento(Medicamento medicamento) throws  SQLException{
         medicamentoRepository.update(medicamento);
     }

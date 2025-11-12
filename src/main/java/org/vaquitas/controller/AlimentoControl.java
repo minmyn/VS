@@ -55,12 +55,6 @@ public class AlimentoControl {
             if (alimentoOriginal == null){
                 throw new NotFoundResponse();
             }
-//            editarAlimento = alimentoValidator.alimentoActualizar(alimentoOriginal,editarAlimento, idCompra);
-//            Map<String, String> errores = alimentoValidator.validarAlimento(editarAlimento);
-//            if (!errores.isEmpty()) {
-//                context.status(400).json(Map.of("errores", errores));
-//                return;
-//            }
             alimentoService.editarAlimentos(editarAlimento);
             context.status(204);
         }catch (NotFoundResponse e){

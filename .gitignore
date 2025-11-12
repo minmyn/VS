@@ -40,6 +40,6 @@ bin/
 
 ### Mac OS ###
 .DS_Store
-
-.env
+src/main/java/org/vaquitas/config/.env
+build/libs/.env
 .env.test

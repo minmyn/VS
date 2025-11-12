@@ -10,6 +10,7 @@ import org.vaquitas.repository.RecetaRepository;
 import org.vaquitas.repository.RecordatorioRepository;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -31,10 +32,14 @@ public class ConsultaService {
         try(Connection connection = DatabaseConfig.getDataSource().getConnection()){
             connection.setAutoCommit(false);
             try {
-                if (animalRepository.existsByIdArete(consulta.getIdArete()))
-                    throw new IllegalArgumentException("Arete duplicado");
+                if (!animalRepository.existsByIdArete(consulta.getIdArete()))
+                    throw new IllegalArgumentException("Arete");
                 int idConsulta = consultaRepository.save(consulta);
-                int idRecordatorio = recordatorioRepository.save(recordatorio);
+                Date fechaRecordatorio = Date.valueOf(recordatorio.getFechaRecordatorio());
+                Integer idRecordatorio = recordatorioRepository.search(fechaRecordatorio);
+                if ( idRecordatorio == null){
+                    idRecordatorio = recordatorioRepository.save(recordatorio);
+                }
                 recetaRepository.save(receta, idConsulta, idRecordatorio);
                 connection.commit();
             }catch (SQLException e){

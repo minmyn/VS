@@ -14,6 +14,7 @@ public class UsuarioRoute {
         app.post("/usuarios", usuarioControl::registrarUsuario);
         app.get("/usuarios", usuarioControl::verUsuario);
         app.patch("/usuarios/{id}", usuarioControl::editarUsuario);
+        app.get("/usuarios/{id}", usuarioControl::encontrarUsuario);
         app.delete("usuarios/{id}", usuarioControl::eliminarUsuario);
         app.post("/usuarios/login" , usuarioControl::autenticarUsuario);
     }
