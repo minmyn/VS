@@ -18,7 +18,8 @@ public class Inicio {
 
     public static AnimalRoute inicioGanado(){
         AnimalRepository animalRepository = new AnimalRepository();
-        AnimalService animalService = new AnimalService(animalRepository);
+        RazaRepository razaRepository = new RazaRepository();
+        AnimalService animalService = new AnimalService(animalRepository, razaRepository);
         AnimalControl animalControl = new AnimalControl(animalService);
         AnimalRoute animalRoute = new AnimalRoute(animalControl);
         return animalRoute;

@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import io.javalin.http.NotFoundResponse;
 import org.vaquitas.model.Alimento;
 import org.vaquitas.service.AlimentoService;
-import org.vaquitas.util.AlimentoValidator;
+//import org.vaquitas.util.AlimentoValidator;
 import org.vaquitas.util.Error;
 
 import java.sql.SQLException;
@@ -20,12 +20,12 @@ public class AlimentoControl {
     public void guardarAlimentos(Context context) {
         try {
             Alimento nuevoAlimento = context.bodyAsClass(Alimento.class);
-            AlimentoValidator alimentoValidator = new AlimentoValidator();
-            Map<String, String> errores = alimentoValidator.validarAlimento(nuevoAlimento);
-            if (!errores.isEmpty()) {
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            AlimentoValidator alimentoValidator = new AlimentoValidator();
+//            Map<String, String> errores = alimentoValidator.validarAlimento(nuevoAlimento);
+//            if (!errores.isEmpty()) {
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             alimentoService.guardarAlimentos(nuevoAlimento);
             context.status(201).json("Gurdado correctamentenete");
         } catch (SQLException e) {
@@ -47,7 +47,7 @@ public class AlimentoControl {
     }
 
     public void  editarAlimentos(Context context){
-        AlimentoValidator alimentoValidator = new AlimentoValidator();
+//        AlimentoValidator alimentoValidator = new AlimentoValidator();
         try {
             int idCompra = Integer.parseInt(context.pathParam("id"));
             Alimento editarAlimento = context.bodyAsClass(Alimento.class);

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class Animal {
     private int idArete;
+    private Raza raza;
     private String nombre;
     private LocalDate fechaNacimiento;
     private double peso;
@@ -11,7 +12,14 @@ public class Animal {
     private String estatus;
     private LocalDate fechaBaja;
     private int idRancho;
-    private int idRaza;
+
+    public Raza getRaza() {
+        return raza;
+    }
+
+    public void setRaza(Raza raza) {
+        this.raza = raza;
+    }
 
     public int getIdArete() {
         return idArete;
@@ -67,14 +75,6 @@ public class Animal {
 
     public void setEstatus(String estatus) {
         this.estatus = estatus;
-    }
-
-    public int getIdRaza() {
-        return idRaza;
-    }
-
-    public void setIdRaza(int idRaza) {
-        this.idRaza = idRaza;
     }
 
     public int getIdRancho() {

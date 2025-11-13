@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import org.vaquitas.model.Raza;
 import org.vaquitas.service.RazaService;
 import org.vaquitas.util.Error;
-import org.vaquitas.util.RazaValidator;
+//import org.vaquitas.util.RazaValidator;
 
 import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
@@ -20,12 +20,12 @@ public class RazaControl {
     public void registrarRaza(Context context) throws SQLClientInfoException{
         try {
             Raza nuevaRaza = context.bodyAsClass(Raza.class);
-            RazaValidator razaValidator = new RazaValidator();
-            Map<String, String> errores = razaValidator.validarRaza(nuevaRaza);
-            if (!errores.isEmpty()) {
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            RazaValidator razaValidator = new RazaValidator();
+//            Map<String, String> errores = razaValidator.validarRaza(nuevaRaza);
+//            if (!errores.isEmpty()) {
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             razaService.registrarRaza(nuevaRaza);
             context.status(201).json("Gurdado correctamentenete");
         }catch (IllegalArgumentException e){

@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import org.vaquitas.model.Venta;
 import org.vaquitas.service.VentaService;
 import org.vaquitas.util.Error;
-import org.vaquitas.util.VentaValidator;
+//import org.vaquitas.util.VentaValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -20,12 +20,12 @@ public class VentaControl {
     public void registrarVenta(Context context){
         try{
             Venta nuevaVenta = context.bodyAsClass(Venta.class);
-            VentaValidator ventaValidator = new VentaValidator();
-            Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
-            if (!errores.isEmpty()){
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            VentaValidator ventaValidator = new VentaValidator();
+//            Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
+//            if (!errores.isEmpty()){
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             if (ventaService.encontrarVacaVendida(nuevaVenta.getIdArete())){
                 context.status(404).json("No se puede vender dos veces la misma vaca");
                 return;

@@ -1,26 +1,30 @@
 package org.vaquitas.service;
 
 import org.vaquitas.model.Animal;
+import org.vaquitas.model.Raza;
 import org.vaquitas.repository.AnimalRepository;
+import org.vaquitas.repository.RazaRepository;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AnimalService {
     private final AnimalRepository animalRepository;
+    private final RazaRepository razaRepository;
 
-    public AnimalService(AnimalRepository animalRepository){
+    public AnimalService(AnimalRepository animalRepository, RazaRepository razaRepository){
         this.animalRepository = animalRepository;
+        this.razaRepository = razaRepository;
     }
 
     public void registrarGanado(Animal animal) throws SQLException {
-        boolean validar;
-        validar= animalRepository.existsByIdArete(animal.getIdArete());
-        if (validar){
-            throw new IllegalArgumentException("Arete duplicado");
-        }
+//        Raza raza = razaRepository.findRaza(animal.getRaza());
+//        if (raza == null) throw new IllegalArgumentException("Raza no encontrada"); // O crea la raza según necesites
+//        animal.setRaza(raza); // Asignar la instancia completa con id correctamente seteado
         animalRepository.save(animal);
     }
+
 
     public List<Animal> visualizarGanado() throws SQLException{
         return animalRepository.findAll();

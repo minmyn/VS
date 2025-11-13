@@ -43,3 +43,5 @@ bin/
 src/main/java/org/vaquitas/config/.env
 build/libs/.env
 .env.test
+build/libs/
+.idea\artifacts\untitled_jar.xml

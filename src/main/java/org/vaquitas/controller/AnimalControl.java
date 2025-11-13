@@ -2,13 +2,13 @@ package org.vaquitas.controller;
 
 import io.javalin.http.Context;
 import org.vaquitas.model.Animal;
+import org.vaquitas.model.Raza;
 import org.vaquitas.service.AnimalService;
-import org.vaquitas.util.AnimalValidator;
+//import org.vaquitas.util.AnimalValidator;
 import org.vaquitas.util.Error;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public class AnimalControl {
 
@@ -18,15 +18,16 @@ public class AnimalControl {
         this.animalService=animalService;
     }
 
-    public void registrarGanado(Context context){       //Integer idUsuario = context.attribute("idUsuario");//        if(idUsuario == null){ //            context.status(401);         //            return;       //        }
+    public void registrarGanado(Context context){
+
         try{
             Animal nuevoGanado = context.bodyAsClass(Animal.class);
-            AnimalValidator animalValidator = new AnimalValidator();
-            Map<String, String> errores = animalValidator.validarAnimal(nuevoGanado);
-            if (!errores.isEmpty()) {
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            AnimalValidator animalValidator = new AnimalValidator();
+//            Map<String, String> errores = animalValidator.validarAnimal(nuevoGanado);
+//            if (!errores.isEmpty()) {
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             animalService.registrarGanado(nuevoGanado);
             context.status(201).json("Gurdado correctamentenete");
         }catch (IllegalArgumentException e){

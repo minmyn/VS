@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import org.vaquitas.model.Medicamento;
 import org.vaquitas.service.MedicamentoService;
 import org.vaquitas.util.Error;
-import org.vaquitas.util.MedicamentoValidator;
+//import org.vaquitas.util.MedicamentoValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,12 +19,12 @@ public class MedicamentoControl{
     public void registrarMedicamento(Context context){
         try {
             Medicamento nuevoMedicamento = context.bodyAsClass(Medicamento.class);
-            MedicamentoValidator medicamentoValidator = new MedicamentoValidator();
-            Map<String, String> errores = medicamentoValidator.validarMedicamento(nuevoMedicamento);
-            if (!errores.isEmpty()) {
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            MedicamentoValidator medicamentoValidator = new MedicamentoValidator();
+//            Map<String, String> errores = medicamentoValidator.validarMedicamento(nuevoMedicamento);
+//            if (!errores.isEmpty()) {
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             medicamentoService.registrarMedicina(nuevoMedicamento);
             context.status(201).json("Gurdado correctamentenete");
         } catch (SQLException e) {

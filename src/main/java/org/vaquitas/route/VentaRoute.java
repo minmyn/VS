@@ -9,8 +9,8 @@ public class VentaRoute {
         this.ventaControl = ventaControl;
     }
     public void register (Javalin app){
-        app.post("/ventas", ventaControl::registrarVenta);
-        //app.p("/ventas/{id}", ventaControl::registrarVenta);
+        //app.post("/ventas", ventaControl::registrarVenta);
+        app.post("/ventas/{id}", ventaControl::registrarVenta);
         app.get("/ventas", ventaControl::verVentas);
     }
 }

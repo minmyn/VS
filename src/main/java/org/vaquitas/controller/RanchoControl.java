@@ -4,7 +4,7 @@ import io.javalin.http.Context;
 import org.vaquitas.model.Rancho;
 import org.vaquitas.service.RanchoService;
 import org.vaquitas.util.Error;
-import org.vaquitas.util.RanchoValidator;
+//import org.vaquitas.util.RanchoValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,12 +19,12 @@ public class RanchoControl {
     public void agregarRancho(Context context){
         try {
             Rancho nuevoRancho = context.bodyAsClass(Rancho.class);
-            RanchoValidator ranchoValidator = new RanchoValidator();
-            Map<String, String> errores = ranchoValidator.validarRancho(nuevoRancho);
-            if (!errores.isEmpty()) {
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            RanchoValidator ranchoValidator = new RanchoValidator();
+//            Map<String, String> errores = ranchoValidator.validarRancho(nuevoRancho);
+//            if (!errores.isEmpty()) {
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             ranchoService.agregarRancho(nuevoRancho);
             context.status(201).json("Gurdado correctamentenete");
         }catch (IllegalArgumentException e){

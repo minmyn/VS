@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.password4j.Password;
 import org.vaquitas.util.Error;
-import org.vaquitas.util.UsuarioValidator;
+//import org.vaquitas.util.UsuarioValidator;
 
 public class UsuarioControl {
 
@@ -25,21 +25,21 @@ public class UsuarioControl {
     public void registrarUsuario(Context context){
         try{
             Usuario nuevoUsuario = context.bodyAsClass(Usuario.class);
-            UsuarioValidator usuarioValidator = new UsuarioValidator();
-            Map<String,String> errores = usuarioValidator.validarUsuario(nuevoUsuario);
-            if (!errores.isEmpty()){
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            UsuarioValidator usuarioValidator = new UsuarioValidator();
+//            Map<String,String> errores = usuarioValidator.validarUsuario(nuevoUsuario);
+//            if (!errores.isEmpty()){
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             String claveHash = Password.hash(nuevoUsuario.getClave()).withBcrypt().getResult();
             nuevoUsuario.setClave(claveHash);
-            errores = usuarioService.registrarUsuario(nuevoUsuario);
-            if (!errores.isEmpty()){
-                context.status(400).json(Map.of("errores", errores));
-                return;
-            }
+//            errores = usuarioService.registrarUsuario(nuevoUsuario);
+//            if (!errores.isEmpty()){
+//                context.status(400).json(Map.of("errores", errores));
+//                return;
+//            }
             context.status(201).json(nuevoUsuario);
-        } catch (SQLException e) {
+//        } catch (SQLException e) {
             context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
         } catch (Exception e) {
             context.status(500).json(Error.getApiServiceError());
