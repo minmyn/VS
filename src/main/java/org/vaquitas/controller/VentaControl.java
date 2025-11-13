@@ -52,17 +52,4 @@ public class VentaControl {
             context.status(500).json(Error.getApiServiceError());
         }
     }
-
-//    public void editarVenta(Context context){
-//        try{
-//            int idVenta = Integer.parseInt(context.pathParam("id"));
-//            Venta editarVenta = context.bodyAsClass(Venta.class);
-//            editarVenta.setIdArete(idVenta);
-//            context.status(201).json("Exitoso");
-//        } catch (SQLException e) {
-//            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
-//        } catch (Exception e) {
-//            context.status(500).json(Error.getApiServiceError());
-//        }
-//    }
 }

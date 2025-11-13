@@ -31,7 +31,7 @@ public class VentaRepository {
 
     //Visualizar Ganado
 
-    public List<Venta> findVendidos() throws SQLException{
+    /*public List<Venta> findVendidos() throws SQLException{
         List<Venta> animal = new ArrayList<>();
         String sql="SELECT * FROM VENTA";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -49,7 +49,39 @@ public class VentaRepository {
             }
             return animal;
         }
+
+*/
+    public List<Venta> findVendidos() throws SQLException{
+        List<Venta> animal = new ArrayList<>();
+        String sql="SELECT v.venta_id, a.nombre, a.arete_id, a.sexo, a.raza_id, a.fecha_nacimiento, a.peso , v.peso_final, v.precio_venta, v.fecha_baja FROM ANIMAL a INNER JOIN VENTA v ON a.arete_id = v.arete_id WHERE a.estado='Vendido'";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()){
+            while (resultSet.next()) {
+                Venta ganado = new Venta();
+                Animal bovino = new Animal();
+                ganado.setIdVenta(resultSet.getInt("venta_id"));
+                bovino.setNombre(resultSet.getString("nombre"));
+                int idArete = resultSet.getInt("arete_id");
+                bovino.setIdArete(idArete);
+                ganado.setIdArete(idArete);
+                bovino.setSexo(resultSet.getString("sexo"));
+                bovino.setIdRaza(resultSet.getInt("raza_id"));
+                Date sqlDate;
+                sqlDate = resultSet.getDate("fecha_nacimiento");
+                bovino.setFechaNacimiento(sqlDate.toLocalDate());
+                bovino.setPeso(resultSet.getDouble("peso"));
+                sqlDate = resultSet.getDate("fecha_baja");
+                ganado.setFechaBaja(sqlDate.toLocalDate());
+                ganado.setPrecioVenta(resultSet.getDouble("precio_venta"));
+                ganado.setPesoFinal(resultSet.getDouble("peso_final"));
+                ganado.setGanado(bovino);
+                animal.add(ganado);
+            }
+            return animal;
+        }
     }
+
 
     public boolean findVendido(int idArete)throws SQLException{
         String sql = "SELECT * FROM VENTA WHERE arete_id = ?";

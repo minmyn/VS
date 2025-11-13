@@ -1,8 +1,11 @@
 package org.vaquitas.model;
 
+import java.util.Date;
+
 public class Receta {
     private int idConsulta, idMedicamento, idRecordatorio;
     private double dosis;
+    private Date fechaIncio;
 
     public int getIdConsulta() {
         return idConsulta;
@@ -34,5 +37,13 @@ public class Receta {
 
     public void setDosis(double dosis) {
         this.dosis = dosis;
+    }
+
+    public Date getFechaIncio() {
+        return fechaIncio;
+    }
+
+    public void setFechaIncio(Date fechaIncio) {
+        this.fechaIncio = fechaIncio;
     }
 }

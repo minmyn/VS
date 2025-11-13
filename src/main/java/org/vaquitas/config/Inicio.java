@@ -91,4 +91,10 @@ public class Inicio {
         RecordatorioRoute recordatorioRoute= new RecordatorioRoute(recordatorioControl);
         return recordatorioRoute;
     }
+
+    public static JwtMiddleware incioToken(){
+        TokenManager tokenManager = new TokenManager();
+        JwtMiddleware jwtMiddleware = new JwtMiddleware(tokenManager);
+        return jwtMiddleware;
+    }
 }

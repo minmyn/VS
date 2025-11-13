@@ -14,7 +14,7 @@ public class UsuarioValidator {
             errores.put("nombre", "Verifique el campo");
         if( usuario.getTelefono() == null || usuario.getTelefono().isBlank())
             errores.put("telefono", "Verifique el campo");
-        if (!"Hombre".equals(usuario.getSexo()) && !"Mujer".equals(usuario.getSexo()))
+        if (!"Masculino".equals(usuario.getSexo()) && !"Femenino".equals(usuario.getSexo()))
             errores.put("sexo", "Verifique el campo");
         Integer n;
         n = usuario.getEdad();

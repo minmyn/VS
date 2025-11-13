@@ -12,7 +12,7 @@ public class Main {
                 corsPluginConfig.addRule(it ->{
                     it.allowHost("http://localhost:5500");
                     it.allowHost("http://127.0.0.1:5500");
-                    //it.allowHost("");//IP DE LA INSTANCIA AWS
+                    //it.allowHost(""); IP DE LA INSTANCIA AWS
                     it.allowCredentials = true;
                 });
             });
@@ -22,14 +22,9 @@ public class Main {
             javalinConfig.showJavalinBanner = false;
         });
         app.start(8548);
-//        Javalin app = Javalin.create().start(8548);
-        System.out.println("Corriendo en el puerto 8548");
+
         app.get("/", ctx  -> ctx.result("Hello Vaquita"));
-
-        TokenManager tokenManager = new TokenManager();
-        JwtMiddleware jwtMiddleware = new JwtMiddleware(tokenManager);
-
-        jwtMiddleware.apply(app);
+        Inicio.incioToken().apply(app);
         Inicio.inicioUsuario().register(app);
         Inicio.inicioGanado().register(app);
         Inicio.inicioVenta().register(app);
@@ -40,6 +35,8 @@ public class Main {
         Inicio.inicioConsulta().register(app);
         Inicio.inicioReceta().register(app);
         Inicio.inicioRecordatorio().register(app);
+
+        System.out.println("Corriendo en el puerto 8548");
 
     }
 }

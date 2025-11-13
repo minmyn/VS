@@ -8,6 +8,15 @@ public class Venta {
     private double precioVenta;
     private double pesoFinal;
     private LocalDate fechaBaja;
+    private Animal ganado;
+
+    public Animal getGanado() {
+        return ganado;
+    }
+
+    public void setGanado(Animal ganado) {
+        this.ganado = ganado;
+    }
 
     public int getIdArete() {
         return idArete;
@@ -49,3 +58,6 @@ public class Venta {
         this.fechaBaja = fechaBaja;
     }
 }
+
+
+
