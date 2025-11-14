@@ -4,14 +4,16 @@ import org.vaquitas.controller.*;
 import org.vaquitas.repository.*;
 import org.vaquitas.route.*;
 import org.vaquitas.service.*;
+import org.vaquitas.util.UsuarioValidator;
 
 public class Inicio {
 
     public static UsuarioRoute inicioUsuario(){
         UsuarioRepository usuarioRepository = new UsuarioRepository();
-        UsuarioService usuarioService = new UsuarioService(usuarioRepository);
+        UsuarioValidator usuarioValidator = new UsuarioValidator(usuarioRepository);
+        UsuarioService usuarioService = new UsuarioService(usuarioRepository, usuarioValidator);
         TokenManager tokenManager = new TokenManager();
-        UsuarioControl usuarioControl = new UsuarioControl(usuarioService, tokenManager);
+        UsuarioControl usuarioControl = new UsuarioControl(usuarioService, tokenManager, usuarioValidator);
         UsuarioRoute usuarioRoute = new UsuarioRoute(usuarioControl);
         return usuarioRoute;
     }
@@ -67,20 +69,29 @@ public class Inicio {
     }
 
     public static ConsultaRoute inicioConsulta(){
-        RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
-        RecetaRepository recetaRepository = new RecetaRepository();
         ConsultaRepository consultaRepository = new ConsultaRepository();
         AnimalRepository animalRepository = new AnimalRepository();
-        ConsultaService consultaService = new ConsultaService(recetaRepository, recordatorioRepository, consultaRepository, animalRepository);
+        ConsultaService consultaService = new ConsultaService(consultaRepository, animalRepository);
         ConsultaControl consultaControl = new ConsultaControl(consultaService);
         ConsultaRoute consultaRoute = new ConsultaRoute(consultaControl);
         return consultaRoute;
     }
 
     public static RecetaRoute inicioReceta(){
+        // Repositorios
+        RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
         RecetaRepository recetaRepository = new RecetaRepository();
-        RecetaService recetaService = new RecetaService(recetaRepository);
-        RecetaControl recetaControl = new RecetaControl(recetaService);
+        ConsultaRepository consultaRepository = new ConsultaRepository();
+        MedicamentoRepository medicamentoRepository = new MedicamentoRepository(); // Se añade el repositorio
+
+        // Services
+        RecetaService recetaService = new RecetaService(recetaRepository, recordatorioRepository, consultaRepository);
+        MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository); // Se añade el servicio
+
+        // Control y Route
+        // Se inyecta el nuevo servicio en el controlador
+        RecetaControl recetaControl = new RecetaControl(recetaService, medicamentoService);
+        // Asumiendo que tienes una clase RecetaRoute para definir las rutas.
         RecetaRoute recetaRoute = new RecetaRoute(recetaControl);
         return recetaRoute;
     }

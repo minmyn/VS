@@ -11,7 +11,7 @@ public class Animal {
     private String sexo;
     private String estatus;
     private LocalDate fechaBaja;
-    private int idRancho;
+    private Rancho rancho;
 
     public Raza getRaza() {
         return raza;
@@ -77,11 +77,4 @@ public class Animal {
         this.estatus = estatus;
     }
 
-    public int getIdRancho() {
-        return idRancho;
-    }
-
-    public void setIdRancho(int idRancho) {
-        this.idRancho = idRancho;
-    }
 }

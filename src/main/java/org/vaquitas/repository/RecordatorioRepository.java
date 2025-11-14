@@ -21,10 +21,11 @@ public class RecordatorioRepository {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) return resultSet.getInt(1);
-            throw new SQLException("No se genero la consula");
+            // CORRECCIÓN del mensaje de error
+            throw new SQLException("No se generó el recordatorio.");
         }
     }
-    //VER TODOS LOS RECORDATORIOS
+
     public List<Recordatorio> findAll() throws SQLException{
         List<Recordatorio> recordatorios = new ArrayList<>();
         String sql = "SELECT * FROM RECORDATORIO";
@@ -44,16 +45,18 @@ public class RecordatorioRepository {
 
     //MICROSERVICIOS Y VALIDACIONES
 
-    public Integer search(Date fechaRecordatorio) throws SQLException{
-        String sql = "SELECT * FROM RECORDATORIO WHERE fecha = ?";
+    public Recordatorio search(Recordatorio recordatorio) throws SQLException{
+        // CORRECCIÓN: La consulta debe seleccionar el ID, no solo '1'.
+        // Asumiendo que el ID se llama calendario_id.
+        String sql = "SELECT calendario_id FROM RECORDATORIO WHERE fecha = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setDate(1, fechaRecordatorio);
+            Date fechasql = Date.valueOf(recordatorio.getFechaRecordatorio());
+            statement.setDate(1, fechasql);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    Recordatorio recordatorio = new Recordatorio();
-                    int idRecordatorio = resultSet.getInt("calendario_id");
-                    return idRecordatorio;
+                    recordatorio.setIdRecordatorio(resultSet.getInt("calendario_id"));
+                    return recordatorio;
                 }
                 return null;
             }

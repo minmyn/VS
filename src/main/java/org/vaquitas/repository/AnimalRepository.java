@@ -7,6 +7,7 @@ import org.vaquitas.model.Raza;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class AnimalRepository {
 
@@ -59,7 +60,7 @@ public class AnimalRepository {
     // Ganado no activo (Muerto o Vendido)
     public List<Animal> findNoActivo() throws SQLException {
         List<Animal> ganadoNoActivo = new ArrayList<>();
-        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Muerto' OR estado = 'Vendido'";
+        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Muerto' OR estado = 'Vendido' ORDER BY a.arete_id";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -84,6 +85,20 @@ public class AnimalRepository {
         return ganadoVendido;
     }
 
+    public Animal findGanado(int idArete) throws SQLException{
+        String sql = "SELECT a.*, r.raza_id, r.nombre as nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE a.arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idArete);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapAnimal(resultSet);
+                }
+            }
+            return null;
+        }
+    }
+
     // Dar de baja al ganado
     public int update(Animal animal) throws SQLException {
         String sql = "UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
@@ -102,8 +117,9 @@ public class AnimalRepository {
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, idArete);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next();
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
         }
     }
 
@@ -133,11 +149,9 @@ public class AnimalRepository {
         animal.setFechaNacimiento(rs.getDate("fecha_nacimiento").toLocalDate());
         animal.setEstatus(rs.getString("estado"));
         animal.setSexo(rs.getString("sexo"));
-        animal.setIdRancho(rs.getInt("rancho_id"));
         Date fechaBajaSql = rs.getDate("fecha_baja");
         if (fechaBajaSql != null) animal.setFechaBaja(fechaBajaSql.toLocalDate());
 
-        // Mapear Raza
         Raza raza = new Raza();
         raza.setIdRaza(rs.getInt("raza_id"));
         raza.setNombreRaza(rs.getString("nombre_raza"));

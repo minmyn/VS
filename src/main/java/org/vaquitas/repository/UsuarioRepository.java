@@ -35,37 +35,43 @@ public class UsuarioRepository {
     //VER TODOS LOS USUARIOS AGRAGADOS
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        String sql = "SELECT * FROM USUARIO";
+        // Se añade clave_acceso y correo_electronico para llenar el objeto Usuario completo
+        String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()
         ) {
             while (resultSet.next()) {
-                Usuario usuarios = new Usuario();//int usersql = resultSet.getInt("usuario_id");//if(usersql!=1) {
+                Usuario usuarios = new Usuario();
                 usuarios.setIdUsuario(resultSet.getInt("usuario_id"));
                 usuarios.setNombre(resultSet.getString("nombre"));
                 usuarios.setTelefono(resultSet.getString("telefono"));
                 usuarios.setSexo(resultSet.getString("sexo"));
-                usuarios.setEdad(resultSet.getInt("edad"));//usuarios.setPuesto(usuarios.getPuesto());
-                usuario.add(usuarios); //}
+                usuarios.setEdad(resultSet.getInt("edad"));
+                usuarios.setEmail(resultSet.getString("correo_electronico"));
+                usuarios.setClave(resultSet.getString("clave_acceso"));
+                usuario.add(usuarios);
             }
             return usuario;
         }
     }
+
     //ENCONTRAR UN SOLO USUARIO Y VERLO
     public Usuario findUsuario(int idUsuario)throws  SQLException{
-        String sql = "SELECT * FROM USUARIO WHERE usuario_id = ?";
+        String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO WHERE usuario_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);){
             statement.setInt(1, idUsuario );
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
                     Usuario usuarioBD = new Usuario();
+                    usuarioBD.setIdUsuario(resultSet.getInt("usuario_id"));
                     usuarioBD.setNombre(resultSet.getString("nombre"));
                     usuarioBD.setTelefono(resultSet.getString("telefono"));
                     usuarioBD.setSexo(resultSet.getString("sexo"));
                     usuarioBD.setEdad(resultSet.getInt("edad"));
                     usuarioBD.setEmail(resultSet.getString("correo_electronico"));
+                    usuarioBD.setClave(resultSet.getString("clave_acceso")); // Se incluye la clave
                     return usuarioBD;
                 }
                 return null;
@@ -96,7 +102,7 @@ public class UsuarioRepository {
 
     //AUTENTICACION DE USUARIO
     public Usuario findByEmailPsw(Usuario usuario) throws SQLException{
-        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
+        String sql = "SELECT usuario_id, correo_electronico, clave_acceso FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);) {
             statement.setString(1, usuario.getEmail());
@@ -114,7 +120,7 @@ public class UsuarioRepository {
 
     //MICROSERVICIOS Y VALIDACIONES PARA USUARIOS
     public boolean findEmail(String email) throws SQLException{
-        String sql = "SELECT * FROM USUARIO WHERE correo_electronico = ?";
+        String sql = "SELECT 1 FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, email);
@@ -123,11 +129,11 @@ public class UsuarioRepository {
         }
         return false;
     }
-    public boolean findTelefono(String telefeno)throws SQLException{
-        String sql = "SELECT * FROM USUARIO WHERE telefono =?";
+    public boolean findTelefono(String telefono)throws SQLException{
+        String sql = "SELECT 1 FROM USUARIO WHERE telefono =?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, telefeno);
+            statement.setString(1, telefono);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) return true;
         }

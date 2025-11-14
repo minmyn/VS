@@ -1,9 +1,8 @@
 package org.vaquitas.service;
 
-import com.password4j.Password;
 import org.vaquitas.model.Usuario;
 import org.vaquitas.repository.UsuarioRepository;
-//import org.vaquitas.util.UsuarioValidator;
+import org.vaquitas.util.UsuarioValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -11,18 +10,21 @@ import java.util.Map;
 
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
-    public UsuarioService (UsuarioRepository usuarioRepository){
-        this.usuarioRepository=usuarioRepository;
+    private final UsuarioValidator usuarioValidator; // Se añade el validador como dependencia
+
+    public UsuarioService (UsuarioRepository usuarioRepository, UsuarioValidator usuarioValidator){ // Se inyecta el validador
+        this.usuarioRepository = usuarioRepository;
+        this.usuarioValidator = usuarioValidator;
     }
 
-//    public Map<String,String> registrarUsuario(Usuario usuario) throws SQLException{
-////        UsuarioValidator usuarioValidator = new UsuarioValidator();
-////        Map<String,String> validar = usuarioValidator.validarDuplicados(usuario.getTelefono(), usuario.getEmail());
-////        if (!validar.isEmpty())
-////            return validar;
-//        usuarioRepository.save(usuario);
-////        return validar;
-//    }
+    public Map<String,String> registrarUsuario(Usuario usuario) throws SQLException{
+        // Se utiliza la instancia inyectada
+        Map<String,String> validar = usuarioValidator.validarDuplicados(usuario.getTelefono(), usuario.getEmail());
+        if (!validar.isEmpty())
+            return validar;
+        usuarioRepository.save(usuario);
+        return validar;
+    }
 
     public List<Usuario> verUsuario() throws SQLException{
         return usuarioRepository.findAll();
@@ -36,7 +38,8 @@ public class UsuarioService {
         return usuarioRepository.deleter(idUsuario);
     }
 
-    public Usuario econtrarUsuaio(int idUsuario) throws SQLException{
+    // Corregida la errata: econtrarUsuaio -> encontrarUsuario
+    public Usuario encontrarUsuario(int idUsuario) throws SQLException{
         return usuarioRepository.findUsuario(idUsuario);
     }
 

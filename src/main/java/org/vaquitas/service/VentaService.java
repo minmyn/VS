@@ -16,7 +16,18 @@ public class VentaService {
         this.animalRepository =animalRepository;
     }
 
+    // ... dentro de VentaService.java ...
     public void registrarVenta(Venta venta) throws SQLException {
+        int idArete = venta.getGanado().getIdArete();
+
+        if (!animalRepository.existsByIdArete(idArete)) {
+            throw new IllegalArgumentException("Ganado inexistente con arete ID: " + idArete);
+        }
+
+        if (ventaRepository.findVendido(idArete)){
+            throw new IllegalArgumentException("El ganado con ID " + idArete + " ya ha sido vendido previamente.");
+        }
+
         ventaRepository.save(venta);
     }
 

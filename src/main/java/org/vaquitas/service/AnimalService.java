@@ -18,10 +18,20 @@ public class AnimalService {
         this.razaRepository = razaRepository;
     }
 
+    // Código para AnimalService.java
+
     public void registrarGanado(Animal animal) throws SQLException {
-//        Raza raza = razaRepository.findRaza(animal.getRaza());
-//        if (raza == null) throw new IllegalArgumentException("Raza no encontrada"); // O crea la raza según necesites
-//        animal.setRaza(raza); // Asignar la instancia completa con id correctamente seteado
+
+        Raza raza = razaRepository.findRaza(animal.getRaza());
+        if (raza == null) {
+            throw new IllegalArgumentException("Raza no encontrada: El ID o nombre de la raza no existe.");
+        }
+        animal.setRaza(raza);
+
+        if (animalRepository.existsByIdArete(animal.getIdArete())) {
+            throw new IllegalArgumentException("Arete duplicado: El ganado con ID " + animal.getIdArete() + " ya existe.");
+        }
+
         animalRepository.save(animal);
     }
 
@@ -42,15 +52,21 @@ public class AnimalService {
         return animalRepository.findVendido();
     }
 
+    public Animal verUnSoloGanado(int idArete) throws SQLException{
+        return  animalRepository.findGanado(idArete);
+    }
+
     public void darBajaGanado(Animal animal) throws SQLException{
         Animal animalBD = animalRepository.validateFechaBaja(animal.getIdArete());
         if (animalBD == null){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Ganado no encontrado con arete ID: " + animal.getIdArete());
         }
         LocalDate fechaNac = animalBD.getFechaNacimiento();
         LocalDate fechBaja = animal.getFechaBaja();
+
         if (fechBaja.isBefore(fechaNac))
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("La fecha de baja no puede ser anterior a la fecha de nacimiento.");
+
         animalRepository.update(animal);
     }
 

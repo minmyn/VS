@@ -9,8 +9,6 @@ public class ConsultaRoute {
         this.consultaControl=consultaControl;
     }
     public void register(Javalin app){
-        app.post("/consultas", consultaControl::crearConsulta);
-        app.get("/consultas", consultaControl::verConsultas);
     }
 
 }

@@ -6,7 +6,7 @@ public class Alimento {
     private int idCompra;
     private double cantidad, precio;
     private String tipo, nombre;
-    private int idRancho;
+    private Rancho idRancho;
     private LocalDate fechaCompra;
 
     public int getIdCompra() {
@@ -49,19 +49,19 @@ public class Alimento {
         this.nombre = nombre;
     }
 
-    public int getIdRancho() {
-        return idRancho;
-    }
-
-    public void setIdRancho(int idRancho) {
-        this.idRancho = idRancho;
-    }
-
     public LocalDate getFechaCompra() {
         return fechaCompra;
     }
 
     public void setFechaCompra(LocalDate fechaCompra) {
         this.fechaCompra = fechaCompra;
+    }
+
+    public Rancho getIdRancho() {
+        return idRancho;
+    }
+
+    public void setIdRancho(Rancho idRancho) {
+        this.idRancho = idRancho;
     }
 }

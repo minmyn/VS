@@ -1,10 +1,11 @@
 package org.vaquitas.controller;
 
 import io.javalin.http.Context;
+import org.vaquitas.model.Animal;
 import org.vaquitas.model.Venta;
 import org.vaquitas.service.VentaService;
 import org.vaquitas.util.Error;
-//import org.vaquitas.util.VentaValidator;
+import org.vaquitas.util.VentaValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -19,22 +20,27 @@ public class VentaControl {
 
     public void registrarVenta(Context context){
         try{
+
+            int idArete = Integer.parseInt(context.pathParam("id"));
             Venta nuevaVenta = context.bodyAsClass(Venta.class);
-//            VentaValidator ventaValidator = new VentaValidator();
-//            Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
-//            if (!errores.isEmpty()){
-//                context.status(400).json(Map.of("errores", errores));
-//                return;
-//            }
-            if (ventaService.encontrarVacaVendida(nuevaVenta.getIdArete())){
-                context.status(404).json("No se puede vender dos veces la misma vaca");
-                return;
-            }else if(!ventaService.encontrarVaca(nuevaVenta.getIdArete())){
-                context.status(404).json("Ganado inexistente");
+            Animal animal = new Animal();
+            animal.setIdArete(idArete);
+            nuevaVenta.setGanado(animal);
+            VentaValidator ventaValidator = new VentaValidator();
+            Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
+
+            if (!errores.isEmpty()){
+                context.status(400).json(Map.of("errores", errores));
                 return;
             }
+
             ventaService.registrarVenta(nuevaVenta);
-            context.status(201).json("Exitoso");
+            context.status(201).json(Map.of("estado", true, "mensaje", "Venta registrada con éxito", "data", nuevaVenta));
+
+        }catch (NumberFormatException e){
+            context.status(400).json(Map.of("mensaje", "El ID del arete debe ser un número entero válido."));
+        } catch (IllegalArgumentException e){
+            context.status(404).json(Map.of("mensaje", e.getMessage()));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

@@ -1,49 +1,52 @@
 package org.vaquitas.model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Receta {
-    private int idConsulta, idMedicamento, idRecordatorio;
-    private double dosis;
-    private Date fechaIncio;
+    private Medicamento medicamento;
+    private Recordatorio recordatorio;
+    private Consulta consulta;
+    private int dosis;
+    private LocalDate fechaInicio;
 
-    public int getIdConsulta() {
-        return idConsulta;
+    public Medicamento getMedicamento() {
+        return medicamento;
     }
 
-    public void setIdConsulta(int idConsulta) {
-        this.idConsulta = idConsulta;
+    public void setMedicamento(Medicamento medicamento) {
+        this.medicamento = medicamento;
     }
 
-    public int getIdMedicamento() {
-        return idMedicamento;
+    public Recordatorio getRecordatorio() {
+        return recordatorio;
     }
 
-    public void setIdMedicamento(int idMedicamento) {
-        this.idMedicamento = idMedicamento;
+    public void setRecordatorio(Recordatorio recordatorio) {
+        this.recordatorio = recordatorio;
     }
 
-    public int getIdRecordatorio() {
-        return idRecordatorio;
+    public Consulta getConsulta() {
+        return consulta;
     }
 
-    public void setIdRecordatorio(int idRecordatorio) {
-        this.idRecordatorio = idRecordatorio;
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
     }
 
-    public double getDosis() {
+    public int getDosis() {
         return dosis;
     }
 
-    public void setDosis(double dosis) {
+    public void setDosis(int dosis) {
         this.dosis = dosis;
     }
 
-    public Date getFechaIncio() {
-        return fechaIncio;
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setFechaIncio(Date fechaIncio) {
-        this.fechaIncio = fechaIncio;
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 }

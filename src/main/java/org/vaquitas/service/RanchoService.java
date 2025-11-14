@@ -13,11 +13,14 @@ public class RanchoService {
         this.ranchoRepository=ranchoRepository;
     }
 
+// RanchoService.java (Método agregarRancho corregido)
+
     public void agregarRancho(Rancho rancho) throws SQLException{
         boolean validar;
         validar = ranchoRepository.duplicateNombre(rancho.getNombre());
         if (validar) throw new IllegalArgumentException("Nombre duplicado");
-        ranchoRepository.save(rancho);
+        int idGenerado = ranchoRepository.save(rancho);
+        rancho.setIdRancho(idGenerado);
     }
 
     public List<Rancho> verRanchos()throws SQLException{

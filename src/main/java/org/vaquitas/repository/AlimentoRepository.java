@@ -24,6 +24,7 @@ public class AlimentoRepository {
             statement.executeUpdate();
         }
     }
+
     //VER TODOS LOS ALIMEMENTOS
     public List<Alimento> findAll() throws SQLException{
         List<Alimento> alimentos = new ArrayList<>();
@@ -69,7 +70,7 @@ public class AlimentoRepository {
     }
     //ACTUALIZAR O CAMBIAR INFORMACION DE UN ALIMENTO
     public int update(Alimento alimento) throws SQLException{
-        String sql = "UPDATE ALIMENTO SET tipo = ?, alimento = ?,cantidad = ?,precio = ?,fecha_compra=? WHERE compra_id = ?";
+        String sql = "UPDATE ALIMENTO SET tipo = ? , alimento = ? , cantidad = ?, precio = ? , fecha_compra = ? WHERE compra_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, alimento.getTipo());
@@ -83,23 +84,12 @@ public class AlimentoRepository {
         }
     }
     //ELIMINAR UN ALIMENTOS
-    public int deleter (int idCompra) throws SQLException{
+    public int delete(int idCompra) throws SQLException{
         String sql = "DELETE FROM ALIMENTO WHERE compra_id = ? ";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, idCompra);
             return statement.executeUpdate();
-        }
-    }
-    //MICROSERVICIOS PARA VALIDACIONES
-    public boolean existById(int idCompra) throws SQLException{
-        String sql = "SELECT * FROM ALIMENTO WHERE compra_id = ?";
-        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setInt(1, idCompra);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) return true;
-            return false;
         }
     }
 

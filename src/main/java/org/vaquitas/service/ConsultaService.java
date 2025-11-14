@@ -9,49 +9,17 @@ import org.vaquitas.repository.ConsultaRepository;
 import org.vaquitas.repository.RecetaRepository;
 import org.vaquitas.repository.RecordatorioRepository;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.util.List;
 
 public class ConsultaService {
 
     private final ConsultaRepository consultaRepository;
-    private final RecetaRepository recetaRepository;
-    private final RecordatorioRepository recordatorioRepository;
     private final AnimalRepository animalRepository;
 
-    public ConsultaService(RecetaRepository recetaRepository, RecordatorioRepository recordatorioRepository, ConsultaRepository consultaRepository, AnimalRepository animalRepository) {
+    public ConsultaService(ConsultaRepository consultaRepository, AnimalRepository animalRepository) {
         this.consultaRepository=consultaRepository;
-        this.recetaRepository=recetaRepository;
-        this.recordatorioRepository=recordatorioRepository;
-        this.animalRepository=animalRepository;
+        this.animalRepository = animalRepository;
+
     }
 
-    public void registrarConsulta(Consulta consulta, Receta receta, Recordatorio recordatorio) throws SQLException{
-        try(Connection connection = DatabaseConfig.getDataSource().getConnection()){
-            connection.setAutoCommit(false);
-            try {
-                if (!animalRepository.existsByIdArete(consulta.getIdArete()))
-                    throw new IllegalArgumentException("Arete");
-                int idConsulta = consultaRepository.save(consulta);
-                Date fechaRecordatorio = Date.valueOf(recordatorio.getFechaRecordatorio());
-                Integer idRecordatorio = recordatorioRepository.search(fechaRecordatorio);
-                if ( idRecordatorio == null){
-                    idRecordatorio = recordatorioRepository.save(recordatorio);
-                }
-                recetaRepository.save(receta, idConsulta, idRecordatorio);
-                connection.commit();
-            }catch (SQLException e){
-                connection.rollback();
-                throw e;
-            }finally {
-                connection.setAutoCommit(true);
-            }
-        }
-    }
 
-    public List<Consulta> verConsultas() throws SQLException{
-        return consultaRepository.findAll();
-    }
 }

@@ -28,13 +28,15 @@ public class Main {
         Inicio.inicioUsuario().register(app);
         Inicio.inicioGanado().register(app);
         Inicio.inicioVenta().register(app);
-        Inicio.inicioRaza().register(app);
-        Inicio.inicioRancho().register(app);
         Inicio.inicioAlimento().register(app);
-        Inicio.inicioMedicina().register(app);
         Inicio.inicioConsulta().register(app);
         Inicio.inicioReceta().register(app);
         Inicio.inicioRecordatorio().register(app);
+
+        //CATALOGOS
+        Inicio.inicioMedicina().register(app);
+        Inicio.inicioRaza().register(app);
+        Inicio.inicioRancho().register(app);
 
         System.out.println("Corriendo en el puerto 8548");
 

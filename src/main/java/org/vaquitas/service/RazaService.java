@@ -13,10 +13,16 @@ public class RazaService {
         this.razaRepository = razaRepository;
     }
 
+// Código corregido para RazaService.java (Método registrarRaza)
+
     public void registrarRaza(Raza raza) throws SQLException{
-//        if (razaRepository.findRaza(raza.getNombreRaza()))
-//            throw new IllegalArgumentException("Raza existente");
-        razaRepository.save(raza);
+
+        if (razaRepository.existsByName(raza.getNombreRaza())) {
+            throw new IllegalArgumentException("Raza ya existe. No se permiten nombres duplicados.");
+        }
+
+        int idGenerado = razaRepository.save(raza);
+        raza.setIdRaza(idGenerado);
     }
 
     public List<Raza> verRazas() throws SQLException{
@@ -24,6 +30,13 @@ public class RazaService {
     }
 
     public void renombrarRaza(Raza raza) throws  SQLException{
-        razaRepository.update(raza);
+        try {
+            razaRepository.update(raza);
+        } catch (SQLException e) {
+            if (e.getMessage() != null && e.getMessage().contains("no afectó ninguna fila")) {
+                throw new IllegalArgumentException("La raza con ID " + raza.getIdRaza() + " no fue encontrada para renombrar.");
+            }
+            throw e;
+        }
     }
 }

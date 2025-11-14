@@ -1,25 +1,28 @@
-//package org.vaquitas.util;
-//
-//import org.vaquitas.model.Venta;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//
-//public class VentaValidator {
-//    public Map<String, String> validarVenta(Venta venta){
-//        Map<String, String> errores = new HashMap<>();
-//        Integer m = venta.getIdArete();
-//        if (m== null || m < 1)
-//            errores.put("idArete", "Verifique el campo");
-//        if (venta.getFechaBaja() == null)
-//            errores.put("fechaBaja", "Verifique el campo");
-//        Double n;
-//        n = venta.getPesoFinal();
-//        if (n == null || n <= 0 )
-//            errores.put("pesoFinal", "Verifique el campo");
-//        n = venta.getPrecioVenta();
-//        if (n == null || n <= 0 )
-//            errores.put("precio","Verifique el campo");
-//        return errores;
-//    }
-//}
+package org.vaquitas.util;
+
+import org.vaquitas.model.Venta;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class VentaValidator {
+    public Map<String, String> validarVenta(Venta venta){
+        Map<String, String> errores = new HashMap<>();
+
+        if (venta.getGanado() == null || venta.getGanado().getIdArete() <= 0)
+            errores.put("idArete", "El ID del arete es inválido o no está especificado.");
+
+        if (venta.getFechaBaja() == null)
+            errores.put("fechaBaja", "La fecha de baja es obligatoria.");
+
+        Double pesoFinal = venta.getPesoFinal();
+        if (pesoFinal == null || pesoFinal <= 0 )
+            errores.put("pesoFinal", "El peso final debe ser mayor a 0.");
+
+        Double precioVenta = venta.getPrecioVenta();
+        if (precioVenta == null || precioVenta <= 0 )
+            errores.put("precioVenta", "El precio de venta debe ser mayor a 0.");
+
+        return errores;
+    }
+}

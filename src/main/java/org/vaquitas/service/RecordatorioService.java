@@ -12,6 +12,7 @@ public class RecordatorioService {
         this.recordatorioRepository=recordatorioRepository;
     }
 
+    //VER RECORDATORIOS
     public List<Recordatorio> verRecordatorio() throws SQLException {
         return recordatorioRepository.findAll();
     }

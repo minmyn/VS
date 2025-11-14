@@ -10,7 +10,7 @@ public class RecetaRoute {
     }
 
     public void register(Javalin app){
-        app.get("/recetas", recetaControl::verRecetas);
-
+        app.post("/receta", recetaControl::guardarSaludHigiene);
+        app.get("/receta", recetaControl::verDetallesRecetas);
     }
 }

@@ -3,25 +3,24 @@ package org.vaquitas.repository;
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Rancho;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RanchoRepository {
 
-    public void save(Rancho rancho) throws SQLException{
+    public int save(Rancho rancho) throws SQLException{
         String sql="INSERT INTO RANCHO (nombre, locacion) VALUES (?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1,rancho.getNombre());
             statement.setString(2, rancho.getUbicacion());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("La inserción del encargado no afectó ninguna fila.");
-            }
+
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next())
+                return resultSet.getInt(1); // Retorna el ID generado
+            throw new SQLException("No se pudo obtener el ID del rancho guardado.");
         }
     }
 

@@ -8,7 +8,7 @@ public class Usuario {
     private int edad;
     private String email;
     private String clave;
-    private int idRancho;
+    private Rancho idRancho;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -66,11 +66,11 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public int getIdRancho() {
+    public Rancho getIdRancho() {
         return idRancho;
     }
 
-    public void setIdRancho(int idRancho) {
+    public void setIdRancho(Rancho idRancho) {
         this.idRancho = idRancho;
     }
 

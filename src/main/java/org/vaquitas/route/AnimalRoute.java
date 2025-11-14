@@ -14,6 +14,7 @@ public class AnimalRoute {
         app.get("/ganado/activos", animalControl::vizualizarGanadoActivo);
         app.get("/ganado/no-activos", animalControl::visualizarGanadoNoActivo);
         app.get("/ganado/vendidos", animalControl::visualizarGanadoVendido);
+        app.get("/ganado/{id}", animalControl::verUnGanado);
         app.patch("/ganado/{id}", animalControl::darBajaGanado);
     }
 }

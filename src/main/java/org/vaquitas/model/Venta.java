@@ -4,7 +4,6 @@ import java.time.LocalDate;
 
 public class Venta {
     private int idVenta;
-    private int idArete;
     private double precioVenta;
     private double pesoFinal;
     private LocalDate fechaBaja;
@@ -16,14 +15,6 @@ public class Venta {
 
     public void setGanado(Animal ganado) {
         this.ganado = ganado;
-    }
-
-    public int getIdArete() {
-        return idArete;
-    }
-
-    public void setIdArete(int idArete) {
-        this.idArete = idArete;
     }
 
     public int getIdVenta() {

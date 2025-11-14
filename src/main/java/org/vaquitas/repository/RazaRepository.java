@@ -3,25 +3,22 @@ package org.vaquitas.repository;
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Raza;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class RazaRepository {
-    public void save(Raza raza) throws SQLException{
+    public int save(Raza raza) throws SQLException{
         String sql="INSERT INTO RAZA (nombre) VALUES (?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
+             PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1,raza.getNombreRaza());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("La inserción del encargado no afectó ninguna fila.");
-            }
+            statement.executeUpdate();
+            ResultSet resultSet = statement.getGeneratedKeys();
+            if (resultSet.next())
+                return resultSet.getInt(1);
+            throw new SQLException("No se genero la consula");
         }
-
     }
 
     public List<Raza> findAll() throws SQLException{
@@ -42,41 +39,47 @@ public class RazaRepository {
 
     public int update(Raza raza) throws SQLException{
         String sql = "UPDATE RAZA SET nombre = ? WHERE raza_id = ?";
-        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql))
+        try(Connection connection = DatabaseConfig.getDataSource().getConnection();
+            PreparedStatement statement = connection.prepareStatement(sql))
         {
             statement.setString(1, raza.getNombreRaza());
             statement.setInt(2, raza.getIdRaza());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("La inserción del encargado no afectó ninguna fila.");
-            }
-            return statement.executeUpdate();
 
+            int affectedRows = statement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new SQLException("La actualización de la raza no afectó ninguna fila. ¿Existe el ID?");
+            }
+            return affectedRows;
         }
     }
 
     public Raza findRaza(Raza raza) throws SQLException{
-        String sql = "SELECT * FROM RAZA WHERE nombre = ?";
+        String sql = "SELECT * FROM RAZA WHERE nombre = ? OR raza_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, raza.getNombreRaza());
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()){
-                raza.setIdRaza(resultSet.getInt("raza_id"));
-                return raza;
+            statement.setInt(2, raza.getIdRaza());
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()){
+                    Raza razaEncontrada = new Raza();
+                    razaEncontrada.setIdRaza(resultSet.getInt("raza_id"));
+                    razaEncontrada.setNombreRaza(resultSet.getString("nombre"));
+                    return razaEncontrada;
+                }
             }
         }
         return null;
     }
-//    public boolean findRaza(String nombreRaza)throws SQLException{
-//        String sql = "SELECT * FROM RAZA WHERE nombre = ?";
-//        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-//             PreparedStatement statement = connection.prepareStatement(sql)){
-//            statement.setString(1, nombreRaza);
-//            ResultSet resultSet = statement.executeQuery();
-//            if (resultSet.next()) return true;
-//        }
-//        return false;
-//    }
+
+    public boolean existsByName(String nombreRaza) throws SQLException{
+        String sql = "SELECT 1 FROM RAZA WHERE nombre = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, nombreRaza);
+            try (ResultSet resultSet = statement.executeQuery()){
+                return resultSet.next();
+            }
+        }
+    }
 }

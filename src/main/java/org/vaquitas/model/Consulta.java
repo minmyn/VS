@@ -1,35 +1,9 @@
 package org.vaquitas.model;
 
 public class Consulta {
-    private int idConsulta, idArete ;
-    private String padecimiento ;
-//    private Consulta consulta;
-//    private Receta receta;
-//    private Recordatorio recordatorio;
-//
-//    public Consulta getConsulta() {
-//        return consulta;
-//    }
-//
-//    public void setConsulta(Consulta consulta) {
-//        this.consulta = consulta;
-//    }
-//
-//    public Receta getReceta() {
-//        return receta;
-//    }
-//
-//    public void setReceta(Receta receta) {
-//        this.receta = receta;
-//    }
-//
-//    public Recordatorio getRecordatorio() {
-//        return recordatorio;
-//    }
-//
-//    public void setRecordatorio(Recordatorio recordatorio) {
-//        this.recordatorio = recordatorio;
-//    }
+    private int idConsulta; // Se mantiene para el findAll
+    private String padecimiento ; // Viene del JSON
+    private Animal ganado;
 
     public int getIdConsulta() {
         return idConsulta;
@@ -39,14 +13,6 @@ public class Consulta {
         this.idConsulta = idConsulta;
     }
 
-    public int getIdArete() {
-        return idArete;
-    }
-
-    public void setIdArete(int idArete) {
-        this.idArete = idArete;
-    }
-
     public String getPadecimiento() {
         return padecimiento;
     }
@@ -54,4 +20,14 @@ public class Consulta {
     public void setPadecimiento(String padecimiento) {
         this.padecimiento = padecimiento;
     }
+
+    public Animal getGanado() {
+        return ganado;
+    }
+
+    public void setGanado(Animal ganado) {
+        this.ganado = ganado;
+    }
+
+
 }

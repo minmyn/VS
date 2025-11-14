@@ -4,9 +4,10 @@ import io.javalin.http.Context;
 import org.vaquitas.model.Rancho;
 import org.vaquitas.service.RanchoService;
 import org.vaquitas.util.Error;
-//import org.vaquitas.util.RanchoValidator;
+import org.vaquitas.util.RanchoValidator;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
