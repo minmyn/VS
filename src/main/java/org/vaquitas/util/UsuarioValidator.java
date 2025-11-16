@@ -24,14 +24,14 @@ public class UsuarioValidator {
         if (!"Masculino".equals(usuario.getSexo()) && !"Femenino".equals(usuario.getSexo()))
             errores.put("sexo", "Verifique el campo");
         Integer n = usuario.getEdad();
-        if (n == null || n < 18) // Se valida si la edad es null o menor a 18
+        if (n == null /*|| n < 18*/) // Se valida si la edad es null o menor a 18
             errores.put("edad", "Verifique el campo");
         if (usuario.getEmail() == null || usuario.getEmail().isBlank())
             errores.put("email", "Verifique el campo");
         if (usuario.getClave() == null || usuario.getClave().isBlank())
             errores.put("clave","Verifique el campo");
-        if (usuario.getClave() != null && usuario.getClave().length() < 12) // Se agrega null check antes de length()
-            errores.put("clave","Demasiado corta"); // Corregido "Demaciado"
+        /*if (usuario.getClave() != null && usuario.getClave().length() < 12) // Se agrega null check antes de length()
+            errores.put("clave","Demasiado corta"); // Corregido "Demaciado"*/
         return errores;
     }
 

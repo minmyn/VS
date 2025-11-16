@@ -1,5 +1,6 @@
 package org.vaquitas;
 import io.javalin.Javalin;
+import org.eclipse.jetty.http.HttpMethod;
 import org.vaquitas.config.Inicio;
 import org.vaquitas.controller.JwtMiddleware;
 import org.vaquitas.controller.TokenManager;
@@ -10,9 +11,14 @@ public class Main {
             //CORS BASICO;
             javalinConfig.bundledPlugins.enableCors(corsPluginConfig -> {
                 corsPluginConfig.addRule(it ->{
+
+                    //Puertos en local
                     it.allowHost("http://localhost:5500");
                     it.allowHost("http://127.0.0.1:5500");
-                    //it.allowHost(""); IP DE LA INSTANCIA AWS
+
+                    // PuestosAWS
+                    it.allowHost("http://172.31.29.241");
+                    it.allowHost("http://52.200.235.132");
                     it.allowCredentials = true;
                 });
             });

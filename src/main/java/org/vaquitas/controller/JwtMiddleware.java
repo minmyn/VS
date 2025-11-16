@@ -15,10 +15,10 @@ public class JwtMiddleware {
     }
 
     public void apply(Javalin app) {
-//        app.before("/usuarios", this::validateJwt);
-//        app.before("/usuarios/{id}", this::validateJwt);
-//        app.before("/usuarios/{id}", this::validateJwt);
-//        app.before("/usuarios/{id}", this::validateJwt);
+//        app.before("/alimentos", this::validateJwt);
+//        app.before("/ganado", this::validateJwt);
+//        app.before("/medicamentos*", this::validateJwt);
+//        app.before("/ranchos*", this::validateJwt);
 //        app.before("/usuarios/{id}", this::validateJwt);
     }
 
