@@ -10,12 +10,11 @@ import java.util.List;
 
 public class RecetaRepository {
 
+    //GUARDAR UNA RECETA
     public void save(Receta receta, int idConsulta, int idRecordatorio) throws SQLException {
-        // Asumo que tu tabla RECETA tiene 5 campos
         String sql ="INSERT INTO RECETA (consulta_id, medicamento_id, calendario_id, dosis, fecha_inicio) VALUES (?,?,?,?,?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
-
             statement.setInt(1, idConsulta);
             statement.setInt(2, receta.getMedicamento().getIdMedicamento());
             statement.setInt(3, idRecordatorio);
@@ -26,7 +25,7 @@ public class RecetaRepository {
         }
     }
 
-
+    //VER TODAS LAS RECETAS
     public List<Receta> findAll() throws SQLException{
         List<Receta> recetas = new ArrayList<>();
         String sql = "SELECT * FROM RECETA";
@@ -36,12 +35,10 @@ public class RecetaRepository {
             while (resultSet.next()) {
                 Receta receta = new Receta();
                 receta.setDosis(resultSet.getInt("dosis"));
-                // CORRECCIÓN: Asumiendo que la columna es "fecha_inicio", no "fecha_baja"
                 Date fechaSql = resultSet.getDate("fecha_inicio");
                 if (fechaSql != null) {
                     receta.setFechaInicio(fechaSql.toLocalDate());
                 }
-                // Nota: Los objetos anidados (Consulta, Medicamento, Recordatorio) no se están cargando aquí.
                 recetas.add(receta);
             }
         }

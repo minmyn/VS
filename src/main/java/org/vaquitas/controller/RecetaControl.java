@@ -16,33 +16,24 @@ public class RecetaControl {
     private final MedicamentoService medicamentoService; // Nuevo campo
     private final RecetaValidator recetaValidator;
 
-    // Constructor actualizado para inyectar MedicamentoService
     public RecetaControl(RecetaService recetaService, MedicamentoService medicamentoService) {
         this.recetaService = recetaService;
-        this.medicamentoService = medicamentoService; // Inicialización de nuevo campo
-        this.recetaValidator = new RecetaValidator(); // Uso del validador actualizado
+        this.medicamentoService = medicamentoService;
+        this.recetaValidator = new RecetaValidator();
     }
 
     public void guardarSaludHigiene(Context context) {
         try {
-            // 1. Deserializar el DTO
             DTOreceta dto = context.bodyAsClass(DTOreceta.class);
-
-            // 2. Validación del DTO
             Map<String, String> errores = recetaValidator.validarCreacionDTO(dto);
-
             if (!errores.isEmpty()){
                 context.status(400).json(Map.of("estado", false, "errores", errores));
                 return;
             }
 
-            // 3. Obtener Modelos y Mapeo (Lógica de negocio en el controlador)
-            // A. Obtener Medicamento (Debe existir)
-            Medicamento medicamento = medicamentoService.buscarMedicamentoPorId(dto.getIdMedicamento())
-                    .orElseThrow(() -> new IllegalArgumentException("El ID de medicamento no existe."));
-
-            // B. Crear Animal/Ganado y Consulta
-            Animal ganado = new Animal(); // Asumiendo que existe una clase Animal/Ganado
+            Medicamento medicamento = new Medicamento();
+            medicamento.setIdMedicamento(dto.getIdMedicamento());
+            Animal ganado = new Animal();
             ganado.setIdArete(dto.getIdAreteGanado());
 
             Consulta consulta = new Consulta();

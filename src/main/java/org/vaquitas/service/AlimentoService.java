@@ -8,6 +8,7 @@ import java.util.List;
 
 public class AlimentoService {
     private final AlimentoRepository alimentoRepository;
+
     public AlimentoService(AlimentoRepository alimentoRepository) {
         this.alimentoRepository = alimentoRepository;
     }

@@ -7,11 +7,10 @@ import org.vaquitas.model.Raza;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class AnimalRepository {
 
-    // Registrar ganado
+    //REGISTRAR GANADO
     public void save(Animal animal) throws SQLException {
         String sql = "INSERT INTO ANIMAL(arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) VALUES(?,?,?,?,?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -43,7 +42,7 @@ public class AnimalRepository {
         return animals;
     }
 
-    // Ganado activo
+    //VER GANADO ACTIVO
     public List<Animal> findActivo() throws SQLException {
         List<Animal> ganadoActivo = new ArrayList<>();
         String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Activo'";
@@ -57,7 +56,7 @@ public class AnimalRepository {
         return ganadoActivo;
     }
 
-    // Ganado no activo (Muerto o Vendido)
+    // VER GANADO MUERTO O VENDIDO (NO ACTIVO)
     public List<Animal> findNoActivo() throws SQLException {
         List<Animal> ganadoNoActivo = new ArrayList<>();
         String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Muerto' OR estado = 'Vendido' ORDER BY a.arete_id";
@@ -71,7 +70,7 @@ public class AnimalRepository {
         return ganadoNoActivo;
     }
 
-    // Ganado vendido
+    // GANADO VENDIDO
     public List<Animal> findVendido() throws SQLException {
         List<Animal> ganadoVendido = new ArrayList<>();
         String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Vendido'";
@@ -85,6 +84,7 @@ public class AnimalRepository {
         return ganadoVendido;
     }
 
+    //GANADO SIN IMPORTAR EL ESTADO
     public Animal findGanado(int idArete) throws SQLException{
         String sql = "SELECT a.*, r.raza_id, r.nombre as nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE a.arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -99,7 +99,7 @@ public class AnimalRepository {
         }
     }
 
-    // Dar de baja al ganado
+    //DAR DE BAJA AL GANADO
     public int update(Animal animal) throws SQLException {
         String sql = "UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -111,7 +111,9 @@ public class AnimalRepository {
         }
     }
 
-    // Verifica si existe por arete
+    //-----------MICROSERVICIOS Ó VALIDACIONES-----------
+
+    //¿EL ARETE EXISTE?
     public boolean existsByIdArete(int idArete) throws SQLException {
         String sql = "SELECT 1 FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -123,7 +125,7 @@ public class AnimalRepository {
         }
     }
 
-    // Validar fecha de baja, sólo obtiene la fecha de nacimiento
+    //FECHA DE BAJA VALIDA
     public Animal validateFechaBaja(int idArete) throws SQLException {
         String sql = "SELECT fecha_nacimiento FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -140,7 +142,7 @@ public class AnimalRepository {
         return null;
     }
 
-    // Funcion pa' no andar repitiendo codigo tilin :D
+    //MAPITA PA' NO REPETIR EL CODIGO.
     private Animal mapAnimal(ResultSet rs) throws SQLException {
         Animal animal = new Animal();
         animal.setIdArete(rs.getInt("arete_id"));
@@ -151,12 +153,10 @@ public class AnimalRepository {
         animal.setSexo(rs.getString("sexo"));
         Date fechaBajaSql = rs.getDate("fecha_baja");
         if (fechaBajaSql != null) animal.setFechaBaja(fechaBajaSql.toLocalDate());
-
         Raza raza = new Raza();
         raza.setIdRaza(rs.getInt("raza_id"));
         raza.setNombreRaza(rs.getString("nombre_raza"));
         animal.setRaza(raza);
-
         return animal;
     }
 }

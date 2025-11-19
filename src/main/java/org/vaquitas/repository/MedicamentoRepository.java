@@ -6,10 +6,10 @@ import org.vaquitas.model.Medicamento;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class MedicamentoRepository {
 
+    //GUARDAR MEDICAMENTO
     public int save(Medicamento medicamento) throws SQLException {
         String sql="INSERT INTO MEDICAMENTO (nombre, descripcion) VALUES (?, ?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -25,6 +25,7 @@ public class MedicamentoRepository {
         }
     }
 
+    //CATALOGO DE MEDICAMENTOS
     public List<Medicamento> findAll() throws SQLException{
         List<Medicamento> medicamentos = new ArrayList<>();
         String sql = "SELECT * FROM MEDICAMENTO";
@@ -42,6 +43,7 @@ public class MedicamentoRepository {
         }
     }
 
+    //ACUALIZAR MEDICAMENTO
     public int update(Medicamento medicamento) throws SQLException {
         String sql = "UPDATE MEDICAMENTO SET nombre = ? WHERE medicamento_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -56,12 +58,11 @@ public class MedicamentoRepository {
         }
     }
 
-
+    //PEQUEO BUSCADOR DE MEDICAMENTOS
     public List<Medicamento> findByNombre(String texto) throws SQLException {
         List<Medicamento> medicamentos = new ArrayList<>();
         String sql;
         String param;
-
         if (texto == null || texto.isEmpty()) {
             sql = "SELECT * FROM MEDICAMENTO";
             param = null;
@@ -72,12 +73,10 @@ public class MedicamentoRepository {
             sql = "SELECT * FROM MEDICAMENTO WHERE nombre LIKE ?";
             param = "%" + texto + "%";
         }
-
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            if (param != null) {
+            if (param != null)
                 statement.setString(1, param);
-            }
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
                     Medicamento medicamento = new Medicamento();
@@ -91,24 +90,22 @@ public class MedicamentoRepository {
         return medicamentos;
     }
 
-    //
-
-    public Optional<Medicamento> findById(int id) throws SQLException {
-        String sql = "SELECT * FROM MEDICAMENTO WHERE medicamento_id = ?";
+    public Medicamento findMed(Medicamento medicamento) throws SQLException{
+        String sql = "SELECT * FROM MEDICAMENT WHERE nombre = ? OR medicamento_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, id);
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            statement.setString(1, medicamento.getNombre());
+            statement.setInt(2, medicamento.getIdMedicamento());
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    Medicamento medicamento = new Medicamento();
-                    medicamento.setIdMedicamento(resultSet.getInt("medicamento_id"));
-                    medicamento.setNombre(resultSet.getString("nombre"));
-                    medicamento.setDescripcion(resultSet.getString("descripcion"));
-                    return Optional.of(medicamento);
+                if (resultSet.next()){
+                    Medicamento medicina = new Medicamento();
+                    medicina.setIdMedicamento(resultSet.getInt("raza_id"));
+                    medicina.setNombre(resultSet.getString("nombre"));
+                    return medicina;
                 }
             }
         }
-        return Optional.empty();
+        return null;
     }
 
 }

@@ -29,6 +29,8 @@ public class Main {
         });
         app.start(8548);
 
+
+
         app.get("/", ctx  -> ctx.result("Hello Vaquita"));
         Inicio.incioToken().apply(app);
         Inicio.inicioUsuario().register(app);
@@ -38,6 +40,7 @@ public class Main {
         Inicio.inicioConsulta().register(app);
         Inicio.inicioReceta().register(app);
         Inicio.inicioRecordatorio().register(app);
+        Inicio.inicioReporte().register(app);
 
         //CATALOGOS
         Inicio.inicioMedicina().register(app);

@@ -23,25 +23,15 @@ public class AnimalControl {
 
         try{
             Animal nuevoGanado = context.bodyAsClass(Animal.class);
-
             AnimalValidator animalValidator = new AnimalValidator();
-
             Map<String, String> errores = animalValidator.validarAnimal(nuevoGanado);
             if (!errores.isEmpty()) {
                 context.status(400).json(Map.of("errores", errores));
                 return;
             }
-
             animalService.registrarGanado(nuevoGanado);
-
-            Map<String, Object> respuesta = new HashMap<>();
-            respuesta.put("estado", true);
-            respuesta.put("mensaje", "Ganado registrado con éxito.");
-            respuesta.put("data", nuevoGanado);
-            context.status(201).json(respuesta);
-
+            context.status(201).json(Map.of("estado", true,"data", nuevoGanado));
         } catch (IllegalArgumentException e){
-
             String mensaje = e.getMessage();
             if (mensaje.contains("Raza no encontrada")) {
                 context.status(404).json(Map.of("mensaje", mensaje));
@@ -50,7 +40,6 @@ public class AnimalControl {
             } else {
                 context.status(400).json(Map.of("mensaje", mensaje));
             }
-
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

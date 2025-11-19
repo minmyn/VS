@@ -26,6 +26,7 @@ public class RecordatorioRepository {
         }
     }
 
+    //VER RECORDATORIOS
     public List<Recordatorio> findAll() throws SQLException{
         List<Recordatorio> recordatorios = new ArrayList<>();
         String sql = "SELECT * FROM RECORDATORIO";
@@ -43,11 +44,10 @@ public class RecordatorioRepository {
         }
     }
 
-    //MICROSERVICIOS Y VALIDACIONES
+    //-----------MICROSERVICIOS Y VALIDACIONES PARA USUARIOS-----------
 
+    //BUSCAR RECORDATORIO
     public Recordatorio search(Recordatorio recordatorio) throws SQLException{
-        // CORRECCIÓN: La consulta debe seleccionar el ID, no solo '1'.
-        // Asumiendo que el ID se llama calendario_id.
         String sql = "SELECT calendario_id FROM RECORDATORIO WHERE fecha = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {

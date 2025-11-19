@@ -5,7 +5,6 @@ import org.vaquitas.repository.MedicamentoRepository;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class MedicamentoService {
     private final MedicamentoRepository medicamentoRepository;
@@ -22,9 +21,6 @@ public class MedicamentoService {
         return medicamentoRepository.findAll();
     }
 
-    public Optional<Medicamento> buscarMedicamentoPorId(int id) throws SQLException {
-        return medicamentoRepository.findById(id); // Requiere findById en Repository
-    }
 
     public List<Medicamento> buscarMedicamentos(String texto) throws SQLException {
         return medicamentoRepository.findByNombre(texto);

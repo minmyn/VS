@@ -109,4 +109,12 @@ public class Inicio {
         JwtMiddleware jwtMiddleware = new JwtMiddleware(tokenManager);
         return jwtMiddleware;
     }
+
+    public static ReporteRoute inicioReporte(){
+        ReportesRepository reportesRepository = new ReportesRepository();
+        ReporteServicee reporteServicee = new ReporteServicee(reportesRepository);
+        ReporteControl reporteControl = new ReporteControl(reporteServicee);
+        ReporteRoute reporteRoute = new ReporteRoute(reporteControl);
+        return reporteRoute;
+    }
 }

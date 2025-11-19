@@ -19,7 +19,6 @@ public class AnimalValidator {
         if (arete == null || arete < 0)
             errores.put("idArete", "El número de arete debe ser positivo");
 
-        // Validación de raza (asegúrate de que el objeto Raza no sea null y su ID válido)
         if (animal.getRaza() == null || animal.getRaza().getIdRaza() <= 0)
             errores.put("raza", "La raza debe estar especificada correctamente");
 

@@ -17,8 +17,7 @@ public class UsuarioRepository {
     public void save(Usuario usuario)  throws SQLException {
         String sql = "INSERT INTO USUARIO (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) VALUES (?, ?, ?, ?, ?, ?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
-            PreparedStatement statement = connection.prepareStatement(sql))
-        {
+            PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, usuario.getNombre());
             statement.setString(2, usuario.getTelefono());
             statement.setString(3, usuario.getSexo());
@@ -35,12 +34,11 @@ public class UsuarioRepository {
     //VER TODOS LOS USUARIOS AGRAGADOS
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        // Se añade clave_acceso y correo_electronico para llenar el objeto Usuario completo
+        // QUITAR CORREO Y CONTRASEÑA PARA MAYOR SEGURIDAD
         String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
-             ResultSet resultSet = statement.executeQuery()
-        ) {
+             ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Usuario usuarios = new Usuario();
                 usuarios.setIdUsuario(resultSet.getInt("usuario_id"));
@@ -89,6 +87,7 @@ public class UsuarioRepository {
             return statement.executeUpdate();
         }
     }
+
     //ELIMINAR UN USUARIO
     public int deleter(int idUsuario) throws SQLException{
         String sql = "DELETE FROM USUARIO WHERE usuario_id = ?";
@@ -118,7 +117,9 @@ public class UsuarioRepository {
         return null;
     }
 
-    //MICROSERVICIOS Y VALIDACIONES PARA USUARIOS
+    //-----------MICROSERVICIOS Y VALIDACIONES PARA USUARIOS-----------
+
+    //ENCONTRAR EMAIL
     public boolean findEmail(String email) throws SQLException{
         String sql = "SELECT 1 FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -129,6 +130,8 @@ public class UsuarioRepository {
         }
         return false;
     }
+
+    //ENCONTRAR  TELEFONO
     public boolean findTelefono(String telefono)throws SQLException{
         String sql = "SELECT 1 FROM USUARIO WHERE telefono =?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

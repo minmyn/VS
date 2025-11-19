@@ -16,7 +16,6 @@ public class VentaService {
         this.animalRepository =animalRepository;
     }
 
-    // ... dentro de VentaService.java ...
     public void registrarVenta(Venta venta) throws SQLException {
         int idArete = venta.getGanado().getIdArete();
 
@@ -25,7 +24,7 @@ public class VentaService {
         }
 
         if (ventaRepository.findVendido(idArete)){
-            throw new IllegalArgumentException("El ganado con ID " + idArete + " ya ha sido vendido previamente.");
+            throw new IllegalArgumentException("El ganado vendido previamente.");
         }
 
         ventaRepository.save(venta);
@@ -35,10 +34,7 @@ public class VentaService {
         return ventaRepository.findVendidos();
     }
 
-    public boolean encontrarVacaVendida(int idArete) throws SQLException{
-        return ventaRepository.findVendido(idArete);
-    }
-    public boolean encontrarVaca (int idArete) throws SQLException{
-        return animalRepository.existsByIdArete(idArete);
-    }
+//    public int editarVenta(Venta venta){
+//        return ventaRepository.update(venta);
+//    }
 }

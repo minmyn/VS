@@ -12,7 +12,7 @@ import java.util.List;
 
 public class VentaRepository {
 
-    //Registrar venta
+    //REGISTRAR VENTA DE GANADO
     public void save(Venta venta) throws SQLException{
         String sql="INSERT INTO VENTA (arete_id, precio_venta, peso_final, fecha_baja) VALUES (?,?,?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -29,7 +29,7 @@ public class VentaRepository {
         }
     }
 
-    //Visualizar Ganado
+    //VISUALIZAR GANADO VENDIDO
     public List<Venta> findVendidos() throws SQLException{
         List<Venta> animal = new ArrayList<>();
         String sql="SELECT v.venta_id, a.nombre, a.arete_id, a.sexo, a.raza_id, rz.nombre AS raza_nombre, a.fecha_nacimiento, a.peso, v.peso_final, v.precio_venta, v.fecha_baja FROM ANIMAL a INNER JOIN VENTA v ON a.arete_id = v.arete_id INNER JOIN RAZA rz ON a.raza_id = rz.raza_id WHERE a.estado = 'Vendido' ORDER BY a.arete_id";
@@ -62,7 +62,21 @@ public class VentaRepository {
         }
     }
 
+    //EDITAR VENTA
+    public int update(Venta venta) throws SQLException {
+        String sql = "UPDATE ANIMAL SET precio_venta, peso_final WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setDouble(1, venta.getPrecioVenta());
+            statement.setDouble(2, venta.getPesoFinal());
+            statement.setInt(3, venta.getGanado().getIdArete());
+            return statement.executeUpdate();
+        }
+    }
 
+    //-----------MICROSERVICIOS Ó VALIDACIONES-----------
+
+    //¿EL GANADO YA FUE VENDIDO?
     public boolean findVendido(int idArete)throws SQLException{
         String sql = "SELECT * FROM VENTA WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

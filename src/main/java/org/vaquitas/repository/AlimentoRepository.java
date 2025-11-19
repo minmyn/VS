@@ -1,5 +1,4 @@
 package org.vaquitas.repository;
-
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Alimento;
 import org.vaquitas.model.Usuario;
@@ -7,7 +6,6 @@ import org.vaquitas.model.Usuario;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 public class AlimentoRepository {
 
     //GUARDAR ALIMENTO
@@ -46,7 +44,8 @@ public class AlimentoRepository {
             return alimentos;
         }
     }
-    //VER UN SOLO ALIMENTO
+
+    //ENCONTRAR/VER UN ALIMENTO
     public Alimento findAlimento(int idCompra) throws SQLException{
         String sql = "SELECT * FROM ALIMENTO WHERE compra_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -68,6 +67,7 @@ public class AlimentoRepository {
             }
         }
     }
+
     //ACTUALIZAR O CAMBIAR INFORMACION DE UN ALIMENTO
     public int update(Alimento alimento) throws SQLException{
         String sql = "UPDATE ALIMENTO SET tipo = ? , alimento = ? , cantidad = ?, precio = ? , fecha_compra = ? WHERE compra_id = ?";
@@ -83,6 +83,7 @@ public class AlimentoRepository {
             return statement.executeUpdate();
         }
     }
+
     //ELIMINAR UN ALIMENTOS
     public int delete(int idCompra) throws SQLException{
         String sql = "DELETE FROM ALIMENTO WHERE compra_id = ? ";

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RazaRepository {
+
+    //GUARDAR RAZA NUEVA
     public int save(Raza raza) throws SQLException{
         String sql="INSERT INTO RAZA (nombre) VALUES (?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -21,6 +23,7 @@ public class RazaRepository {
         }
     }
 
+    //LISTAR TODAS LAS RAZAS
     public List<Raza> findAll() throws SQLException{
         List<Raza> razas = new ArrayList<>();
         String sql = "SELECT * FROM RAZA";
@@ -37,6 +40,7 @@ public class RazaRepository {
         }
     }
 
+    //MODIFICAR NOMBRE DE UNA RAZA
     public int update(Raza raza) throws SQLException{
         String sql = "UPDATE RAZA SET nombre = ? WHERE raza_id = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -44,16 +48,14 @@ public class RazaRepository {
         {
             statement.setString(1, raza.getNombreRaza());
             statement.setInt(2, raza.getIdRaza());
-
             int affectedRows = statement.executeUpdate();
-
-            if (affectedRows == 0) {
+            if (affectedRows == 0)
                 throw new SQLException("La actualización de la raza no afectó ninguna fila. ¿Existe el ID?");
-            }
             return affectedRows;
         }
     }
 
+    //ENCONTRAR RAZA
     public Raza findRaza(Raza raza) throws SQLException{
         String sql = "SELECT * FROM RAZA WHERE nombre = ? OR raza_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -72,6 +74,9 @@ public class RazaRepository {
         return null;
     }
 
+    //-----------MICROSERVICIOS Ó VALIDACIONES-----------
+
+    //NO REPETIR RAZA APA'
     public boolean existsByName(String nombreRaza) throws SQLException{
         String sql = "SELECT 1 FROM RAZA WHERE nombre = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

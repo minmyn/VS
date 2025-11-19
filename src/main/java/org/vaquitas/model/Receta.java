@@ -1,7 +1,6 @@
 package org.vaquitas.model;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Receta {
     private Medicamento medicamento;

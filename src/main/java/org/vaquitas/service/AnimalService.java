@@ -18,20 +18,13 @@ public class AnimalService {
         this.razaRepository = razaRepository;
     }
 
-    // Código para AnimalService.java
-
     public void registrarGanado(Animal animal) throws SQLException {
-
         Raza raza = razaRepository.findRaza(animal.getRaza());
-        if (raza == null) {
+        if (raza == null)
             throw new IllegalArgumentException("Raza no encontrada: El ID o nombre de la raza no existe.");
-        }
         animal.setRaza(raza);
-
-        if (animalRepository.existsByIdArete(animal.getIdArete())) {
+        if (animalRepository.existsByIdArete(animal.getIdArete()))
             throw new IllegalArgumentException("Arete duplicado: El ganado con ID " + animal.getIdArete() + " ya existe.");
-        }
-
         animalRepository.save(animal);
     }
 

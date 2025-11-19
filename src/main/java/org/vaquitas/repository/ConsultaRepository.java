@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ConsultaRepository {
 
+    //AGREGAR CONUSLTA (POR MEDIO DE RECETA)
     public int save(Consulta consulta) throws SQLException{
         String sql ="INSERT INTO CONSULTA (arete_id, padecimiento) VALUES (?,?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
