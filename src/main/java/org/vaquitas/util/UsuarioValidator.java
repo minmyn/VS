@@ -10,7 +10,6 @@ import java.util.Map;
 public class UsuarioValidator {
     private final UsuarioRepository usuarioRepository; // Se agrega la dependencia
 
-    // Constructor para inyectar UsuarioRepository
     public UsuarioValidator(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
