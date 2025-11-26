@@ -15,12 +15,10 @@ public class DTOdetalles {
 
     // Campos de RECETA
     private int dosis;
-    private LocalDate fechaInicioReceta; // Para evitar conflicto con la fecha de recordatorio
+    private LocalDate fechaInicioReceta;
 
     // Campos de RECORDATORIO
     private LocalDate fechaRecordatorio;
-
-    // --- Getters y Setters ---
 
     public long getAreteId() {
         return areteId;
