@@ -78,20 +78,16 @@ public class Inicio {
     }
 
     public static RecetaRoute inicioReceta(){
-        // Repositorios
         RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
         RecetaRepository recetaRepository = new RecetaRepository();
         ConsultaRepository consultaRepository = new ConsultaRepository();
         MedicamentoRepository medicamentoRepository = new MedicamentoRepository(); // Se añade el repositorio
 
-        // Services
         RecetaService recetaService = new RecetaService(recetaRepository, recordatorioRepository, consultaRepository);
         MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository); // Se añade el servicio
 
-        // Control y Route
-        // Se inyecta el nuevo servicio en el controlador
         RecetaControl recetaControl = new RecetaControl(recetaService, medicamentoService);
-        // Asumiendo que tienes una clase RecetaRoute para definir las rutas.
+        
         RecetaRoute recetaRoute = new RecetaRoute(recetaControl);
         return recetaRoute;
     }
