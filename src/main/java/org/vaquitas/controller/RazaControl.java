@@ -56,17 +56,13 @@ public class RazaControl {
         }
     }
 
-    // Código para RazaControl.java
-
     public void renombrarRaza(Context context){
         try {
             int idRaza = Integer.parseInt(context.pathParam("id"));
             Raza renombreRaza = context.bodyAsClass(Raza.class);
 
-            // Asignar el ID de la ruta al objeto
             renombreRaza.setIdRaza(idRaza);
 
-            // VALIDACIÓN: Renombrar solo requiere el nombre de raza, lo validamos
             RazaValidator razaValidator = new RazaValidator();
             Map<String, String> errores = razaValidator.validarRaza(renombreRaza);
             if (!errores.isEmpty()) {
@@ -76,7 +72,6 @@ public class RazaControl {
 
             razaService.renombrarRaza(renombreRaza);
 
-            // IMPLEMENTACIÓN: Estructura de respuesta solicitada (con 200 OK)
             Map<String, Object> respuesta = new HashMap<>();
             respuesta.put("estado", true);
             respuesta.put("data", renombreRaza);
@@ -85,7 +80,6 @@ public class RazaControl {
         } catch (NumberFormatException e) {
             context.status(400).json(Map.of("mensaje", "El ID de la raza debe ser un número entero válido."));
         } catch (IllegalArgumentException e){
-            // Manejo de error para el caso de que la raza a renombrar no exista
             context.status(404).json(Map.of("mensaje", "Raza no encontrada o error de dato."));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
