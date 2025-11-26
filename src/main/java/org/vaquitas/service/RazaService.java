@@ -13,7 +13,6 @@ public class RazaService {
         this.razaRepository = razaRepository;
     }
 
-// Código corregido para RazaService.java (Método registrarRaza)
 
     public void registrarRaza(Raza raza) throws SQLException{
 
