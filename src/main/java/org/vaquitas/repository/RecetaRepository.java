@@ -48,7 +48,6 @@ public class RecetaRepository {
     public List<DTOdetalles> findAllDetalles() throws SQLException {
         List<DTOdetalles> detalles = new ArrayList<>();
 
-        // Se usan ALIAS (AS) en los nombres duplicados (como 'nombre' y 'fecha') para evitar ambigüedad.
         String sql = "SELECT " +
                 "ANIMAL.arete_id, " +
                 "ANIMAL.nombre AS nombre_animal, " +
