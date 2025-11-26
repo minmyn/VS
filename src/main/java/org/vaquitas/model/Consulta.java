@@ -1,8 +1,8 @@
 package org.vaquitas.model;
 
 public class Consulta {
-    private int idConsulta; // Se mantiene para el findAll
-    private String padecimiento ; // Viene del JSON
+    private int idConsulta;
+    private String padecimiento ;
     private Animal ganado;
 
     public int getIdConsulta() {
