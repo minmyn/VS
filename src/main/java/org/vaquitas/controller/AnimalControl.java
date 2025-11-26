@@ -46,19 +46,7 @@ public class AnimalControl {
             context.status(500).json(Error.getApiServiceError());
         }
     }
-/*
-JSON ESPERADO
-    {
-        "idArete": 1,
-            "raza": {
-        "idRaza": 1
-    },
-        "nombre": "Firulais",
-            "fechaNacimiento": "2023-01-01",
-            "peso": 210.5,
-            "sexo": "Macho"
-    }
-*/
+
 
     public void visualizarGanado(Context context) throws SQLException{
         try {
