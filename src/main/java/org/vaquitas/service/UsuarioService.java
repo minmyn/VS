@@ -18,7 +18,6 @@ public class UsuarioService {
     }
 
     public Map<String,String> registrarUsuario(Usuario usuario) throws SQLException{
-        // Se utiliza la instancia inyectada
         Map<String,String> validar = usuarioValidator.validarDuplicados(usuario.getTelefono(), usuario.getEmail());
         if (!validar.isEmpty())
             return validar;
@@ -38,7 +37,6 @@ public class UsuarioService {
         return usuarioRepository.deleter(idUsuario);
     }
 
-    // Corregida la errata: econtrarUsuaio -> encontrarUsuario
     public Usuario encontrarUsuario(int idUsuario) throws SQLException{
         return usuarioRepository.findUsuario(idUsuario);
     }
