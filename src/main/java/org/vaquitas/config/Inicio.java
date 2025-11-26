@@ -81,10 +81,10 @@ public class Inicio {
         RecordatorioRepository recordatorioRepository = new RecordatorioRepository();
         RecetaRepository recetaRepository = new RecetaRepository();
         ConsultaRepository consultaRepository = new ConsultaRepository();
-        MedicamentoRepository medicamentoRepository = new MedicamentoRepository(); // Se añade el repositorio
+        MedicamentoRepository medicamentoRepository = new MedicamentoRepository(); 
 
         RecetaService recetaService = new RecetaService(recetaRepository, recordatorioRepository, consultaRepository);
-        MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository); // Se añade el servicio
+        MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository);
 
         RecetaControl recetaControl = new RecetaControl(recetaService, medicamentoService);
         
