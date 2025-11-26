@@ -16,7 +16,7 @@ import org.vaquitas.util.UsuarioValidator;
 public class UsuarioControl {
 
     private final UsuarioService usuarioService;
-    private final UsuarioValidator usuarioValidator; // Se añade el validador
+    private final UsuarioValidator usuarioValidator; 
     private final TokenManager tokenManager;
 
     public UsuarioControl(UsuarioService usuarioService, TokenManager tokenManager, UsuarioValidator usuarioValidator){
