@@ -2,7 +2,7 @@ package org.vaquitas.controller;
 
 import io.javalin.http.Context;
 import org.vaquitas.model.*;
-import org.vaquitas.service.MedicamentoService; // Nueva Dependencia
+import org.vaquitas.service.MedicamentoService; 
 import org.vaquitas.service.RecetaService;
 import org.vaquitas.util.Error;
 import org.vaquitas.util.RecetaValidator;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class RecetaControl {
     private final RecetaService recetaService;
-    private final MedicamentoService medicamentoService; // Nuevo campo
+    private final MedicamentoService medicamentoService; 
     private final RecetaValidator recetaValidator;
 
     public RecetaControl(RecetaService recetaService, MedicamentoService medicamentoService) {
@@ -40,25 +40,21 @@ public class RecetaControl {
             consulta.setGanado(ganado);
             consulta.setPadecimiento(dto.getPadecimiento());
 
-            // C. Crear Recordatorio
             Recordatorio recordatorio = new Recordatorio();
             recordatorio.setFechaRecordatorio(dto.getFechaRecordatorio());
 
-            // D. Crear Receta
             Receta receta = new Receta();
             receta.setMedicamento(medicamento);
             receta.setConsulta(consulta);
             receta.setRecordatorio(recordatorio);
             receta.setDosis(dto.getDosis());
-            receta.setFechaInicio(dto.getFechaInicio()); // Nombre de campo corregido
+            receta.setFechaInicio(dto.getFechaInicio());
 
-            // 4. Llamar al servicio
             recetaService.guardarReceta(receta);
 
             context.status(201).json(Map.of("mensaje", "Guardado correctamente"));
 
         } catch (IllegalArgumentException e) {
-            // Captura errores como "Medicamento no encontrado"
             context.status(404).json(Map.of("mensaje", e.getMessage()));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
