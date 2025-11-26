@@ -20,7 +20,7 @@ public class MedicamentoRepository {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-            // CORRECCIÓN del mensaje de error
+            
             throw new SQLException("No se generó el medicamento.");
         }
     }
