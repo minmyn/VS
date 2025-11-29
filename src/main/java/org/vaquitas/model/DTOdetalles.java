@@ -3,28 +3,30 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 public class DTOdetalles {
-    private int areteId;
+    // Campos del ANIMAL
+    private long areteId;
     private String nombreAnimal;
+
+    // Campos de CONSULTA
     private String padecimiento;
+
+    // Campos de MEDICAMENTO
     private String nombreMedicamento;
+
+    // Campos de RECETA
     private int dosis;
-    private LocalDate fechaInicioReceta;
+    private LocalDate fechaInicioReceta; // Para evitar conflicto con la fecha de recordatorio
+
+    // Campos de RECORDATORIO
     private LocalDate fechaRecordatorio;
-    private int numeroReceta;
 
-    public int getNumeroReceta() {
-        return numeroReceta;
-    }
+    // --- Getters y Setters ---
 
-    public void setNumeroReceta(int numeroReceta) {
-        this.numeroReceta = numeroReceta;
-    }
-
-    public int getAreteId() {
+    public long getAreteId() {
         return areteId;
     }
 
-    public void setAreteId(int areteId) {
+    public void setAreteId(long areteId) {
         this.areteId = areteId;
     }
 
