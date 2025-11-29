@@ -13,8 +13,6 @@ public class RanchoService {
         this.ranchoRepository=ranchoRepository;
     }
 
-// RanchoService.java (Método agregarRancho corregido)
-
     public void agregarRancho(Rancho rancho) throws SQLException{
         boolean validar;
         validar = ranchoRepository.duplicateNombre(rancho.getNombre());

@@ -10,7 +10,6 @@ import java.util.Map;
 public class UsuarioValidator {
     private final UsuarioRepository usuarioRepository; // Se agrega la dependencia
 
-    // Constructor para inyectar UsuarioRepository
     public UsuarioValidator(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
@@ -30,7 +29,7 @@ public class UsuarioValidator {
             errores.put("email", "Verifique el campo");
         if (usuario.getClave() == null || usuario.getClave().isBlank())
             errores.put("clave","Verifique el campo");
-        /*if (usuario.getClave() != null && usuario.getClave().length() < 12) // Se agrega null check antes de length()
+        /*if (usuario.getClave() != null && usuario.getClave().length() < 12)
             errores.put("clave","Demasiado corta"); // Corregido "Demaciado"*/
         return errores;
     }

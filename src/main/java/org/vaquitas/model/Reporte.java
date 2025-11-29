@@ -2,13 +2,11 @@ package org.vaquitas.model;
 
 public class Reporte {
 
-    private String columna;   //
-    private double numero;     //
+    private String columna;
+    private double numero;
     private double porcentaje;
 
-    public String getColumna() {
-        return columna;
-    }
+    public String getColumna() {return columna;}
 
     public void setColumna(String columna) {
         this.columna = columna;

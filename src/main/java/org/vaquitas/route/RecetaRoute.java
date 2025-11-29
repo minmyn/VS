@@ -12,5 +12,6 @@ public class RecetaRoute {
     public void register(Javalin app){
         app.post("/receta", recetaControl::guardarSaludHigiene);
         app.get("/receta", recetaControl::verDetallesRecetas);
+        app.get("/receta/medicamento/{id}", recetaControl::verRecetaPorMedicamento);
     }
 }

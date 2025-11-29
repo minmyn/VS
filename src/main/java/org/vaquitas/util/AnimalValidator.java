@@ -2,6 +2,7 @@ package org.vaquitas.util;
 
 import org.vaquitas.model.Animal;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public class AnimalValidator {
             errores.put("fechaNacimiento", "La fecha de nacimiento es obligatoria");
 
         Integer arete = animal.getIdArete();
-        if (arete == null || arete < 0)
+        if (arete == null || arete < 1)
             errores.put("idArete", "El número de arete debe ser positivo");
 
         if (animal.getRaza() == null || animal.getRaza().getIdRaza() <= 0)
@@ -35,8 +36,9 @@ public class AnimalValidator {
 
     public Map<String, String> validarAnimalBaja(Animal animal){
         Map<String, String> errores = new HashMap<>();
-        if (animal.getFechaBaja() == null)
-            errores.put("fechaBaja", "La fecha de baja es obligatoria");
+        LocalDate hoy = LocalDate.now();
+        if (animal.getFechaBaja() == null || animal.getFechaBaja().isBefore(hoy))
+            errores.put("fechaBaja", "Verificar fecha");
         return errores;
     }
 }

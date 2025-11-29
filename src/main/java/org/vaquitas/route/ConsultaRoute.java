@@ -9,6 +9,7 @@ public class ConsultaRoute {
         this.consultaControl=consultaControl;
     }
     public void register(Javalin app){
+        app.get("/consuta/{idArete}",consultaControl::buscarConsultasPorAnimal);
     }
 
 }

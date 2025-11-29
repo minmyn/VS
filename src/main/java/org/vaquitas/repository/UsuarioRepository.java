@@ -34,7 +34,7 @@ public class UsuarioRepository {
     //VER TODOS LOS USUARIOS AGRAGADOS
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        // QUITAR CORREO Y CONTRASEÑA PARA MAYOR SEGURIDAD
+        // Nota mental: Quitar correo y psw, por la seguridad.
         String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);

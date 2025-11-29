@@ -18,12 +18,9 @@ public class ReportesRepository {
         String sql = "SELECT estado, COUNT(*) as cantidad FROM ANIMAL WHERE estado = 'Muerto' OR estado = 'Vendido' GROUP BY estado";
         double total = 0;
         List<Reporte> temporales = new ArrayList<>();
-
-        try (
-                Connection connection = DatabaseConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery()
-        ) {
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()){
             while (rs.next()) {
                 String estado = rs.getString("estado");
                 double cantidad = rs.getInt("cantidad");
@@ -55,11 +52,9 @@ public class ReportesRepository {
         double total = 0;
         List<Reporte> temporales = new ArrayList<>();
 
-        try (
-                Connection connection = DatabaseConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery()
-        ) {
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 String sexo = rs.getString("sexo");
                 double cantidad = rs.getInt("cantidad");
@@ -90,12 +85,9 @@ public class ReportesRepository {
         String sql = "SELECT tipo, SUM(precio) as sumaPrecio FROM ALIMENTO GROUP BY tipo";
         double total = 0;
         List<Reporte> temporales = new ArrayList<>();
-
-        try (
-                Connection connection = DatabaseConfig.getDataSource().getConnection();
-                PreparedStatement statement = connection.prepareStatement(sql);
-                ResultSet rs = statement.executeQuery()
-        ) {
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 String tipo = rs.getString("tipo");
                 double sumaPrecio = rs.getDouble("sumaPrecio");

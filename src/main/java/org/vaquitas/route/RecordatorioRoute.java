@@ -11,5 +11,6 @@ public class RecordatorioRoute {
 
     public void register(Javalin app){
         app.get("/recordatorios", recordatorioControl::verRecordatorio);
+        app.patch("/recordatorios/{id}", recordatorioControl::actualizarRecordatorio);
     }
 }

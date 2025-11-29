@@ -48,4 +48,5 @@ public class Receta {
     public void setFechaInicio(LocalDate fechaInicio) {
         this.fechaInicio = fechaInicio;
     }
+
 }

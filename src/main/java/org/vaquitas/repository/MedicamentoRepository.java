@@ -20,7 +20,6 @@ public class MedicamentoRepository {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-            // CORRECCIÓN del mensaje de error
             throw new SQLException("No se generó el medicamento.");
         }
     }
@@ -89,23 +88,4 @@ public class MedicamentoRepository {
         }
         return medicamentos;
     }
-
-    public Medicamento findMed(Medicamento medicamento) throws SQLException{
-        String sql = "SELECT * FROM MEDICAMENT WHERE nombre = ? OR medicamento_id = ?";
-        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)){
-            statement.setString(1, medicamento.getNombre());
-            statement.setInt(2, medicamento.getIdMedicamento());
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()){
-                    Medicamento medicina = new Medicamento();
-                    medicina.setIdMedicamento(resultSet.getInt("raza_id"));
-                    medicina.setNombre(resultSet.getString("nombre"));
-                    return medicina;
-                }
-            }
-        }
-        return null;
-    }
-
 }

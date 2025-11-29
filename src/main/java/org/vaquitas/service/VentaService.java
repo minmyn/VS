@@ -6,6 +6,7 @@ import org.vaquitas.repository.AnimalRepository;
 import org.vaquitas.repository.VentaRepository;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class VentaService {
@@ -26,7 +27,14 @@ public class VentaService {
         if (ventaRepository.findVendido(idArete)){
             throw new IllegalArgumentException("El ganado vendido previamente.");
         }
-
+        Animal animalBD = animalRepository.validateFechaBaja(venta.getGanado().getIdArete());
+        LocalDate fechaNac = animalBD.getFechaNacimiento();
+        LocalDate fechBaja = venta.getFechaBaja();
+        LocalDate hoy = LocalDate.now();
+        if (fechBaja.isBefore(fechaNac))
+            throw new IllegalArgumentException("La fecha de baja no puede ser anterior a la fecha de nacimiento.");
+        if(fechBaja.isAfter(hoy))
+            throw new IllegalArgumentException("La fecha de baja no puede una fecha que no ha pasado");
         ventaRepository.save(venta);
     }
 
@@ -34,7 +42,4 @@ public class VentaService {
         return ventaRepository.findVendidos();
     }
 
-//    public int editarVenta(Venta venta){
-//        return ventaRepository.update(venta);
-//    }
 }

@@ -45,7 +45,7 @@ public class AlimentoRepository {
         }
     }
 
-    //ENCONTRAR/VER UN ALIMENTO
+    //ENCONTRAR-VER UN ALIMENTO
     public Alimento findAlimento(int idCompra) throws SQLException{
         String sql = "SELECT * FROM ALIMENTO WHERE compra_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

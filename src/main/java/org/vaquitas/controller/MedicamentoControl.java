@@ -64,20 +64,14 @@ public class MedicamentoControl{
             int idMedicamento = Integer.parseInt(context.pathParam("id"));
             Medicamento medicamentoActualizado = context.bodyAsClass(Medicamento.class);
             medicamentoActualizado.setIdMedicamento(idMedicamento);
-
             Map<String, String> errores = medicamentoValidator.validarMedicamento(medicamentoActualizado);
-
             if (!errores.isEmpty()) {
                 context.status(400).json(Map.of("estado", false, "errores", errores));
                 return;
             }
-
             int affectedRows = medicamentoService.actualizarMedicamento(medicamentoActualizado);
             if (affectedRows > 0) {
-                Map<String, Object> respuesta = new HashMap<>();
-                respuesta.put("estado", true);
-                respuesta.put("data", medicamentoActualizado);
-                context.status(200).json(respuesta);
+                context.status(200).json(Map.of("estado", true, "data", medicamentoActualizado));
             } else {
                 context.status(500).json(Error.getApiServiceError());
             }

@@ -10,15 +10,14 @@ import java.util.Map;
 
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
-    private final UsuarioValidator usuarioValidator; // Se añade el validador como dependencia
+    private final UsuarioValidator usuarioValidator;
 
-    public UsuarioService (UsuarioRepository usuarioRepository, UsuarioValidator usuarioValidator){ // Se inyecta el validador
+    public UsuarioService (UsuarioRepository usuarioRepository, UsuarioValidator usuarioValidator){
         this.usuarioRepository = usuarioRepository;
         this.usuarioValidator = usuarioValidator;
     }
 
     public Map<String,String> registrarUsuario(Usuario usuario) throws SQLException{
-        // Se utiliza la instancia inyectada
         Map<String,String> validar = usuarioValidator.validarDuplicados(usuario.getTelefono(), usuario.getEmail());
         if (!validar.isEmpty())
             return validar;
@@ -38,7 +37,6 @@ public class UsuarioService {
         return usuarioRepository.deleter(idUsuario);
     }
 
-    // Corregida la errata: econtrarUsuaio -> encontrarUsuario
     public Usuario encontrarUsuario(int idUsuario) throws SQLException{
         return usuarioRepository.findUsuario(idUsuario);
     }

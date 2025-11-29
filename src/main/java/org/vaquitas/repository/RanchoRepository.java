@@ -15,11 +15,11 @@ public class RanchoRepository {
              PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             statement.setString(1,rancho.getNombre());
             statement.setString(2, rancho.getUbicacion());
-
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
-                return resultSet.getInt(1); // Retorna el ID generado
+                return resultSet.getInt(1);
+
             throw new SQLException("No se pudo obtener el ID del rancho guardado.");
         }
     }

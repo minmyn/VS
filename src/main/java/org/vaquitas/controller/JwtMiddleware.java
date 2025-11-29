@@ -29,11 +29,8 @@ public class JwtMiddleware {
     }
 
     private void validateJwt(Context ctx) {
-
         String authHeader = ctx.header("Authorization");
         String userId = ctx.header("User-Id");
-
-        // Verificar que existan los headers
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             ctx.status(401).json(Map.of(
                     "error", "Authorization header faltante o malformado"
@@ -41,18 +38,13 @@ public class JwtMiddleware {
             System.out.println("Authorization header faltante o malformado");
             throw  new UnauthorizedResponse("Authorization header faltante o malformado");
         }
-
         if (userId == null) {
             ctx.status(401).json(Map.of(
                     "error", "User-Id header requerido"
             ));
             throw  new UnauthorizedResponse("Authorization  User-Id header requerido");
         }
-
-        // Extraer el token
         String token = authHeader.substring(7);
-
-        // Validar el token
         try {
             if (!tokenManager.validateToken(token, userId)) {
                 ctx.status(403).json(Map.of(
@@ -60,7 +52,6 @@ public class JwtMiddleware {
                 ));
                 throw  new UnauthorizedResponse("Authorization: Token inválido o expirado");
             }
-            // Token válido - la solicitud continúa
         } catch (Exception e) {
             ctx.status(401).json(Map.of(
                     "error", "Error al validar el token"

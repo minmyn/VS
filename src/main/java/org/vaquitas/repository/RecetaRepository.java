@@ -47,13 +47,12 @@ public class RecetaRepository {
 
     public List<DTOdetalles> findAllDetalles() throws SQLException {
         List<DTOdetalles> detalles = new ArrayList<>();
-
-        // Se usan ALIAS (AS) en los nombres duplicados (como 'nombre' y 'fecha') para evitar ambigüedad.
-        String sql = "SELECT " +
+        String sql ="SELECT " +
                 "ANIMAL.arete_id, " +
                 "ANIMAL.nombre AS nombre_animal, " +
                 "CONSULTA.padecimiento, " +
                 "MEDICAMENTO.nombre AS nombre_medicamento, " +
+                "CONSULTA.consulta_id,"+
                 "RECETA.dosis, " +
                 "RECETA.fecha_inicio, " +
                 "RECORDATORIO.fecha AS fecha_recordatorio " +
@@ -70,23 +69,65 @@ public class RecetaRepository {
             while (resultSet.next()) {
                 DTOdetalles dto = new DTOdetalles();
 
-                dto.setAreteId(resultSet.getLong("arete_id"));
+                dto.setNumeroReceta(resultSet.getInt("consulta_id"));
+                dto.setAreteId(resultSet.getInt("arete_id"));
                 dto.setNombreAnimal(resultSet.getString("nombre_animal"));
                 dto.setPadecimiento(resultSet.getString("padecimiento"));
                 dto.setNombreMedicamento(resultSet.getString("nombre_medicamento"));
                 dto.setDosis(resultSet.getInt("dosis"));
-
-                // Mapeo de fechas (usando los alias o nombres de columna)
                 Date fechaInicioSql = resultSet.getDate("fecha_inicio");
                 if (fechaInicioSql != null) {
                     dto.setFechaInicioReceta(fechaInicioSql.toLocalDate());
                 }
-
                 Date fechaRecordatorioSql = resultSet.getDate("fecha_recordatorio");
                 if (fechaRecordatorioSql != null) {
                     dto.setFechaRecordatorio(fechaRecordatorioSql.toLocalDate());
                 }
+                detalles.add(dto);
+            }
+        }
+        return detalles;
+    }
 
+    public List<DTOdetalles> findRecetaByMedicina(int id) throws SQLException {
+        List<DTOdetalles> detalles = new ArrayList<>();
+        String sql = "SELECT " +
+                "ANIMAL.arete_id, " +
+                "ANIMAL.nombre AS nombre_animal, " +
+                "CONSULTA.padecimiento, " +
+                "MEDICAMENTO.nombre AS nombre_medicamento, " +
+                "CONSULTA.consulta_id,"+
+                "RECETA.dosis, " +
+                "RECETA.fecha_inicio, " +
+                "RECORDATORIO.fecha AS fecha_recordatorio " +
+                "FROM ANIMAL " +
+                "JOIN CONSULTA ON ANIMAL.arete_id = CONSULTA.arete_id " +
+                "JOIN RECETA ON CONSULTA.consulta_id = RECETA.consulta_id " +
+                "JOIN MEDICAMENTO ON RECETA.medicamento_id = MEDICAMENTO.medicamento_id " +
+                "JOIN RECORDATORIO ON RECETA.calendario_id = RECORDATORIO.calendario_id "+
+                "WHERE MEDICAMENTO.medicamento_id = ?";
+
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                DTOdetalles dto = new DTOdetalles();
+
+                dto.setNumeroReceta(resultSet.getInt("consulta_id"));
+                dto.setAreteId(resultSet.getInt("arete_id"));
+                dto.setNombreAnimal(resultSet.getString("nombre_animal"));
+                dto.setPadecimiento(resultSet.getString("padecimiento"));
+                dto.setNombreMedicamento(resultSet.getString("nombre_medicamento"));
+                dto.setDosis(resultSet.getInt("dosis"));
+                Date fechaInicioSql = resultSet.getDate("fecha_inicio");
+                if (fechaInicioSql != null) {
+                    dto.setFechaInicioReceta(fechaInicioSql.toLocalDate());
+                }
+                Date fechaRecordatorioSql = resultSet.getDate("fecha_recordatorio");
+                if (fechaRecordatorioSql != null) {
+                    dto.setFechaRecordatorio(fechaRecordatorioSql.toLocalDate());
+                }
                 detalles.add(dto);
             }
         }

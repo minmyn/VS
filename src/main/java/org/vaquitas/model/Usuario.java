@@ -66,13 +66,9 @@ public class Usuario {
         this.clave = clave;
     }
 
-    public Rancho getIdRancho() {
-        return idRancho;
-    }
+    public Rancho getIdRancho() {return idRancho;}
 
-    public void setIdRancho(Rancho idRancho) {
-        this.idRancho = idRancho;
-    }
+    public void setIdRancho(Rancho idRancho) {this.idRancho = idRancho;}
 
     public Usuario(){}
     public Usuario(String email, String clave){

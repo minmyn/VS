@@ -1,11 +1,9 @@
 package org.vaquitas.repository;
 
 import org.vaquitas.config.DatabaseConfig;
-import org.vaquitas.model.Receta;
 import org.vaquitas.model.Recordatorio;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +19,6 @@ public class RecordatorioRepository {
             statement.executeUpdate();
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next()) return resultSet.getInt(1);
-            // CORRECCIÓN del mensaje de error
             throw new SQLException("No se generó el recordatorio.");
         }
     }
@@ -60,6 +57,18 @@ public class RecordatorioRepository {
                 }
                 return null;
             }
+        }
+    }
+
+    //EDITAR RECORDATORIO
+    public int update(Recordatorio recordatorio) throws SQLException{
+        String sql = "UPDATE RECORDATORIO SET fecha = ? WHERE calendario_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)){
+            Date sqlDate = Date.valueOf(recordatorio.getFechaRecordatorio());
+            statement.setDate(1, sqlDate);
+            statement.setInt(2, recordatorio.getIdRecordatorio());
+            return statement.executeUpdate();
         }
     }
 }

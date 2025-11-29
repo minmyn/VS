@@ -20,7 +20,6 @@ public class VentaControl {
 
     public void registrarVenta(Context context){
         try{
-
             int idArete = Integer.parseInt(context.pathParam("id"));
             Venta nuevaVenta = context.bodyAsClass(Venta.class);
             Animal animal = new Animal();
@@ -28,15 +27,12 @@ public class VentaControl {
             nuevaVenta.setGanado(animal);
             VentaValidator ventaValidator = new VentaValidator();
             Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
-
             if (!errores.isEmpty()){
                 context.status(400).json(Map.of("errores", errores));
                 return;
             }
-
             ventaService.registrarVenta(nuevaVenta);
             context.status(201).json(Map.of("estado", true, "mensaje", "Venta registrada con éxito", "data", nuevaVenta));
-
         }catch (NumberFormatException e){
             context.status(400).json(Map.of("mensaje", "El ID del arete debe ser un número entero válido."));
         } catch (IllegalArgumentException e){

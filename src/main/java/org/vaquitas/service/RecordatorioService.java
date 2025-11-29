@@ -16,4 +16,9 @@ public class RecordatorioService {
     public List<Recordatorio> verRecordatorio() throws SQLException {
         return recordatorioRepository.findAll();
     }
+
+    public void editarRecordatorio(Recordatorio recordatorio) throws SQLException{
+        recordatorioRepository.update(recordatorio);
+    }
+
 }
