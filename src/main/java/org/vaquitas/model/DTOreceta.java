@@ -3,19 +3,12 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 public class DTOreceta {
-    // 1. Datos para Receta (IDs de entidades existentes)
     private int idMedicamento;
     private int dosis;
-    private LocalDate fechaInicio; // Mapea al campo corregido en el modelo Receta.java
-
-    // 2. Datos para Consulta
-    private int idAreteGanado; // ID del Animal/Ganado
+    private LocalDate fechaInicio;
+    private int idAreteGanado;
     private String padecimiento;
-
-    // 3. Datos para Recordatorio
     private LocalDate fechaRecordatorio;
-
-    // --- Getters y Setters ---
 
     public int getIdMedicamento() {
         return idMedicamento;
