@@ -8,11 +8,32 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de repositorio que maneja las operaciones de persistencia (CRUD) para la entidad {@link Animal}.
+ * <p>
+ * Es responsable de traducir las operaciones de negocio en sentencias SQL y manejar las conexiones a la base de datos.
+ * </p>
+ *
+ * @author VaquitaSoft
+ * @version 1.0
+ * @since 2025-10-19
+ */
 public class AnimalRepository {
 
-    //REGISTRAR GANADO
+    /**
+     * Persiste un nuevo registro de animal en la tabla ANIMAL.
+     * <p>
+     * Asume que el estatus inicial es 'Activo'.
+     * </p>
+     *
+     * @param animal El objeto {@link Animal} a guardar.
+     * @throws SQLException Si ocurre un error durante la ejecución de la sentencia SQL (e.g., violaciones de restricciones).
+     */
     public void save(Animal animal) throws SQLException {
-        String sql = "INSERT INTO ANIMAL(arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) VALUES(?,?,?,?,?,?)";
+        // SQL para registrar ganado ('estado' se establece por defecto a 'Activo' en la DB)
+        String sql =
+                "INSERT INTO ANIMAL (arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) " +
+                "VALUES(?,?,?,?,?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, animal.getIdArete());
@@ -28,10 +49,17 @@ public class AnimalRepository {
         }
     }
 
-    // Visualizar todos los animales
+    /**
+     * Recupera una lista de todos los animales registrados, incluyendo su información de {@link Raza}.
+     *
+     * @return Una lista de objetos {@link Animal}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Animal> findAll() throws SQLException {
         List<Animal> animals = new ArrayList<>();
-        String sql = "SELECT a.*, r.raza_id, r.nombre as nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id";
+        String sql =
+                "SELECT a.*, r.raza_id, r.nombre as nombre_raza " +
+                "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -42,10 +70,18 @@ public class AnimalRepository {
         return animals;
     }
 
-    //VER GANADO ACTIVO
+    /**
+     * Recupera una lista de animales con estatus 'Activo'.
+     *
+     * @return Una lista de objetos {@link Animal}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Animal> findActivo() throws SQLException {
         List<Animal> ganadoActivo = new ArrayList<>();
-        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Activo'";
+        String sql =
+                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+                "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
+                "WHERE estado = 'Activo'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -56,10 +92,18 @@ public class AnimalRepository {
         return ganadoActivo;
     }
 
-    // VER GANADO MUERTO O VENDIDO (NO ACTIVO)
+    /**
+     * Recupera una lista de animales con estatus 'Muerto' o 'Vendido'.
+     *
+     * @return Una lista de objetos {@link Animal}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Animal> findNoActivo() throws SQLException {
         List<Animal> ganadoNoActivo = new ArrayList<>();
-        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Muerto' OR estado = 'Vendido' ORDER BY a.arete_id";
+        String sql =
+                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+                "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
+                "WHERE estado = 'Muerto' OR estado = 'Vendido' ORDER BY a.arete_id";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -70,10 +114,18 @@ public class AnimalRepository {
         return ganadoNoActivo;
     }
 
-    // GANADO VENDIDO
+    /**
+     * Recupera una lista de animales con estatus 'Vendido'.
+     *
+     * @return Una lista de objetos {@link Animal}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Animal> findVendido() throws SQLException {
         List<Animal> ganadoVendido = new ArrayList<>();
-        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE estado = 'Vendido'";
+        String sql =
+                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+                "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
+                "WHERE estado = 'Vendido'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()) {
@@ -84,9 +136,17 @@ public class AnimalRepository {
         return ganadoVendido;
     }
 
-    //GANADO SIN IMPORTAR EL ESTADO
+    /**
+     * Busca un animal por su ID de arete.
+     *
+     * @param idArete El ID del arete a buscar.
+     * @return El objeto {@link Animal} si es encontrado, o {@code null} si no existe.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public Animal findGanado(int idArete) throws SQLException{
-        String sql = "SELECT a.*, r.raza_id, r.nombre as nombre_raza FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id WHERE a.arete_id = ?";
+        String sql = "SELECT a.*, r.raza_id, r.nombre as nombre_raza " +
+                "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
+                "WHERE a.arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, idArete);
@@ -99,7 +159,13 @@ public class AnimalRepository {
         }
     }
 
-    //DAR DE BAJA AL GANADO
+    /**
+     * Actualiza la fecha de baja y el estado (a 'Muerto') de un animal.
+     *
+     * @param animal El objeto {@link Animal} conteniendo el ID del arete y la fecha de baja.
+     * @return El número de filas afectadas (1 si fue exitoso, 0 si el animal no existe).
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public int update(Animal animal) throws SQLException {
         String sql = "UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -111,9 +177,13 @@ public class AnimalRepository {
         }
     }
 
-    //-----------MICROSERVICIOS Ó VALIDACIONES-----------
-
-    //¿EL ARETE EXISTE?
+    /**
+     * Verifica si un ID de arete ya existe en la base de datos.
+     *
+     * @param idArete El ID del arete a verificar.
+     * @return {@code true} si el arete ya existe, {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public boolean existsByIdArete(int idArete) throws SQLException {
         String sql = "SELECT 1 FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -125,8 +195,13 @@ public class AnimalRepository {
         }
     }
 
-    //VALIDAR CUIDADO
-
+    /**
+     * Valida el estatus del animal para operaciones de cuidado.
+     *
+     * @param idArete El ID del arete a verificar.
+     * @return {@code true} si el animal NO está 'Activo' (o no existe), {@code false} si está 'Activo'.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public boolean validateCuidado(int idArete) throws SQLException{
         String sql = "SELECT estado FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -134,14 +209,20 @@ public class AnimalRepository {
             statement.setInt(1, idArete);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (!resultSet.next())
-                    return true; // No existe
+                    return true; // No existe o ha sido dado de baja
                 String estado = resultSet.getString("estado");
                 return !"Activo".equalsIgnoreCase(estado);
             }
         }
     }
 
-    //FECHA DE BAJA VALIDA
+    /**
+     * Recupera la fecha de nacimiento de un animal para ser utilizada en la validación de la fecha de baja.
+     *
+     * @param idArete El ID del arete.
+     * @return Un objeto {@link Animal} que contiene únicamente la fecha de nacimiento, o {@code null} si no existe.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public Animal validateFechaBaja(int idArete) throws SQLException {
         String sql = "SELECT fecha_nacimiento FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -158,7 +239,16 @@ public class AnimalRepository {
         return null;
     }
 
-    //MAPITA PA' NO REPETIR EL CODIGO.
+    /**
+     * Función utilitaria para mapear una fila de {@link ResultSet} a un objeto {@link Animal}.
+     * <p>
+     * Se usa en los métodos de consulta para evitar la duplicidad de código.
+     * </p>
+     *
+     * @param rs El {@link ResultSet} posicionado en la fila actual.
+     * @return Un objeto {@link Animal} completamente mapeado.
+     * @throws SQLException Si ocurre un error al acceder a una columna del ResultSet.
+     */
     private Animal mapAnimal(ResultSet rs) throws SQLException {
         Animal animal = new Animal();
         animal.setIdArete(rs.getInt("arete_id"));

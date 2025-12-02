@@ -44,7 +44,7 @@ public class AnimalValidator {
         if (animal.getNombre() == null || animal.getNombre().isBlank())
             errores.put("nombre", "El nombre no puede estar vacío");
 
-        // Validación de fechaNacimiento
+        // Validación de fechaNacimiento no sea nula y que no sea una fecha futura.
         if (animal.getFechaNacimiento() == null) {
             errores.put("fechaNacimiento", "La fecha de nacimiento es obligatoria");
         } else {
@@ -53,7 +53,7 @@ public class AnimalValidator {
                 errores.put("fechaNacimiento", "La fecha de nacimiento no puede ser futura");
             }
         }
-        // Validación de idArete (Chequea que no sea null y que sea positivo)
+        // Validación de idArete (Verifica que no sea null y que sea positivo)
         if (animal.getIdArete() < 1)
             errores.put("idArete", "El número de arete debe ser positivo");
 
@@ -89,7 +89,7 @@ public class AnimalValidator {
      */
     public Map<String, String> validarAnimalBaja(Animal animal){
         Map<String, String> errores = new HashMap<>();
-        // Se valida que la fecha de baja no sea nula y que no sea una fecha pasada.
+        // Se valida que la fecha de baja no sea nula y que no sea una fecha futura.
 
         if (animal.getFechaBaja() == null) {
             errores.put("fechaBaja", "La fecha de baja es obligatoria");
