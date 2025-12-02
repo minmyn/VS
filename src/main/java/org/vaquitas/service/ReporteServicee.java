@@ -16,12 +16,29 @@ public class ReporteServicee {
     public List<Reporte> reporteGanado() throws SQLException{
         return reportesRepository.findEstado();
     }
-
-    public List<Reporte> reporteAlimento() throws SQLException{
-        return reportesRepository.findTipo();
+    public List<Reporte> reporteGanadoRaza() throws SQLException{
+        return reportesRepository.findRaza();
     }
 
     public List<Reporte> reporteVenta() throws SQLException{
         return reportesRepository.findSexo();
     }
+
+    public List<Reporte> reporteVentaRaza() throws SQLException{
+        return reportesRepository.findVendidoByRaza();
+    }
+
+    public List<Reporte> reporteAlimento() throws SQLException{
+        return reportesRepository.findTipo();
+    }
+
+    public List<Reporte> reporteAlimentoSemanal() throws SQLException{
+        return reportesRepository.findTipoSemanal();
+    }
+
+    public List<Reporte> reporteAlimentoAnual() throws SQLException{
+        return reportesRepository.findAlimentoAnualPorMes();
+    }
+
+
 }

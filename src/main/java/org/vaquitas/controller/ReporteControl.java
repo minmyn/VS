@@ -26,10 +26,10 @@ public class ReporteControl {
         }
     }
 
-    public void generarReporteAlimentos(Context context){
+    public void generarReporteRegistroRazas(Context context){
         try {
-            List<Reporte> reporteAlimento = reporteServicee.reporteAlimento();
-            context.status(200).json(reporteAlimento);
+            List<Reporte> reporteReguistro = reporteServicee.reporteGanadoRaza();
+            context.status(200).json(reporteReguistro);
         } catch (SQLException e) {
             context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
         } catch (Exception e) {
@@ -47,4 +47,50 @@ public class ReporteControl {
             context.status(500).json(Error.getApiServiceError());
         }
     }
+
+    public void generarReporteVentasPorRaza(Context context){
+        try {
+            List<Reporte> reporteVentas = reporteServicee.reporteVentaRaza();
+            context.status(200).json(reporteVentas);
+        } catch (SQLException e) {
+            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
+
+    public void generarReporteAlimentos(Context context){
+        try {
+            List<Reporte> reporteAlimento = reporteServicee.reporteAlimento();
+            context.status(200).json(reporteAlimento);
+        } catch (SQLException e) {
+            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
+    public void generarReporteAlimentoSemanal(Context context){
+        try {
+            List<Reporte> reporteAlimento = reporteServicee.reporteAlimentoSemanal();
+            context.status(200).json(reporteAlimento);
+        } catch (SQLException e) {
+            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
+    public void generarReporteAlimentoAnualMes(Context context){
+        try {
+            List<Reporte> reporteAlimento = reporteServicee.reporteAlimentoAnual();
+            context.status(200).json(reporteAlimento);
+        } catch (SQLException e) {
+            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
 }

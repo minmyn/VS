@@ -125,6 +125,22 @@ public class AnimalRepository {
         }
     }
 
+    //VALIDAR CUIDADO
+
+    public boolean validateCuidado(int idArete) throws SQLException{
+        String sql = "SELECT estado FROM ANIMAL WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idArete);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (!resultSet.next())
+                    return true; // No existe
+                String estado = resultSet.getString("estado");
+                return !"Activo".equalsIgnoreCase(estado);
+            }
+        }
+    }
+
     //FECHA DE BAJA VALIDA
     public Animal validateFechaBaja(int idArete) throws SQLException {
         String sql = "SELECT fecha_nacimiento FROM ANIMAL WHERE arete_id = ?";

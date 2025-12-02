@@ -5,6 +5,7 @@ import org.vaquitas.model.Consulta;
 import org.vaquitas.model.DTOdetalles;
 import org.vaquitas.model.Receta;
 import org.vaquitas.model.Recordatorio;
+import org.vaquitas.repository.AnimalRepository;
 import org.vaquitas.repository.ConsultaRepository;
 import org.vaquitas.repository.RecetaRepository;
 import org.vaquitas.repository.RecordatorioRepository;
@@ -19,12 +20,17 @@ public class RecetaService {
     private final RecetaRepository recetaRepository;
     private final RecordatorioRepository recordatorioRepository;
     private final ConsultaRepository consultaRepository;
+    private final AnimalRepository animalRepository;
 
 
-    public RecetaService(RecetaRepository recetaRepository, RecordatorioRepository recordatorioRepository, ConsultaRepository consultaRepository) {
+    public RecetaService(RecetaRepository recetaRepository,
+                         RecordatorioRepository recordatorioRepository,
+                         ConsultaRepository consultaRepository,
+                         AnimalRepository animalRepository) {
         this.recetaRepository = recetaRepository;
         this.recordatorioRepository = recordatorioRepository;
         this.consultaRepository = consultaRepository;
+        this.animalRepository = animalRepository;
     }
 
     public void guardarReceta(Receta receta) throws SQLException {
@@ -34,16 +40,16 @@ public class RecetaService {
             try {
                 Consulta consulta = receta.getConsulta();
                 int idConsulta = consultaRepository.save(consulta);
-
                 int idRecordatorio;
                 Recordatorio recordatorioASalvar = receta.getRecordatorio();
                 Recordatorio recordatorioEncontrado = recordatorioRepository.search(recordatorioASalvar);
-
                 if (recordatorioEncontrado == null) {
                     idRecordatorio = recordatorioRepository.save(recordatorioASalvar);
                 } else {
                     idRecordatorio = recordatorioEncontrado.getIdRecordatorio();
                 }
+                if (animalRepository.validateCuidado(consulta.getGanado().getIdArete()))
+                    throw new IllegalArgumentException("El ganado no existe ó no esta activo");
                 recetaRepository.save(receta, idConsulta, idRecordatorio);
                 connection.commit();
             } catch (SQLException e) {

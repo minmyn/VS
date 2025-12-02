@@ -5,6 +5,7 @@ public class Reporte {
     private String columna;
     private double numero;
     private double porcentaje;
+    private String nota;
 
     public String getColumna() {return columna;}
 
@@ -26,5 +27,13 @@ public class Reporte {
 
     public void setPorcentaje(double porcentaje) {
         this.porcentaje = porcentaje;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
     }
 }
