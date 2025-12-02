@@ -1,6 +1,8 @@
 package org.vaquitas.util;
 
 import org.vaquitas.model.DTOreceta;
+
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,11 +43,23 @@ public class RecetaValidator {
         if (dto.getPadecimiento() == null || dto.getPadecimiento().isBlank())
             errores.put("padecimiento", "El padecimiento es obligatorio.");
 
-        if (dto.getFechaRecordatorio() == null)
+        if (dto.getFechaRecordatorio() == null) {
             errores.put("fechaRecordatorio", "La fecha de recordatorio es obligatoria.");
+        }else {
+            LocalDate hoy = LocalDate.now();
+            if (dto.getFechaRecordatorio().isBefore(hoy)) {
+                errores.put("fechaRecordatorio", "La fecha del recordatorio no puede ser anterior a la fecha actual.");
+            }
+        }
 
-        if (dto.getFechaInicio() == null)
+        if (dto.getFechaInicio() == null){
             errores.put("fechaInicio", "La fecha de inicio de la receta es obligatoria.");
+        }else {
+            LocalDate hoy = LocalDate.now();
+            if (dto.getFechaInicio().isBefore(hoy)) {
+                errores.put("fechaInicio", "La fecha del recordatorio no puede ser anterior a la fecha actual.");
+            }
+        }
 
         if (dto.getDosis() < 0)
             errores.put("dosis", "La dosis debe ser mayor a cero.");
