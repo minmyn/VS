@@ -11,11 +11,27 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de repositorio que maneja las operaciones de persistencia (CRUD) para la entidad {@link Usuario}.
+ *
+ * @author VaquitaSoft
+ * @version 1.0
+ * @since 2025-10-19
+ */
 public class UsuarioRepository {
 
-    //AGREGAR O REGISTRAR USUARIO
+    /**
+     * Persiste un nuevo usuario en la tabla USUARIO.
+     * <p>
+     * La clave debe estar hasheada antes de llamar a este método.
+     * </p>
+     *
+     * @param usuario El objeto {@link Usuario} a guardar.
+     * @throws SQLException Si ocurre un error de base de datos o si no se afecta ninguna fila.
+     */
     public void save(Usuario usuario)  throws SQLException {
-        String sql = "INSERT INTO USUARIO (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (nombre, telefono, sexo, edad, correo_electronico, clave_acceso) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, usuario.getNombre());
@@ -26,15 +42,19 @@ public class UsuarioRepository {
             statement.setString(6, usuario.getClave());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("La inserción del encargado no afectó ninguna fila.");
+                throw new SQLException("La inserción del usuario no afectó ninguna fila.");
             }
         }
     }
 
-    //VER TODOS LOS USUARIOS AGRAGADOS
+    /**
+     * Recupera todos los usuarios de la base de datos.
+     *
+     * @return Una lista de objetos {@link Usuario}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Usuario> findAll() throws SQLException{
         List<Usuario> usuario = new ArrayList<>();
-        // Nota mental: Quitar correo y psw, por la seguridad.
         String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
@@ -46,7 +66,7 @@ public class UsuarioRepository {
                 usuarios.setTelefono(resultSet.getString("telefono"));
                 usuarios.setSexo(resultSet.getString("sexo"));
                 usuarios.setEdad(resultSet.getInt("edad"));
-                usuarios.setEmail(resultSet.getString("correo_electronico"));
+                //usuarios.setEmail(resultSet.getString("correo_electronico"));
                 usuarios.setClave(resultSet.getString("clave_acceso"));
                 usuario.add(usuarios);
             }
@@ -54,7 +74,13 @@ public class UsuarioRepository {
         }
     }
 
-    //ENCONTRAR UN SOLO USUARIO Y VERLO
+    /**
+     * Busca y recupera un único usuario por su ID.
+     *
+     * @param idUsuario El ID del usuario a buscar.
+     * @return El objeto {@link Usuario} con todos sus campos, incluyendo la clave hasheada, o {@code null}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public Usuario findUsuario(int idUsuario)throws  SQLException{
         String sql = "SELECT usuario_id, nombre, telefono, sexo, edad, correo_electronico, clave_acceso FROM USUARIO WHERE usuario_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -69,14 +95,21 @@ public class UsuarioRepository {
                     usuarioBD.setSexo(resultSet.getString("sexo"));
                     usuarioBD.setEdad(resultSet.getInt("edad"));
                     usuarioBD.setEmail(resultSet.getString("correo_electronico"));
-                    usuarioBD.setClave(resultSet.getString("clave_acceso")); // Se incluye la clave
+                    //usuarioBD.setClave(resultSet.getString("clave_acceso"));
                     return usuarioBD;
                 }
                 return null;
             }
         }
     }
-    //ACTUALIZAR USUARIO
+
+    /**
+     * Actualiza el email y la clave (hasheada) de un usuario.
+     *
+     * @param usuario El objeto {@link Usuario} con el ID y los campos a actualizar.
+     * @return El número de filas afectadas (1 si fue exitoso, 0 si el usuario no existe).
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public int update(Usuario usuario) throws SQLException{
         String sql = "UPDATE USUARIO SET correo_electronico = ?, clave_acceso = ? WHERE usuario_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -88,7 +121,13 @@ public class UsuarioRepository {
         }
     }
 
-    //ELIMINAR UN USUARIO
+    /**
+     * Elimina un usuario por su ID.
+     *
+     * @param idUsuario El ID del usuario a eliminar.
+     * @return El número de filas eliminadas (1 si existe, 0 si no existe).
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public int deleter(int idUsuario) throws SQLException{
         String sql = "DELETE FROM USUARIO WHERE usuario_id = ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -99,7 +138,16 @@ public class UsuarioRepository {
         }
     }
 
-    //AUTENTICACION DE USUARIO
+    /**
+     * Busca un usuario por su email para obtener la clave hasheada y el ID.
+     * <p>
+     * Es crucial para el proceso de autenticación.
+     * </p>
+     *
+     * @param usuario El objeto {@link Usuario} que contiene el email a buscar.
+     * @return El objeto {@link Usuario} con ID, email y clave hasheada, o {@code null}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public Usuario findByEmailPsw(Usuario usuario) throws SQLException{
         String sql = "SELECT usuario_id, correo_electronico, clave_acceso FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -119,27 +167,37 @@ public class UsuarioRepository {
 
     //-----------MICROSERVICIOS Y VALIDACIONES PARA USUARIOS-----------
 
-    //ENCONTRAR EMAIL
+    /**
+     * Verifica si un correo electrónico ya existe en la base de datos.
+     *
+     * @param email El correo electrónico a verificar.
+     * @return {@code true} si el email ya existe, {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public boolean findEmail(String email) throws SQLException{
         String sql = "SELECT 1 FROM USUARIO WHERE correo_electronico = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) return true;
+            return resultSet.next();
         }
-        return false;
     }
 
-    //ENCONTRAR  TELEFONO
+    /**
+     * Verifica si un número de teléfono ya existe en la base de datos.
+     *
+     * @param telefono El número de teléfono a verificar.
+     * @return {@code true} si el teléfono ya existe, {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public boolean findTelefono(String telefono)throws SQLException{
         String sql = "SELECT 1 FROM USUARIO WHERE telefono =?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, telefono);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) return true;
+            return resultSet.next();
         }
-        return false;
     }
 }

@@ -63,18 +63,17 @@ public class UsuarioControl {
         try {
             int idUsuario = Integer.parseInt(context.pathParam("id"));
             Usuario usuarioUpdate = context.bodyAsClass(Usuario.class);
-            if (usuarioUpdate.getClave() == null || usuarioUpdate.getClave().isBlank()) {
-                context.status(400).json(Map.of("error", "La clave no puede estar vacía."));
+            Map<String,String> errores = usuarioValidator.validarActualizacion(usuarioUpdate);
+            if (!errores.isEmpty()){
+                context.status(400).json(Map.of("errores", errores));
                 return;
             }
+
             String claveHash = Password.hash(usuarioUpdate.getClave()).withBcrypt().getResult();
             usuarioUpdate.setClave(claveHash);
             usuarioUpdate.setIdUsuario(idUsuario);
             usuarioService.actualizarUsuario(usuarioUpdate);
-            Map<String, Object> respuesta = new HashMap<>();
-            respuesta.put("estado", true);
-            respuesta.put("data", usuarioUpdate);
-            context.status(201).json(respuesta);
+            context.status(201).json(Map.of("estado", true, "data", usuarioUpdate));
         }catch (NumberFormatException e) {
             context.status(400).json(Map.of("error", "ID de usuario inválido."));
         } catch (SQLException e) {
