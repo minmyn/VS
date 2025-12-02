@@ -26,7 +26,7 @@ public class AlimentoRepository {
     //VER TODOS LOS ALIMEMENTOS
     public List<Alimento> findAll() throws SQLException{
         List<Alimento> alimentos = new ArrayList<>();
-        String sql = "SELECT * FROM ALIMENTO";
+        String sql = "SELECT * FROM ALIMENTO ORDER BY fecha_compra DESC";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){

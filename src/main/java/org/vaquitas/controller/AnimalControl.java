@@ -46,19 +46,6 @@ public class AnimalControl {
             context.status(500).json(Error.getApiServiceError());
         }
     }
-/*
-JSON ESPERADO
-    {
-        "idArete": 1,
-            "raza": {
-        "idRaza": 1
-    },
-        "nombre": "Firulais",
-            "fechaNacimiento": "2023-01-01",
-            "peso": 210.5,
-            "sexo": "Macho"
-    }
-*/
 
     public void visualizarGanado(Context context) throws SQLException{
         try {
@@ -150,7 +137,6 @@ JSON ESPERADO
             context.status(400).json(Map.of("mensaje", "El ID del arete debe ser un número entero válido."));
         }catch (IllegalArgumentException e){
             String mensajeError = e.getMessage() != null ? e.getMessage() : "Error de validación en la baja del ganado.";
-
             if (mensajeError.isEmpty()) {
                 context.status(404).json(Map.of("mensaje", "Ganado inexistente."));
             } else {

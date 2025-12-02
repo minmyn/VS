@@ -51,14 +51,10 @@ public class AnimalService {
 
     public void darBajaGanado(Animal animal) throws SQLException{
         Animal animalBD = animalRepository.validateFechaBaja(animal.getIdArete());
-        if (animalBD == null){
+        if (animalBD == null)
             throw new IllegalArgumentException("Ganado no encontrado con arete ID: " + animal.getIdArete());
-        }
-        LocalDate fechaNac = animalBD.getFechaNacimiento();
-        LocalDate fechBaja = animal.getFechaBaja();
-
-        if (fechBaja.isBefore(fechaNac))
-            throw new IllegalArgumentException("La fecha de baja no puede ser anterior a la fecha de nacimiento.");
+        if (animal.getFechaBaja().isBefore(animalBD.getFechaNacimiento()))
+            throw new IllegalArgumentException("La fecha de baja no puede ser menor la fecha de nacimiento.");
 
         animalRepository.update(animal);
     }
