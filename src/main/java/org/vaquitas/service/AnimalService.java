@@ -56,9 +56,9 @@ public class AnimalService {
         animal.setRaza(raza); // Asigna el objeto Raza completo
 
         // Regla 2: Verificar duplicidad del arete
+
         if (animalRepository.existsByIdArete(animal.getIdArete()))
             throw new IllegalArgumentException("Arete duplicado: El ganado con ID " + animal.getIdArete() + " ya existe.");
-
         animalRepository.save(animal);
     }
 

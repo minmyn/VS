@@ -10,11 +10,30 @@ import java.time.LocalDate;
  * @since 2025-10-19
  */
 public class Venta {
+    /**
+     * Identificador único de la venta (PK).
+     */
     private int idVenta;
+
+    /**
+     * Precio final de la transacción de venta del animal.
+     */
     private double precioVenta;
+
+    /**
+     * Peso registrado del animal al momento de la venta.
+     */
     private double pesoFinal;
+
+    /**
+     * Fecha en la que se registra la venta y, por ende, la baja del animal del hato.
+     */
     private LocalDate fechaBaja;
-    private Animal ganado; // Entidad Animal asociada a esta venta
+
+    /**
+     * El objeto {@link Animal} asociado a esta venta. Contiene el ID del arete (FK).
+     */
+    private Animal ganado;
 
     /**
      * Obtiene el objeto {@link Animal} que fue vendido.

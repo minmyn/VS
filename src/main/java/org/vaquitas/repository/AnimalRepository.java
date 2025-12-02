@@ -23,14 +23,13 @@ public class AnimalRepository {
     /**
      * Persiste un nuevo registro de animal en la tabla ANIMAL.
      * <p>
-     * Asume que el estatus inicial es 'Activo'.
+     * Asume que el estatus inicial es 'Activo' (definido en la base de datos o en la capa de servicio).
      * </p>
      *
      * @param animal El objeto {@link Animal} a guardar.
      * @throws SQLException Si ocurre un error durante la ejecución de la sentencia SQL (e.g., violaciones de restricciones).
      */
     public void save(Animal animal) throws SQLException {
-        // SQL para registrar ganado ('estado' se establece por defecto a 'Activo' en la DB)
         String sql =
                 "INSERT INTO ANIMAL (arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) " +
                 "VALUES(?,?,?,?,?,?)";
@@ -42,10 +41,6 @@ public class AnimalRepository {
             statement.setDouble(4, animal.getPeso());
             statement.setString(5, animal.getSexo());
             statement.setInt(6, animal.getRaza().getIdRaza());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("La inserción del animal no afectó ninguna fila.");
-            }
         }
     }
 
@@ -166,22 +161,42 @@ public class AnimalRepository {
      * @return El número de filas afectadas (1 si fue exitoso, 0 si el animal no existe).
      * @throws SQLException Si ocurre un error de base de datos.
      */
-    public int update(Animal animal) throws SQLException {
+    public void update(Animal animal) throws SQLException {
         String sql = "UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             Date sqlDate = Date.valueOf(animal.getFechaBaja());
             statement.setDate(1, sqlDate);
             statement.setInt(2, animal.getIdArete());
-            return statement.executeUpdate();
         }
     }
 
     /**
      * Verifica si un ID de arete ya existe en la base de datos.
+     * <p>
+     * Se usa comúnmente para validar la existencia de un animal antes de crear una entidad relacionada (e.g., Consulta, Venta).
+     * </p>
      *
      * @param idArete El ID del arete a verificar.
      * @return {@code true} si el arete ya existe, {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
+    public boolean existsByIdArete(int idArete) throws SQLException {
+        String sql = "SELECT 1 FROM ANIMAL WHERE arete_id = ?";
+        try (Connection connection = DatabaseConfig.getDataSource().getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, idArete);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                return resultSet.next();
+            }
+        }
+    }
+
+    /**
+     * Recupera la fecha de nacimiento y el estado actual de un animal para validación de venta.
+     *
+     * @param idArete El ID del arete.
+     * @return Un objeto {@link Animal} con la fecha de nacimiento y el estado, o {@code null} si no existe.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public Animal validateVenta(int idArete) throws SQLException {
@@ -194,7 +209,7 @@ public class AnimalRepository {
                 Animal ganado = new Animal();
                 Date sqlDate = resultSet.getDate("fecha_nacimiento");
                 ganado.setFechaNacimiento(sqlDate.toLocalDate());
-                ganado.setEstatus("estado");
+                ganado.setEstatus(resultSet.getString("estado"));
                 return ganado;
             }
         }
@@ -202,10 +217,13 @@ public class AnimalRepository {
     }
 
     /**
-     * Valida el estatus del animal para operaciones de cuidado.
+     * Valida el estatus del animal para operaciones de cuidado (Receta/Consulta).
+     * <p>
+     * Se utiliza para asegurar que las operaciones de salud solo se realicen en ganado 'Activo'.
+     * </p>
      *
      * @param idArete El ID del arete a verificar.
-     * @return {@code true} si el animal NO está 'Activo' (o no existe), {@code false} si está 'Activo'.
+     * @return {@code true} si el animal **NO** está 'Activo' (incluye no existente, 'Muerto', o 'Vendido'), {@code false} si está 'Activo'.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public boolean validateCuidado(int idArete) throws SQLException{
@@ -215,15 +233,15 @@ public class AnimalRepository {
             statement.setInt(1, idArete);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (!resultSet.next())
-                    return true; // No existe o ha sido dado de baja
+                    return true; // Retorna true si no existe
                 String estado = resultSet.getString("estado");
-                return !"Activo".equalsIgnoreCase(estado);
+                return !"Activo".equalsIgnoreCase(estado); // Retorna true si es 'Muerto' o 'Vendido'
             }
         }
     }
 
     /**
-     * Recupera la fecha de nacimiento de un animal para ser utilizada en la validación de la fecha de baja.
+     * Recupera la fecha de nacimiento de un animal para ser utilizada en la validación de la fecha de baja (Muerte/Venta).
      *
      * @param idArete El ID del arete.
      * @return Un objeto {@link Animal} que contiene únicamente la fecha de nacimiento, o {@code null} si no existe.
