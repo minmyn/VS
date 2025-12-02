@@ -7,8 +7,22 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de repositorio que maneja las operaciones de persistencia (CRUD) para la entidad {@link Rancho}.
+ *
+ * @author VaquitaSoft
+ * @version 1.0
+ * @since 2025-10-19
+ */
 public class RanchoRepository {
 
+    /**
+     * Persiste un nuevo rancho en la tabla RANCHO y recupera el ID generado.
+     *
+     * @param rancho El objeto {@link Rancho} a guardar.
+     * @return El ID (PK) generado por la base de datos.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public int save(Rancho rancho) throws SQLException{
         String sql="INSERT INTO RANCHO (nombre, locacion) VALUES (?,?)";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -19,14 +33,19 @@ public class RanchoRepository {
             ResultSet resultSet = statement.getGeneratedKeys();
             if (resultSet.next())
                 return resultSet.getInt(1);
-
             throw new SQLException("No se pudo obtener el ID del rancho guardado.");
         }
     }
 
+    /**
+     * Recupera todos los ranchos de la base de datos.
+     *
+     * @return Una lista de objetos {@link Rancho}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public List<Rancho> findAll() throws SQLException{
         List<Rancho> ranchos = new ArrayList<>();
-        String sql = "SELECT  * FROM RANCHO";
+        String sql = "SELECT * FROM RANCHO";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery()){
@@ -34,6 +53,7 @@ public class RanchoRepository {
                 Rancho rancho = new Rancho();
                 rancho.setIdRancho(resultSet.getInt("rancho_id"));
                 rancho.setNombre(resultSet.getString("nombre"));
+                // Se asume que la columna es 'locacion'
                 rancho.setUbicacion(resultSet.getString("locacion"));
                 ranchos.add(rancho);
             }
@@ -41,7 +61,15 @@ public class RanchoRepository {
         }
     }
 
+    /**
+     * Actualiza el nombre y la ubicación de un rancho existente.
+     *
+     * @param rancho El objeto {@link Rancho} con el ID y los campos a actualizar.
+     * @return El número de filas afectadas (1 si fue exitoso, 0 si no existe).
+     * @throws SQLException Si ocurre un error de base de datos o si no se afectó ninguna fila.
+     */
     public int update(Rancho rancho) throws SQLException{
+        // Se asume que el nombre de la columna es 'locacion'
         String sql = "UPDATE RANCHO SET locacion = ?, nombre = ? WHERE rancho_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -50,14 +78,21 @@ public class RanchoRepository {
             statement.setInt(3, rancho.getIdRancho());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
-                throw new SQLException("La inserción del encargado no afectó ninguna fila.");
+                throw new SQLException("La actualización no afectó ninguna fila. ID de rancho no encontrado.");
             }
-            return statement.executeUpdate();
+            return affectedRows;
         }
     }
 
+    /**
+     * Verifica si ya existe un rancho con el nombre proporcionado (Validación de duplicados).
+     *
+     * @param nombre El nombre a verificar.
+     * @return {@code true} si el nombre ya existe en la base de datos, {@code false} en caso contrario.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
     public boolean duplicateNombre(String nombre) throws SQLException{
-        String sql = "SELECT * FROM RANCHO WHERE nombre = ?";
+        String sql = "SELECT 1 FROM RANCHO WHERE nombre = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setString(1, nombre);
