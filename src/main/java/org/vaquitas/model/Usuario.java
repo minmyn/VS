@@ -1,7 +1,7 @@
 package org.vaquitas.model;
 
 /**
- * Representa la entidad de dominio {@code Usuario}, utilizado para la gestión de acceso y registro.
+ * Representa la entidad de dominio {@link Usuario} utilizada para la gestión de acceso y registro en el sistema.
  *
  * @author VaquitaSoft
  * @version 1.0

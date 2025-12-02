@@ -1,7 +1,8 @@
 package org.vaquitas.model;
 
 /**
- * Representa la entidad de dominio {@code Medicamento}.
+ * Representa la entidad de dominio {@link Medicamento} que describe un medicamento disponible en el rancho.
+ *
  * <p>
  * Contiene información básica sobre un medicamento utilizado en la salud animal.
  * </p>

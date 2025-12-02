@@ -3,7 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * Clase de modelo que representa un **Animal** individual dentro del inventario del rancho.
+ * Representa la entidad de dominio {@link Animal} que identifica un animal individual dentro del inventario del rancho.
  * <p>
  * Esta entidad contiene los datos básicos de identificación, genéticos y de estatus
  * de cada ejemplar bovino.

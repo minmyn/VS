@@ -1,8 +1,7 @@
 package org.vaquitas.model;
 
 /**
- * Clase de modelo inmutable utilizada para estandarizar las respuestas de error
- * devueltas por la API al cliente.
+ * Estructura inmutable utilizada para estandarizar las respuestas de error devueltas por la API al cliente.
  * <p>
  * Un objeto {@code ApiError} siempre contendrá un código de estado HTTP,
  * una descripción general del error y un mensaje detallado.

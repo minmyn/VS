@@ -3,7 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * Representa la entidad de dominio {@code Venta}, que registra la baja de un animal por venta.
+ * Representa la entidad de dominio {@link Venta} que registra la baja de un animal por su venta en el rancho.
  *
  * @author VaquitaSoft
  * @version 1.0

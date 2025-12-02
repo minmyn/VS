@@ -3,7 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * Clase de modelo que representa la compra de un artículo de <b>alimento</b> o insumo dentro de un rancho.
+ * Representa la entidad de dominio {@link Alimento} que contiene la compra de un artículo de alimento o insumo dentro de un rancho.
  * <p>
  * Esta entidad se utiliza para registrar y rastrear el inventario y los costos
  * asociados a la alimentación del ganado.

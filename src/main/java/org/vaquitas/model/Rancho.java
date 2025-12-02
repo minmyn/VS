@@ -1,7 +1,7 @@
 package org.vaquitas.model;
 
 /**
- * Representa la entidad de dominio {@code Rancho}, que es la unidad geográfica
+ * Representa la entidad de dominio {@link Rancho}, que es la unidad geográfica
  * o administrativa donde se aloja el ganado.
  *
  * @author VaquitaSoft

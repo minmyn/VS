@@ -3,11 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * Representa un registro de recordatorio o alarma para una entidad.
- * <p>
- * Aunque actualmente solo contiene la fecha, su propósito es ser utilizado
- * para programar recordatorios basados en la fecha.
- * </p>
+ * Representa la entidad de dominio {@link Recordatorio} que establece una alarma o nota asociada a una entidad.
  *
  * @author VaquitaSoft
  * @version 1.0

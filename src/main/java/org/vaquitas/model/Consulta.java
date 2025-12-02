@@ -1,7 +1,7 @@
 package org.vaquitas.model;
 
 /**
- * Clase de modelo que representa un registro de <br>Consulta</br> o chequeo de salud para un animal.
+ * Representa la entidad de dominio {@link Consulta} que contiene un registro de chequeo de salud realizado para un animal.
  * <p>
  * Una consulta está asociada a un animal y detalla el padecimiento diagnosticado.
  * </p>

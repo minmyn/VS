@@ -3,11 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * DTO (Data Transfer Object) utilizado para devolver al cliente los **detalles completos de una Receta**,
- * incluyendo información consolidada de {@link Animal}, {@link Consulta}, {@link Medicamento} y {@link Recordatorio}.
- * <p>
- * Se utiliza principalmente en operaciones de lectura (GET) para evitar anidación de objetos.
- * </p>
+ * DTO (Data Transfer Object) utilizado para devolver los detalles completos de una Receta, consolidando información de varias entidades.
  *
  * @author VaquitaSoft
  * @version 1.0

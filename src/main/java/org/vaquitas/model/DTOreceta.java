@@ -3,11 +3,7 @@ package org.vaquitas.model;
 import java.time.LocalDate;
 
 /**
- * DTO (Data Transfer Object) utilizado para recibir los datos necesarios desde el cliente
- * para la **creación de una nueva Receta**.
- * <p>
- * Contiene todos los IDs y campos necesarios para crear las entidades relacionadas: {@link Consulta}, {@link Receta} y {@link Recordatorio}.
- * </p>
+ DTO (Data Transfer Object) utilizado para recibir los datos necesarios para la creación de una nueva Receta desde el cliente.
  *
  * @author VaquitaSoft
  * @version 1.0
