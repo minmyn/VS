@@ -184,15 +184,21 @@ public class AnimalRepository {
      * @return {@code true} si el arete ya existe, {@code false} en caso contrario.
      * @throws SQLException Si ocurre un error de base de datos.
      */
-    public boolean existsByIdArete(int idArete) throws SQLException {
-        String sql = "SELECT 1 FROM ANIMAL WHERE arete_id = ?";
+    public Animal validateVenta(int idArete) throws SQLException {
+        String sql = "SELECT fecha_nacimiento, estado FROM ANIMAL WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, idArete);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                return resultSet.next();
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Animal ganado = new Animal();
+                Date sqlDate = resultSet.getDate("fecha_nacimiento");
+                ganado.setFechaNacimiento(sqlDate.toLocalDate());
+                ganado.setEstatus("estado");
+                return ganado;
             }
         }
+        return null;
     }
 
     /**

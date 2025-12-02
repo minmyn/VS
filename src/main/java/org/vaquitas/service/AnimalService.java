@@ -131,6 +131,7 @@ public class AnimalService {
     public void darBajaGanado(Animal animal) throws SQLException{
         // Regla 1: Validar que el animal exista y obtener la fecha de nacimiento para comparación
         Animal animalBD = animalRepository.validateFechaBaja(animal.getIdArete());
+
         if (animalBD == null)
             throw new IllegalArgumentException("Ganado no encontrado con arete ID: " + animal.getIdArete());
 
