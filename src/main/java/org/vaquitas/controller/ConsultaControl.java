@@ -17,6 +17,7 @@ public class ConsultaControl {
         this.consultaService=consultaService;
     }
 
+
     public void buscarConsultasPorAnimal(Context context) {
         try {
             int areteId = Integer.parseInt(context.pathParam("idArete"));

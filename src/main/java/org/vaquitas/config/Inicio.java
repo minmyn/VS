@@ -85,8 +85,7 @@ public class Inicio {
         AnimalRepository animalRepository = new AnimalRepository();
 
         RecetaService recetaService = new RecetaService(recetaRepository, recordatorioRepository, consultaRepository, animalRepository);
-        MedicamentoService medicamentoService = new MedicamentoService(medicamentoRepository);
-        RecetaControl recetaControl = new RecetaControl(recetaService, medicamentoService);
+        RecetaControl recetaControl = new RecetaControl(recetaService);
         RecetaRoute recetaRoute = new RecetaRoute(recetaControl);
         return recetaRoute;
     }
