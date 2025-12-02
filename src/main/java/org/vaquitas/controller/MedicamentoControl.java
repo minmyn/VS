@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Controlador para la gestión de {@code Medicamentos}.
+ * Controlador para la gestión de {@link Medicamento}.
  * <p>
  * Maneja la recepción de peticiones HTTP, la validación de entrada y la coordinación con la capa de servicio.
  * </p>

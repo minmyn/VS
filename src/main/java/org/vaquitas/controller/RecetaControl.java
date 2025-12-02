@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Controlador para la gestión de {@code Recetas} de salud e higiene animal.
+ * Controlador para la gestión de {@link Receta} de salud e higiene animal.
  * <p>
  * Maneja la lógica de validación del DTO de entrada y la coordinación de la lógica de negocio
  * para la creación de las entidades {@link Consulta}, {@link Receta} y {@link Recordatorio}.
