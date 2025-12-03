@@ -35,15 +35,12 @@ public class AlimentoControl {
 
     /**
      * Registra una nueva compra de alimento en la base de datos.
-     * <p>
-     * Procesa la petición POST a /alimentos, realiza la validación de los datos.
-     * </p>
+     * <p>Procesa la petición POST a {@code /alimentos}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
     public void guardarAlimentos(Context context) {
         try {
-            // 1. Deserializar y validar
             Alimento nuevoAlimento = context.bodyAsClass(Alimento.class);
             AlimentoValidator alimentoValidator = new AlimentoValidator();
 
@@ -53,10 +50,9 @@ public class AlimentoControl {
                 return;
             }
 
-            // 2. Ejecutar servicio
             alimentoService.guardarAlimentos(nuevoAlimento);
-            // 3. Respuesta exitosa
-            context.status(201).json(Map.of("estado", true, "data", nuevoAlimento));
+
+            context.status(201).json(Map.of("estado", true, "mensaje", "Compra de alimento registrada con éxito", "data", nuevoAlimento));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
@@ -66,9 +62,7 @@ public class AlimentoControl {
 
     /**
      * Recupera y visualiza todas las compras de alimentos registradas.
-     * <p>
-     * Procesa la petición GET a /alimentos.
-     * </p>
+     * <p>Procesa la petición GET a {@code /alimentos}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -85,10 +79,7 @@ public class AlimentoControl {
 
     /**
      * Actualiza la información de una compra de alimento por su ID de compra.
-     * <p>
-     * Procesa la petición PATCH a /alimentos/{id}.
-     * Requiere que la compra exista y que los datos actualizados sean válidos.
-     * </p>
+     * <p>Procesa la petición PATCH a {@code /alimentos/{id}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -97,12 +88,10 @@ public class AlimentoControl {
             int idCompra = Integer.parseInt(context.pathParam("id"));
             Alimento alimentoActualizar = context.bodyAsClass(Alimento.class);
 
-            // 1. Verificar existencia antes de validar/actualizar
             Alimento alimentoOriginal = alimentoService.encontrarAlimento(idCompra);
             if (alimentoOriginal == null)
                 throw new NotFoundResponse("Compra no encontrada");
 
-            // 2. Asignar ID y validar
             alimentoActualizar.setIdCompra(idCompra);
             AlimentoValidator alimentoValidator = new AlimentoValidator();
             Map<String, String> errores = alimentoValidator.validarAlimento(alimentoActualizar);
@@ -112,12 +101,13 @@ public class AlimentoControl {
                 return;
             }
 
-            // 3. Ejecutar servicio
             alimentoService.editarAlimentos(alimentoActualizar);
-            // 4. Respuesta exitosa
-            context.status(200).json(Map.of("estado", true, "data", alimentoActualizar));
+
+            context.status(200).json(Map.of("estado", true, "mensaje", "Compra actualizada con éxito", "data", alimentoActualizar));
         } catch (NotFoundResponse e){
             context.status(404).json(Map.of("estado", false, "mensaje", e.getMessage()));
+        } catch (NumberFormatException e) {
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID de la compra debe ser un número entero válido."));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError() );
         } catch (Exception e) {
@@ -127,9 +117,7 @@ public class AlimentoControl {
 
     /**
      * Elimina un registro de compra de alimento por su ID.
-     * <p>
-     * Procesa la petición DELETE a /alimentos/{id}.
-     * </p>
+     * <p>Procesa la petición DELETE a {@code /alimentos/{id}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -137,17 +125,17 @@ public class AlimentoControl {
         try {
             int idCompra = Integer.parseInt(context.pathParam("id"));
 
-            // 1. Verificar existencia antes de eliminar
             Alimento alimentoOriginal = alimentoService.encontrarAlimento(idCompra);
             if (alimentoOriginal == null)
                 throw new NotFoundResponse("Compra no encontrada");
 
-            // 2. Ejecutar servicio
             alimentoService.eliminarAlimento(idCompra);
-            // 3. Respuesta exitosa (204 No Content)
+
             context.status(204);
         }catch(NotFoundResponse e){
             context.status(404).json(Map.of("estado", false, "mensaje", e.getMessage()));
+        }catch (NumberFormatException e) {
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID de la compra debe ser un número entero válido."));
         }catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

@@ -2,10 +2,14 @@ package org.vaquitas.route;
 
 import io.javalin.Javalin;
 import org.vaquitas.controller.RecordatorioControl;
+import org.vaquitas.model.Recordatorio;
 
 /**
  * Clase de enrutamiento que define los {@code endpoints} relacionados con la gestión de
- * {@link org.vaquitas.model.Recordatorio}.
+ * {@link Recordatorio}.
+ * <p>
+ * Asigna rutas HTTP específicas a los métodos correspondientes en el {@link RecordatorioControl}.
+ * </p>
  *
  * @author VaquitaSoft
  * @version 1.0
@@ -29,7 +33,7 @@ public class RecordatorioRoute {
      * <table>
      * <caption>Endpoints de Recordatorio</caption>
      * <tr><th>Método</th><th>Ruta</th><th>Propósito</th></tr>
-     * <tr><td>GET</td><td>/recordatorios</td><td>Recupera el listado de todos los recordatorios.</td></tr>
+     * <tr><td>GET</td><td>/recordatorios</td><td>Recupera el listado de todos los recordatorios programados (activos).</td></tr>
      * <tr><td>PATCH</td><td>/recordatorios/{id}</td><td>Actualiza la fecha de un recordatorio específico por su ID.</td></tr>
      * </table>
      *

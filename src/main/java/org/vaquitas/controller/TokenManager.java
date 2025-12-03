@@ -20,13 +20,14 @@ public class TokenManager {
     /** Clave secreta estática utilizada para firmar y verificar los tokens. Debe ser robusta y almacenada de forma segura. */
     private static final String SECRET = "UnaClaveSuperSecretaQueSeaLarga1234567890";
 
-    /** Objeto {@link SecretKey} generado a partir del {@code SECRET} para el algoritmo HMAC. */
+    /** Objeto {@link SecretKey} generado a partir del {@code SECRET} */
     private static final SecretKey key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    /** * Tiempo de expiración del token en milisegundos.
-     * El valor de 3,600,000 ms equivale a exactamente una (1) hora.
+    /**
+     * Tiempo de expiración del token en milisegundos.
+     * El valor de 3,600,000 ms equivale a exactamente una  una hora.
      */
-    private static final long EXPIRATION_TIME = 3600000; // 1 hora
+    private static final long EXPIRATION_TIME = 3600000;
 
     /**
      * Constructor por defecto.

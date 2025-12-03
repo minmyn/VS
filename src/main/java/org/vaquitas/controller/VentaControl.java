@@ -14,7 +14,8 @@ import java.util.Map;
 /**
  * Controlador para la gestión de {@link Venta} de ganado.
  * <p>
- * Maneja la recepción de peticiones HTTP, la validación de entrada y la coordinación con la capa de servicio.
+ * Maneja la recepción de peticiones HTTP (POST, GET), la validación de entrada
+ * del cuerpo de la petición y la coordinación con la capa de servicio.
  * </p>
  *
  * @author VaquitaSoft
@@ -36,19 +37,22 @@ public class VentaControl {
     /**
      * Registra la venta de un animal, iniciando el proceso de baja.
      * <p>
-     * Procesa la petición POST a /ventas/{id}.
-     * </p>
+     * Procesa la petición POST a {@code /ventas/{id}}.
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
     public void registrarVenta(Context context){
         try{
+            // Extrae y valida el path parameter 'id'
             int idArete = Integer.parseInt(context.pathParam("id"));
+
+            // Mapea el cuerpo de la petición al objeto Venta
             Venta nuevaVenta = context.bodyAsClass(Venta.class);
             Animal animal = new Animal();
             animal.setIdArete(idArete);
             nuevaVenta.setGanado(animal); // Asocia el ID del arete del path al objeto Venta
 
+            // Validación de campos del objeto Venta
             VentaValidator ventaValidator = new VentaValidator();
             Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
 
@@ -57,17 +61,22 @@ public class VentaControl {
                 return;
             }
 
+            // Lógica de negocio en la capa de servicio
             ventaService.registrarVenta(nuevaVenta);
 
+            // Respuesta exitosa
             context.status(201).json(Map.of("estado", true, "mensaje", "Venta registrada con éxito", "data", nuevaVenta));
         }catch (NumberFormatException e){
+            // Error al parsear el path parameter
             context.status(400).json(Map.of("estado", false, "mensaje", "El ID del arete debe ser un número entero válido."));
         } catch (IllegalArgumentException e){
             // Manejo de errores de negocio (Ganado inexistente, vendido, fechas inválidas)
             context.status(404).json(Map.of("estado", false, "mensaje", e.getMessage()));
         } catch (SQLException e) {
+            // Error de conexión o consulta a la base de datos
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
+            // Error inesperado
             context.status(500).json(Error.getApiServiceError());
         }
     }
@@ -75,7 +84,7 @@ public class VentaControl {
     /**
      * Recupera el listado de todos los animales que han sido vendidos.
      * <p>
-     * Procesa la petición GET a /ventas.
+     * Procesa la petición GET a {@code /ventas}.
      * </p>
      *
      * @param context El contexto de la petición HTTP de Javalin.

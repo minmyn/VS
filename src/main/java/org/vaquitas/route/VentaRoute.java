@@ -2,9 +2,10 @@ package org.vaquitas.route;
 
 import io.javalin.Javalin;
 import org.vaquitas.controller.VentaControl;
+import org.vaquitas.model.Venta;
 
 /**
- * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link org.vaquitas.model.Venta}.
+ * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link Venta}.
  * <p>
  * Asigna rutas HTTP específicas a los métodos correspondientes en el {@link VentaControl}.
  * </p>
@@ -31,8 +32,8 @@ public class VentaRoute {
      * <table>
      * <caption>Endpoints de Venta</caption>
      * <tr><th>Método</th><th>Ruta</th><th>Propósito</th></tr>
-     * <tr><td>POST</td><td>/ventas/{id}</td><td>Registra la venta de un animal especificado por su arete ID.</td></tr>
-     * <tr><td>GET</td><td>/ventas</td><td>Recupera el listado completo de animales vendidos.</td></tr>
+     * <tr><td>POST</td><td>/ventas/{id}</td><td>Registra la venta de un animal especificado por su arete ID ({@code id} es el arete).</td></tr>
+     * <tr><td>GET</td><td>/ventas</td><td>Recupera el listado completo de animales vendidos (incluye detalles de la venta y el animal).</td></tr>
      * </table>
      *
      * @param app La instancia de {@link Javalin} donde se registrarán las rutas.

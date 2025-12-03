@@ -36,18 +36,14 @@ public class ConsultaControl {
 
     /**
      * Busca y recupera todas las consultas médicas asociadas a un animal específico.
-     * <p>
-     * Procesa la petición GET a /consultas/animal/{idArete}.
-     * </p>
+     * <p>Procesa la petición GET a {@code /consultas/animal/{idArete}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
     public void buscarConsultasPorAnimal(Context context) {
         try {
-            // Se obtiene el ID del arete desde el path
             int areteId = Integer.parseInt(context.pathParam("idArete"));
 
-            // Se llama al servicio para obtener la lista de consultas
             List<Consulta> consultas = consultaService.obtenerConsultasPorArete(areteId);
 
             if (consultas.isEmpty()) {
@@ -57,13 +53,10 @@ public class ConsultaControl {
 
             context.status(200).json(consultas);
         } catch (NumberFormatException e) {
-            // Manejo de error 400 (Bad Request) para IDs no numéricos
-            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del arete debe ser un número entero válido (BIGINT)."));
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del arete debe ser un número entero válido."));
         } catch (SQLException e) {
-            // Manejo de error 500 (Internal Server Error) para fallos de base de datos
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
-            // Manejo de error 500 (Internal Server Error) para otros fallos de servicio
             context.status(500).json(Error.getApiServiceError());
         }
     }

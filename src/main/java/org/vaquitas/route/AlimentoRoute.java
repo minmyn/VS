@@ -2,9 +2,10 @@ package org.vaquitas.route;
 
 import io.javalin.Javalin;
 import org.vaquitas.controller.AlimentoControl;
+import org.vaquitas.model.Alimento;
 
 /**
- * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link org.vaquitas.model.Alimento}.
+ * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link Alimento} (compras de alimento).
  * <p>
  * Asigna rutas HTTP específicas a los métodos correspondientes en el {@link AlimentoControl} para realizar operaciones CRUD.
  * </p>

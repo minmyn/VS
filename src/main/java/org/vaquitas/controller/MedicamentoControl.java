@@ -12,7 +12,8 @@ import java.util.Map;
 /**
  * Controlador para la gestión de {@link Medicamento}.
  * <p>
- * Maneja la recepción de peticiones HTTP, la validación de entrada y la coordinación con la capa de servicio.
+ * Maneja la recepción de peticiones HTTP (POST, GET, PATCH), la validación de entrada
+ * y la coordinación con la capa de servicio para el catálogo de medicamentos.
  * </p>
  *
  * @author VaquitaSoft
@@ -35,9 +36,7 @@ public class MedicamentoControl{
 
     /**
      * Registra un nuevo medicamento.
-     * <p>
-     * Procesa la petición POST a /medicamentos.
-     * </p>
+     * <p>Procesa la petición POST a {@code /medicamentos}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -45,12 +44,15 @@ public class MedicamentoControl{
         try {
             Medicamento nuevoMedicamento = context.bodyAsClass(Medicamento.class);
             Map<String, String> errores = medicamentoValidator.validarMedicamento(nuevoMedicamento);
+
             if (!errores.isEmpty()) {
                 context.status(400).json(Map.of("estado", false, "errores", errores));
                 return;
             }
+
             medicamentoService.registrarMedicina(nuevoMedicamento);
-            context.status(201).json(Map.of("estado", true,"data", nuevoMedicamento));
+
+            context.status(201).json(Map.of("estado", true, "mensaje", "Medicamento registrado con éxito", "data", nuevoMedicamento));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
@@ -60,9 +62,7 @@ public class MedicamentoControl{
 
     /**
      * Recupera el listado completo de medicamentos.
-     * <p>
-     * Procesa la petición GET a /medicamentos.
-     * </p>
+     * <p>Procesa la petición GET a {@code /medicamentos}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -79,9 +79,7 @@ public class MedicamentoControl{
 
     /**
      * Busca medicamentos por texto en el nombre.
-     * <p>
-     * Procesa la petición GET a /medicamento?nombre={texto}. El parámetro se obtiene del query.
-     * </p>
+     * <p>Procesa la petición GET a {@code /medicamento?nombre={texto}}. El parámetro se obtiene del query.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -99,31 +97,32 @@ public class MedicamentoControl{
 
     /**
      * Actualiza un medicamento existente.
-     * <p>
-     * Procesa la petición PATCH a /medicamentos/{id}.
-     * </p>
+     * <p>Procesa la petición PATCH a {@code /medicamentos/{id}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
     public void actualizarMedicamento(Context context){
         try {
             int idMedicamento = Integer.parseInt(context.pathParam("id"));
+
             Medicamento medicamentoActualizado = context.bodyAsClass(Medicamento.class);
             medicamentoActualizado.setIdMedicamento(idMedicamento);
+
             Map<String, String> errores = medicamentoValidator.validarMedicamento(medicamentoActualizado);
             if (!errores.isEmpty()) {
                 context.status(400).json(Map.of("estado", false, "errores", errores));
                 return;
             }
+
             int affectedRows = medicamentoService.actualizarMedicamento(medicamentoActualizado);
+
             if (affectedRows > 0) {
-                context.status(200).json(Map.of("estado", true, "data", medicamentoActualizado));
+                context.status(200).json(Map.of("estado", true, "mensaje", "Medicamento actualizado con éxito", "data", medicamentoActualizado));
             } else {
-                // Se asume que 0 filas afectadas es un error de ID no encontrado o datos idénticos.
                 context.status(404).json(Map.of("estado", false, "mensaje", "Medicamento no encontrado para actualizar."));
             }
         } catch (NumberFormatException e) {
-            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del medicamento debe ser un número válido."));
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del medicamento debe ser un número entero válido."));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

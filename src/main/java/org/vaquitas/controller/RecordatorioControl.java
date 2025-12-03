@@ -33,9 +33,11 @@ public class RecordatorioControl {
 
     /**
      * Recupera el listado completo de todos los recordatorios programados.
-     * <p>
-     * Procesa la petición GET a /recordatorios.
-     * </p>
+     * <p>Procesa la petición GET a {@code /recordatorios}.</p>
+     * <ul>
+     * <li>**Éxito (200 OK):** Retorna la lista de recordatorios.</li>
+     * <li>**Error (500 Internal Server Error):** Fallo de base de datos o error inesperado.</li>
+     * </ul>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -44,7 +46,7 @@ public class RecordatorioControl {
             List<Recordatorio> recordatorios = recordatorioService.verRecordatorio();
             context.status(200).json(recordatorios);
         } catch (SQLException e) {
-            context.status(500).json(org.vaquitas.util.Error.getApiDatabaseError());
+            context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
             context.status(500).json(Error.getApiServiceError());
         }
@@ -52,9 +54,12 @@ public class RecordatorioControl {
 
     /**
      * Actualiza la fecha de un recordatorio específico por su ID.
-     * <p>
-     * Procesa la petición PATCH a /recordatorios/{id}.
-     * </p>
+     * <p>Procesa la petición PATCH a {@code /recordatorios/{id}}.</p>
+     * <ul>
+     * <li>**Éxito (204 No Content):** Actualización exitosa.</li>
+     * <li>**Error (400 Bad Request):** ID de recordatorio no válido.</li>
+     * <li>**Error (500 Internal Server Error):** Fallo de base de datos o error inesperado.</li>
+     * </ul>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -64,16 +69,12 @@ public class RecordatorioControl {
             Recordatorio recordatorioAct = context.bodyAsClass(Recordatorio.class);
             recordatorioAct.setIdRecordatorio(id);
             recordatorioService.editarRecordatorio(recordatorioAct);
-
-            // 204 Respuesta de actualización exitosa.
             context.status(204);
         } catch (NumberFormatException e) {
-            // Manejo de error 400 (Bad Request) para IDs no numéricos
-            context.status(400).json(Map.of("estado", false, "error", "ID de recordatorio no válido o formato incorrecto."));
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID de recordatorio debe ser un número entero válido."));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
-            // Usar el error genérico 500 para fallos del servidor o del servicio
             context.status(500).json(Error.getApiServiceError());
         }
     }

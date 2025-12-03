@@ -2,9 +2,10 @@ package org.vaquitas.route;
 
 import io.javalin.Javalin;
 import org.vaquitas.controller.RecetaControl;
+import org.vaquitas.model.Receta;
 
 /**
- * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link org.vaquitas.model.Receta}.
+ * Clase de enrutamiento que define todos los {@code endpoints} relacionados con la gestión de {@link Receta}.
  * <p>
  * Asigna rutas HTTP específicas a los métodos correspondientes en el {@link RecetaControl}.
  * </p>
@@ -31,8 +32,8 @@ public class RecetaRoute {
      * <table>
      * <caption>Endpoints de Recetas</caption>
      * <tr><th>Método</th><th>Ruta</th><th>Propósito</th></tr>
-     * <tr><td>POST</td><td>/receta</td><td>Crea una nueva receta, consulta y recordatorio.</td></tr>
-     * <tr><td>GET</td><td>/receta</td><td>Visualiza todas las recetas con detalles consolidados.</td></tr>
+     * <tr><td>POST</td><td>/receta</td><td>Crea una nueva receta, consulta y recordatorio de forma transaccional.</td></tr>
+     * <tr><td>GET</td><td>/receta</td><td>Visualiza todas las recetas con detalles consolidados (DTOdetalles).</td></tr>
      * <tr><td>GET</td><td>/receta/medicamento/{id}</td><td>Visualiza recetas filtradas por el ID del medicamento.</td></tr>
      * <tr><td>GET</td><td>/receta/recordatorio/{id}</td><td>Visualiza recetas filtradas por el ID del recordatorio (calendario).</td></tr>
      * </table>

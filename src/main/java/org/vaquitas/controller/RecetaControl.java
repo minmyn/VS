@@ -2,7 +2,6 @@ package org.vaquitas.controller;
 
 import io.javalin.http.Context;
 import org.vaquitas.model.*;
-import org.vaquitas.service.MedicamentoService;
 import org.vaquitas.service.RecetaService;
 import org.vaquitas.util.Error;
 import org.vaquitas.util.RecetaValidator;
@@ -15,7 +14,7 @@ import java.util.Map;
  * Controlador para la gestión de {@link Receta} de salud e higiene animal.
  * <p>
  * Maneja la lógica de validación del DTO de entrada y la coordinación de la lógica de negocio
- * para la creación de las entidades {@link Consulta}, {@link Receta} y {@link Recordatorio}.
+ * para la creación transaccional de las entidades {@link Consulta}, {@link Receta} y {@link Recordatorio}.
  * </p>
  *
  * @author VaquitaSoft
@@ -37,11 +36,9 @@ public class RecetaControl {
     }
 
     /**
-     * Crea un nuevo registro de salud/higiene animal, que implica la creación de una Consulta,
+     * Crea un nuevo registro de salud/higiene animal, que implica la creación transaccional de una Consulta,
      * un Recordatorio (si no existe) y la Receta.
-     * <p>
-     * Procesa la petición POST a /receta.
-     * </p>
+     * <p>Procesa la petición POST a {@code /receta}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -55,7 +52,6 @@ public class RecetaControl {
                 return;
             }
 
-            // Mapeo del DTO a las entidades de dominio
             Medicamento medicamento = new Medicamento();
             medicamento.setIdMedicamento(dto.getIdMedicamento());
 
@@ -79,10 +75,10 @@ public class RecetaControl {
             // Ejecutar servicio
             recetaService.guardarReceta(receta);
 
-            context.status(201).json(Map.of("estado", true, "data", dto));
+            context.status(201).json(Map.of("estado", true, "mensaje", "Receta, Consulta y Recordatorio registrados con éxito.", "data", dto));
         } catch (IllegalArgumentException e) {
-            // Manejo de errores de negocio (e.g., Ganado no activo, Medicamento no existe)
-            context.status(404).json(Map.of("mensaje", e.getMessage()));
+            // Manejo de errores de negocio (e.g., Ganado no activo)
+            context.status(404).json(Map.of("estado", false, "mensaje", e.getMessage()));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
@@ -91,10 +87,8 @@ public class RecetaControl {
     }
 
     /**
-     * Recupera los detalles consolidados de todas las recetas.
-     * <p>
-     * Procesa la petición GET a /receta.
-     * </p>
+     * Recupera los detalles consolidados de todas las recetas registradas.
+     * <p>Procesa la petición GET a {@code /receta}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -111,9 +105,7 @@ public class RecetaControl {
 
     /**
      * Recupera los detalles de las recetas asociadas a un medicamento específico.
-     * <p>
-     * Procesa la petición GET a /receta/medicamento/{id}.
-     * </p>
+     * <p>Procesa la petición GET a {@code /receta/medicamento/{id}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin.
      */
@@ -123,10 +115,10 @@ public class RecetaControl {
             List<DTOdetalles> detalles = recetaService.verRecetaPorMedicamento(idMedicamento);
             context.status(200).json(detalles);
         } catch (NumberFormatException e) {
-            context.status(400).json(Map.of("mensaje", "El ID del medicamento debe ser un número entero válido."));
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del medicamento debe ser un número entero válido."));
         } catch (IllegalArgumentException e) {
-            String mensajeError = e.getMessage();
-            context.status(400).json(mensajeError);
+            // Captura de errores de negocio
+            context.status(400).json(Map.of("estado", false, "mensaje", e.getMessage()));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
@@ -136,27 +128,24 @@ public class RecetaControl {
 
     /**
      * Recupera los detalles de las recetas asociadas a un recordatorio específico (por ID de calendario/recordatorio).
-     * <p>
-     * Procesa la petición GET a /receta/recordatorio/{id}.
-     * </p>
+     * <p>Procesa la petición GET a {@code /receta/recordatorio/{id}}.</p>
      *
      * @param context El contexto de la petición HTTP de Javalin. El parámetro 'id' es el ID del recordatorio.
      */
     public void verRecetaPorRecordatorio(Context context){
         try {
-            int idMedicamento = Integer.parseInt(context.pathParam("id"));
-            List<DTOdetalles> detalles = recetaService.verRecetaPorRecordatorio(idMedicamento);
+            int idRecordatorio = Integer.parseInt(context.pathParam("id"));
+            List<DTOdetalles> detalles = recetaService.verRecetaPorRecordatorio(idRecordatorio);
             context.status(200).json(detalles);
         } catch (NumberFormatException e) {
-            context.status(400).json(Map.of("mensaje", "El ID del medicamento debe ser un número entero válido."));
+            context.status(400).json(Map.of("estado", false, "mensaje", "El ID del recordatorio debe ser un número entero válido."));
         } catch (IllegalArgumentException e) {
-            String mensajeError = e.getMessage();
-            context.status(400).json(mensajeError);
+            // Captura de errores de negocio
+            context.status(400).json(Map.of("estado", false, "mensaje", e.getMessage()));
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
             context.status(500).json(Error.getApiServiceError());
         }
     }
-
 }
