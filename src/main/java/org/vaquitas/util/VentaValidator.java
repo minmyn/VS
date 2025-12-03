@@ -18,23 +18,18 @@ public class VentaValidator {
      * Valida que los campos requeridos para la venta sean válidos.
      *
      * @param venta El objeto {@link Venta} a validar.
-     * @return Un mapa de errores, donde la clave es el campo y el valor es el mensaje de error.
-     * Retorna un mapa vacío si no hay errores.
+     * @return Un mapa de errores. Retorna un mapa vacío si no hay errores.
      */
     public Map<String, String> validarVenta(Venta venta){
         Map<String, String> errores = new HashMap<>();
 
-        // El ID del arete se obtiene del path, pero se valida que el objeto Ganado no sea nulo.
         if (venta.getGanado() == null || venta.getGanado().getIdArete() <= 0)
             errores.put("idArete", "El ID del arete es inválido o no está especificado.");
 
         if (venta.getFechaBaja() == null) {
             errores.put("fechaBaja", "La fecha de baja es obligatoria");
-        } else {
-            LocalDate hoy = LocalDate.now();
-            if (venta.getFechaBaja().isAfter(hoy)) {
-                errores.put("fechaBaja", "La fecha de baja no puede ser futura");
-            }
+        } else if (venta.getFechaBaja().isAfter(LocalDate.now())) {
+            errores.put("fechaBaja", "La fecha de baja no puede ser futura");
         }
 
         if (venta.getPesoFinal() <= 0 )

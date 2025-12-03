@@ -15,13 +15,6 @@ import java.util.Map;
 public class ConsultaValidator {
     /**
      * Valida los campos obligatorios de un objeto {@link Consulta}.
-     * <p>
-     * Reglas de validación:
-     * <ul>
-     * <li>El objeto {@code Ganado} (Animal) no puede ser nulo.</li>
-     * <li>El {@code Padecimiento} no puede ser nulo o estar en blanco.</li>
-     * </ul>
-     * </p>
      *
      * @param consulta El objeto Consulta a validar.
      * @return Un {@code Map<String, String>} con errores de validación. Retorna un mapa vacío si es válido.
@@ -29,8 +22,8 @@ public class ConsultaValidator {
     public Map<String, String> validarConsulta(Consulta consulta){
         Map<String, String> errores = new HashMap<>();
 
-        if (consulta.getGanado() == null )
-            errores.put("consulta", "Verifique el campo: El animal asociado es obligatorio.");
+        if (consulta.getGanado() == null || consulta.getGanado().getIdArete() <= 0)
+            errores.put("ganado", "El animal asociado es obligatorio y debe tener un ID de arete válido.");
 
         if (consulta.getPadecimiento() == null || consulta.getPadecimiento().isBlank())
             errores.put("padecimiento", "El padecimiento no puede estar vacío.");

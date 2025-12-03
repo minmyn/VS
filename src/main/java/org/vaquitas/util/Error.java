@@ -3,7 +3,7 @@ package org.vaquitas.util;
 import org.vaquitas.model.ApiError;
 
 /**
- * Clase de utilidad (factory) para generar objetos {@link ApiError} estandarizados.
+ * Clase de utilidad para generar objetos {@link ApiError} estandarizados.
  * <p>
  * Proporciona métodos estáticos para crear respuestas de error comunes en la API,
  * facilitando la consistencia en el manejo de fallos.
@@ -41,9 +41,6 @@ public class Error {
 
     /**
      * Genera un error estándar de Petición Incorrecta (400) con un mensaje genérico.
-     * <p>
-     * Se usa cuando el formato o los parámetros de la petición son incorrectos o incompletos.
-     * </p>
      *
      * @return Una instancia de {@link ApiError} con status 400.
      */
@@ -56,9 +53,6 @@ public class Error {
 
     /**
      * Genera un error de Petición Incorrecta (400) con un mensaje detallado proporcionado.
-     * <p>
-     * Este método permite personalizar el mensaje de error para indicar qué falló específicamente.
-     * </p>
      *
      * @param message El mensaje específico que describe por qué la petición fue incorrecta.
      * @return Una instancia de {@link ApiError} con status 400.
@@ -69,5 +63,4 @@ public class Error {
                 "Bad Request",
                 message);
     }
-
 }

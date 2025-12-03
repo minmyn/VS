@@ -18,15 +18,6 @@ public class RecetaValidator {
 
     /**
      * Valida los campos obligatorios para la creación de una nueva receta.
-     * <p>
-     * Reglas de validación:
-     * <ul>
-     * <li>{@code idMedicamento} e {@code idAreteGanado} deben ser mayores a cero.</li>
-     * <li>{@code padecimiento} no puede estar vacío.</li>
-     * <li>{@code fechaRecordatorio} y {@code fechaInicio} no pueden ser nulos.</li>
-     * <li>{@code dosis} debe ser mayor a cero.</li>
-     * </ul>
-     * </p>
      *
      * @param dto El DTO de receta a validar.
      * @return Un {@code Map<String, String>} con errores de validación. Retorna un mapa vacío si es válido.
@@ -34,10 +25,10 @@ public class RecetaValidator {
     public Map<String, String> validarCreacionDTO(DTOreceta dto){
         Map<String, String> errores = new HashMap<>();
 
-        if (dto.getIdMedicamento() <= 0)
+        if (dto.getIdMedicamento() < 0)
             errores.put("idMedicamento", "ID de medicamento inválido.");
 
-        if (dto.getIdAreteGanado() <= 0)
+        if (dto.getIdAreteGanado() < 0)
             errores.put("idAreteGanado", "ID de arete inválido.");
 
         if (dto.getPadecimiento() == null || dto.getPadecimiento().isBlank())
@@ -45,20 +36,14 @@ public class RecetaValidator {
 
         if (dto.getFechaRecordatorio() == null) {
             errores.put("fechaRecordatorio", "La fecha de recordatorio es obligatoria.");
-        }else {
-            LocalDate hoy = LocalDate.now();
-            if (dto.getFechaRecordatorio().isBefore(hoy)) {
-                errores.put("fechaRecordatorio", "La fecha del recordatorio no puede ser anterior a la fecha actual.");
-            }
+        }else if (dto.getFechaRecordatorio().isBefore(LocalDate.now())) {
+            errores.put("fechaRecordatorio", "La fecha del recordatorio no puede ser anterior a la fecha actual.");
         }
 
         if (dto.getFechaInicio() == null){
             errores.put("fechaInicio", "La fecha de inicio de la receta es obligatoria.");
-        }else {
-            LocalDate hoy = LocalDate.now();
-            if (dto.getFechaInicio().isBefore(hoy)) {
-                errores.put("fechaInicio", "La fecha del recordatorio no puede ser anterior a la fecha actual.");
-            }
+        }else if (dto.getFechaInicio().isAfter(LocalDate.now())) {
+            errores.put("fechaInicio", "La fecha de inicio no puede ser futura.");
         }
 
         if (dto.getDosis() < 0)

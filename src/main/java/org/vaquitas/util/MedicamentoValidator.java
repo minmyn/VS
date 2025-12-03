@@ -18,15 +18,14 @@ public class MedicamentoValidator {
      * Valida que los campos requeridos para la creación o actualización de un medicamento sean válidos.
      *
      * @param medicamento El objeto {@link Medicamento} a validar.
-     * @return Un mapa de errores, donde la clave es el nombre del campo y el valor es el mensaje de error.
-     * Retorna un mapa vacío si no hay errores.
+     * @return Un mapa de errores. Retorna un mapa vacío si no hay errores.
      */
     public Map<String, String> validarMedicamento(Medicamento medicamento){
         Map<String, String> errores = new HashMap<>();
         if (medicamento.getNombre() == null || medicamento.getNombre().isBlank())
-            errores.put("nombre", "Verifique el campo");
+            errores.put("nombre", "Verifique el campo nombre.");
         if (medicamento.getDescripcion() == null || medicamento.getDescripcion().isBlank())
-            errores.put("descripcion", "Verifique el campo");
+            errores.put("descripcion", "Verifique el campo descripción.");
         return errores;
     }
 }

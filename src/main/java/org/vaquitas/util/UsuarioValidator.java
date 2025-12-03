@@ -33,48 +33,45 @@ public class UsuarioValidator {
      * Valida que todos los campos obligatorios del usuario cumplan con las reglas de negocio básicas.
      *
      * @param usuario El objeto {@link Usuario} a validar.
-     * @return Un mapa de errores, donde la clave es el nombre del campo y el valor es el mensaje de error.
-     * Retorna un mapa vacío si no hay errores.
+     * @return Un mapa de errores. Retorna un mapa vacío si no hay errores.
      */
-    public Map<String, String> validarUsuario(Usuario usuario){
+    public Map<String, String> validarUsuario(Usuario usuario) {
         Map<String, String> errores = new HashMap<>();
 
         if (usuario.getNombre() == null || usuario.getNombre().isBlank())
-            errores.put("nombre", "Verifique el campo");
+            errores.put("nombre", "El nombre es obligatorio.");
 
-        if( usuario.getTelefono() == null || usuario.getTelefono().isBlank() || usuario.getTelefono().length()!=10 )
-            errores.put("telefono", "Verifique el campo");
+        if (usuario.getTelefono() == null || usuario.getTelefono().isBlank() || usuario.getTelefono().length() != 10)
+            errores.put("telefono", "El teléfono debe tener 10 dígitos.");
 
-        // Se valida el campo sexo contra valores permitidos
         if (usuario.getSexo() == null || (!"Masculino".equals(usuario.getSexo()) && !"Femenino".equals(usuario.getSexo())))
-            errores.put("sexo", "Verifique el campo");
+            errores.put("sexo", "El sexo debe ser 'Masculino' o 'Femenino'.");
 
         if (usuario.getEdad() < 18)
-            errores.put("edad", "Verifique el campo");
+            errores.put("edad", "El usuario debe ser mayor de 18 años.");
 
         if (usuario.getEmail() == null || usuario.getEmail().isBlank())
-            errores.put("email", "Verifique el campo");
+            errores.put("email", "El email es obligatorio.");
 
         if (usuario.getClave() == null || usuario.getClave().isBlank())
-            errores.put("clave","Verifique el campo");
+            errores.put("clave", "La clave es obligatoria.");
 
         return errores;
     }
 
     /**
-     * Valida que el contraseña y el email no estén vacios en la base de datos al momento de actualizar.
+     * Valida que el email y la clave no estén vacíos al momento de actualizar las credenciales de un usuario.
      *
-     * @param usuario El correo electrónico a verificar.
-     * @return Un mapa de errores con mensajes específicos para campos duplicados.
-     * @throws SQLException Si ocurre un error al acceder a la base de datos.
+     * @param usuario El objeto {@link Usuario} a verificar.
+     * @return Un mapa de errores.
      */
-    public Map<String, String> validarActualizacion(Usuario usuario) throws SQLException {
+    public Map<String, String> validarActualizacion(Usuario usuario) {
         Map<String, String> errores = new HashMap<>();
         if (usuario.getEmail() == null || usuario.getEmail().isBlank())
-            errores.put("email", "Verifique el campo");
+            errores.put("email", "El email es obligatorio para la actualización.");
 
         if (usuario.getClave() == null || usuario.getClave().isBlank())
-            errores.put("clave","Verifique el campo");
+            errores.put("clave","La clave es obligatoria para la actualización.");
         return errores;
     }
 

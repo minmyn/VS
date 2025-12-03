@@ -21,8 +21,7 @@ public class RanchoValidator {
      * Valida que los campos obligatorios del rancho (nombre y ubicación) no estén vacíos.
      *
      * @param rancho El objeto {@link Rancho} a validar.
-     * @return Un mapa de errores, donde la clave es el nombre del campo y el valor es el mensaje de error.
-     * Retorna un mapa vacío si no hay errores.
+     * @return Un mapa de errores. Retorna un mapa vacío si no hay errores.
      */
     public Map<String, String> validarRancho(Rancho rancho){
         Map<String, String> errores = new HashMap<>();
