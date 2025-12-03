@@ -1,6 +1,5 @@
 package org.vaquitas.repository;
 
-
 import org.vaquitas.config.DatabaseConfig;
 import org.vaquitas.model.Animal;
 import org.vaquitas.model.Raza;
@@ -37,13 +36,21 @@ public class VentaRepository {
             statement.setDouble(3, venta.getPesoFinal());
             Date sqlDate = Date.valueOf(venta.getFechaBaja());
             statement.setDate(4, sqlDate);
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("La inserción de la venta no afectó ninguna fila.");
+            }
         }
     }
 
     /**
-     * Recupera una lista de todos los animales vendidos, incluyendo detalles del animal y la venta.
+     * Recupera una lista de todos los animales vendidos, incluyendo detalles del animal, raza y la venta.
+     * <p>
+     * Realiza JOINs entre VENTA, ANIMAL y RAZA. Se asume que el estado del animal en la tabla ANIMAL
+     * se actualiza a 'Vendido' tras registrar la venta.
+     * </p>
      *
-     * @return Una lista de objetos {@link Venta} con el campo {@code ganado} poblado.
+     * @return Una lista de objetos {@link Venta} con el campo {@code ganado} (Animal) poblado.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public List<Venta> findVendidos() throws SQLException{
@@ -52,10 +59,12 @@ public class VentaRepository {
                 "FROM ANIMAL a " +
                 "INNER JOIN VENTA v ON a.arete_id = v.arete_id " +
                 "INNER JOIN RAZA rz ON a.raza_id = rz.raza_id " +
-                "WHERE a.estado = 'Vendido' ORDER BY a.arete_id"; // Se asume que el estado del animal se actualiza a 'Vendido'
+                "WHERE a.estado = 'Vendido' ORDER BY a.arete_id";
+
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql);
              ResultSet resultSet = statement.executeQuery()){
+
             while (resultSet.next()) {
                 Venta ganado = new Venta();
                 Animal bovino = new Animal();
@@ -74,7 +83,7 @@ public class VentaRepository {
                 bovino.setSexo(resultSet.getString("sexo"));
                 Date sqlDateNac = resultSet.getDate("fecha_nacimiento");
                 bovino.setFechaNacimiento(sqlDateNac.toLocalDate());
-                bovino.setPeso(resultSet.getDouble("peso")); // Peso de registro inicial
+                bovino.setPeso(resultSet.getDouble("peso"));
 
                 // Mapeo de Raza
                 raza.setIdRaza(resultSet.getInt("raza_id"));
@@ -108,6 +117,9 @@ public class VentaRepository {
 
     /**
      * Verifica si un animal ya tiene un registro de venta en la tabla VENTA.
+     * <p>
+     * Se utiliza como microservicio o validación para evitar registrar ventas duplicadas.
+     * </p>
      *
      * @param idArete El ID del arete del animal a verificar.
      * @return {@code true} si el animal ya fue vendido (existe en la tabla VENTA), {@code false} en caso contrario.
@@ -119,7 +131,7 @@ public class VentaRepository {
              PreparedStatement statement = connection.prepareStatement(sql)){
             statement.setInt(1, idArete);
             ResultSet resultSet = statement.executeQuery();
-            return resultSet.next(); // Retorna true si encuentra una fila
+            return resultSet.next();
         }
     }
 }

@@ -149,10 +149,6 @@ public class RecetaRepository {
 
     /**
      * Realiza una consulta compleja para obtener los detalles de las recetas asociadas a un recordatorio específico.
-     * <p>
-     * **Nota de Corrección:** Se modificó la cláusula WHERE para filtrar por el ID del recordatorio (calendario_id),
-     * consistente con el parámetro de entrada y la estructura de la tabla.
-     * </p>
      *
      * @param id El ID del recordatorio (calendario_id).
      * @return Una lista de objetos {@link DTOdetalles}.
@@ -189,9 +185,6 @@ public class RecetaRepository {
 
     /**
      * Método auxiliar privado para mapear un {@code ResultSet} a un objeto {@link DTOdetalles}.
-     * <p>
-     * Centraliza la lógica de conversión de tipos de datos de SQL a Java (incluyendo {@code Date} a {@code LocalDate}).
-     * </p>
      *
      * @param resultSet El conjunto de resultados de la consulta SQL.
      * @return Un objeto {@link DTOdetalles} completamente mapeado.

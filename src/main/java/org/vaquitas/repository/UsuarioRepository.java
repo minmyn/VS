@@ -23,7 +23,7 @@ public class UsuarioRepository {
     /**
      * Persiste un nuevo usuario en la tabla USUARIO.
      * <p>
-     * La clave debe estar hasheada antes de llamar a este método.
+     * **Advertencia:** La clave debe estar hasheada antes de llamar a este método.
      * </p>
      *
      * @param usuario El objeto {@link Usuario} a guardar.
@@ -39,7 +39,7 @@ public class UsuarioRepository {
             statement.setString(3, usuario.getSexo());
             statement.setInt(4, usuario.getEdad());
             statement.setString(5, usuario.getEmail());
-            statement.setString(6, usuario.getClave());
+            //statement.setString(6, usuario.getClave());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("La inserción del usuario no afectó ninguna fila.");
@@ -48,7 +48,7 @@ public class UsuarioRepository {
     }
 
     /**
-     * Recupera todos los usuarios de la base de datos.
+     * Recupera todos los usuarios de la base de datos (excluyendo la clave de acceso en el mapeo).
      *
      * @return Una lista de objetos {@link Usuario}.
      * @throws SQLException Si ocurre un error de base de datos.
@@ -66,8 +66,8 @@ public class UsuarioRepository {
                 usuarios.setTelefono(resultSet.getString("telefono"));
                 usuarios.setSexo(resultSet.getString("sexo"));
                 usuarios.setEdad(resultSet.getInt("edad"));
-                //usuarios.setEmail(resultSet.getString("correo_electronico"));
-                usuarios.setClave(resultSet.getString("clave_acceso"));
+                usuarios.setEmail(resultSet.getString("correo_electronico"));
+                //usuarios.setClave(resultSet.getString("clave_acceso"));
                 usuario.add(usuarios);
             }
             return usuario;
@@ -78,7 +78,7 @@ public class UsuarioRepository {
      * Busca y recupera un único usuario por su ID.
      *
      * @param idUsuario El ID del usuario a buscar.
-     * @return El objeto {@link Usuario} con todos sus campos, incluyendo la clave hasheada, o {@code null}.
+     * @return El objeto {@link Usuario} con todos sus campos, o {@code null}.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public Usuario findUsuario(int idUsuario)throws  SQLException{
@@ -95,7 +95,7 @@ public class UsuarioRepository {
                     usuarioBD.setSexo(resultSet.getString("sexo"));
                     usuarioBD.setEdad(resultSet.getInt("edad"));
                     usuarioBD.setEmail(resultSet.getString("correo_electronico"));
-                    //usuarioBD.setClave(resultSet.getString("clave_acceso"));
+                    //usuarioBD.setClave(resultSet.getString("clave_acceso")); // Incluido el campo 'clave_acceso'
                     return usuarioBD;
                 }
                 return null;
@@ -139,10 +139,7 @@ public class UsuarioRepository {
     }
 
     /**
-     * Busca un usuario por su email para obtener la clave hasheada y el ID.
-     * <p>
-     * Es crucial para el proceso de autenticación.
-     * </p>
+     * Busca un usuario por su email para obtener la clave hasheada y el ID (para autenticación).
      *
      * @param usuario El objeto {@link Usuario} que contiene el email a buscar.
      * @return El objeto {@link Usuario} con ID, email y clave hasheada, o {@code null}.
@@ -165,10 +162,8 @@ public class UsuarioRepository {
         return null;
     }
 
-    //-----------MICROSERVICIOS Y VALIDACIONES PARA USUARIOS-----------
-
     /**
-     * Verifica si un correo electrónico ya existe en la base de datos.
+     * Verifica si un correo electrónico ya existe en la base de datos (Validación).
      *
      * @param email El correo electrónico a verificar.
      * @return {@code true} si el email ya existe, {@code false} en caso contrario.
@@ -185,7 +180,7 @@ public class UsuarioRepository {
     }
 
     /**
-     * Verifica si un número de teléfono ya existe en la base de datos.
+     * Verifica si un número de teléfono ya existe en la base de datos (Validación).
      *
      * @param telefono El número de teléfono a verificar.
      * @return {@code true} si el teléfono ya existe, {@code false} en caso contrario.

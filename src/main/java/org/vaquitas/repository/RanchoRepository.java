@@ -21,7 +21,7 @@ public class RanchoRepository {
      *
      * @param rancho El objeto {@link Rancho} a guardar.
      * @return El ID (PK) generado por la base de datos.
-     * @throws SQLException Si ocurre un error de base de datos.
+     * @throws SQLException Si ocurre un error de base de datos o si no se obtiene el ID generado.
      */
     public int save(Rancho rancho) throws SQLException{
         String sql="INSERT INTO RANCHO (nombre, locacion) VALUES (?,?)";
@@ -45,7 +45,7 @@ public class RanchoRepository {
      */
     public List<Rancho> findAll() throws SQLException{
         List<Rancho> ranchos = new ArrayList<>();
-        String sql = "SELECT * FROM RANCHO";
+        String sql = "SELECT rancho_id, nombre, locacion FROM RANCHO";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery()){
@@ -53,7 +53,6 @@ public class RanchoRepository {
                 Rancho rancho = new Rancho();
                 rancho.setIdRancho(resultSet.getInt("rancho_id"));
                 rancho.setNombre(resultSet.getString("nombre"));
-                // Se asume que la columna es 'locacion'
                 rancho.setUbicacion(resultSet.getString("locacion"));
                 ranchos.add(rancho);
             }
@@ -65,11 +64,10 @@ public class RanchoRepository {
      * Actualiza el nombre y la ubicación de un rancho existente.
      *
      * @param rancho El objeto {@link Rancho} con el ID y los campos a actualizar.
-     * @return El número de filas afectadas (1 si fue exitoso, 0 si no existe).
+     * @return El número de filas afectadas (1 si fue exitoso).
      * @throws SQLException Si ocurre un error de base de datos o si no se afectó ninguna fila.
      */
     public int update(Rancho rancho) throws SQLException{
-        // Se asume que el nombre de la columna es 'locacion'
         String sql = "UPDATE RANCHO SET locacion = ?, nombre = ? WHERE rancho_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {

@@ -22,14 +22,12 @@ public class AnimalRepository {
 
     /**
      * Persiste un nuevo registro de animal en la tabla ANIMAL.
-     * <p>
-     * Asume que el estatus inicial es 'Activo' (definido en la base de datos o en la capa de servicio).
-     * </p>
      *
      * @param animal El objeto {@link Animal} a guardar.
+     * @return El número de filas afectadas (1).
      * @throws SQLException Si ocurre un error durante la ejecución de la sentencia SQL (e.g., violaciones de restricciones).
      */
-    public void save(Animal animal) throws SQLException {
+    public int save(Animal animal) throws SQLException {
         String sql =
                 "INSERT INTO ANIMAL (arete_id, nombre, fecha_nacimiento, peso, sexo, raza_id) " +
                 "VALUES(?,?,?,?,?,?)";
@@ -41,6 +39,7 @@ public class AnimalRepository {
             statement.setDouble(4, animal.getPeso());
             statement.setString(5, animal.getSexo());
             statement.setInt(6, animal.getRaza().getIdRaza());
+            return statement.executeUpdate();
         }
     }
 
@@ -68,13 +67,12 @@ public class AnimalRepository {
     /**
      * Recupera una lista de animales con estatus 'Activo'.
      *
-     * @return Una lista de objetos {@link Animal}.
+     * @return Una lista de objetos {@link Animal} activos.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public List<Animal> findActivo() throws SQLException {
         List<Animal> ganadoActivo = new ArrayList<>();
-        String sql =
-                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
                 "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
                 "WHERE estado = 'Activo'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -90,13 +88,12 @@ public class AnimalRepository {
     /**
      * Recupera una lista de animales con estatus 'Muerto' o 'Vendido'.
      *
-     * @return Una lista de objetos {@link Animal}.
+     * @return Una lista de objetos {@link Animal} no activos.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public List<Animal> findNoActivo() throws SQLException {
         List<Animal> ganadoNoActivo = new ArrayList<>();
-        String sql =
-                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
                 "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
                 "WHERE estado = 'Muerto' OR estado = 'Vendido' ORDER BY a.arete_id";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -112,13 +109,12 @@ public class AnimalRepository {
     /**
      * Recupera una lista de animales con estatus 'Vendido'.
      *
-     * @return Una lista de objetos {@link Animal}.
+     * @return Una lista de objetos {@link Animal} vendidos.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public List<Animal> findVendido() throws SQLException {
         List<Animal> ganadoVendido = new ArrayList<>();
-        String sql =
-                "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
+        String sql = "SELECT a.*, r.raza_id, r.nombre AS nombre_raza " +
                 "FROM ANIMAL a JOIN RAZA r ON a.raza_id = r.raza_id " +
                 "WHERE estado = 'Vendido'";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -161,21 +157,19 @@ public class AnimalRepository {
      * @return El número de filas afectadas (1 si fue exitoso, 0 si el animal no existe).
      * @throws SQLException Si ocurre un error de base de datos.
      */
-    public void update(Animal animal) throws SQLException {
+    public int update(Animal animal) throws SQLException {
         String sql = "UPDATE ANIMAL SET fecha_baja = ? , estado = 'Muerto' WHERE arete_id = ?";
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             Date sqlDate = Date.valueOf(animal.getFechaBaja());
             statement.setDate(1, sqlDate);
             statement.setInt(2, animal.getIdArete());
+            return statement.executeUpdate();
         }
     }
 
     /**
      * Verifica si un ID de arete ya existe en la base de datos.
-     * <p>
-     * Se usa comúnmente para validar la existencia de un animal antes de crear una entidad relacionada (e.g., Consulta, Venta).
-     * </p>
      *
      * @param idArete El ID del arete a verificar.
      * @return {@code true} si el arete ya existe, {@code false} en caso contrario.

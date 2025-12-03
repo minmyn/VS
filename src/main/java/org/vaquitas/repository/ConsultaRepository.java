@@ -8,9 +8,25 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase de repositorio que maneja las operaciones de persistencia (CRUD) para la entidad {@link Consulta}.
+ *
+ * @author VaquitaSoft
+ * @version 1.0
+ * @since 2025-10-19
+ */
 public class ConsultaRepository {
 
-    //AGREGAR CONUSLTA (POR MEDIO DE RECETA)
+    /**
+     * Persiste una nueva consulta médica en la tabla CONSULTA.
+     * <p>
+     * Se utiliza principalmente como parte del proceso de registro de una receta.
+     * </p>
+     *
+     * @param consulta El objeto {@link Consulta} a guardar.
+     * @return El ID (clave primaria) generado para la nueva consulta.
+     * @throws SQLException Si ocurre un error de base de datos o si no se obtiene el ID generado.
+     */
     public int save(Consulta consulta) throws SQLException{
         String sql ="INSERT INTO CONSULTA (arete_id, padecimiento) VALUES (?,?)";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -24,7 +40,14 @@ public class ConsultaRepository {
         }
     }
 
-    public List<Consulta> findByConsulta (long areteId) throws SQLException{
+    /**
+     * Recupera todas las consultas asociadas a un animal específico.
+     *
+     * @param areteId El ID del arete del animal cuyas consultas se desean obtener.
+     * @return Una lista de objetos {@link Consulta}.
+     * @throws SQLException Si ocurre un error de base de datos.
+     */
+    public List<Consulta> findByConsulta (int areteId) throws SQLException{
         String sql = "SELECT c.consulta_id, " +
                 "c.padecimiento, " +
                 "a.arete_id AS arete, " +

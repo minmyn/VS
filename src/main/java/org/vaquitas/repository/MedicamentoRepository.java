@@ -61,7 +61,7 @@ public class MedicamentoRepository {
     }
 
     /**
-     * Actualiza el nombre de un medicamento por su ID.
+     * Actualiza el nombre y la descripción de un medicamento por su ID.
      *
      * @param medicamento El objeto {@link Medicamento} con el ID y el nuevo nombre/descripción.
      * @return El número de filas afectadas (1 si la actualización fue exitosa).
@@ -72,11 +72,10 @@ public class MedicamentoRepository {
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, medicamento.getNombre());
-            statement.setString(2, medicamento.getDescripcion()); // Incluida la descripción
+            statement.setString(2, medicamento.getDescripcion());
             statement.setInt(3, medicamento.getIdMedicamento());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
-                // Se lanza una excepción más descriptiva para manejar en el controlador
                 throw new SQLException("No se encontró ningún medicamento con el ID: " + medicamento.getIdMedicamento() + " para actualizar.");
             }
             return affectedRows;
@@ -86,8 +85,8 @@ public class MedicamentoRepository {
     /**
      * Busca medicamentos por coincidencias en el campo 'nombre'.
      * <p>
-     * Implementa tres lógicas de búsqueda: si el texto es nulo, si tiene una letra (LIKE 'X%'),
-     * o si tiene más de una letra (LIKE '%X%').
+     * La lógica de búsqueda varía según el texto: si es nulo (recupera todos),
+     * si tiene una letra (LIKE 'X%'), o si tiene más de una letra (LIKE '%X%').
      * </p>
      *
      * @param texto El fragmento de texto a buscar en el nombre.
@@ -102,13 +101,13 @@ public class MedicamentoRepository {
 
         if (texto == null || texto.isEmpty() || "null".equalsIgnoreCase(texto)) {
             sql = "SELECT medicamento_id, nombre, descripcion FROM MEDICAMENTO ORDER BY nombre ASC";
-            useParam = false; //No hay parametro
+            useParam = false;
         } else if (texto.length() <= 1) {
             sql = "SELECT medicamento_id, nombre, descripcion FROM MEDICAMENTO WHERE nombre LIKE ? ORDER BY nombre ASC";
-            param = texto + "%"; // Comienza con...
+            param = texto + "%";
         } else {
             sql = "SELECT medicamento_id, nombre, descripcion FROM MEDICAMENTO WHERE nombre LIKE ? ORDER BY nombre ASC";
-            param = "%" + texto + "%"; // Contiene...
+            param = "%" + texto + "%";
         }
 
         try (Connection connection = DatabaseConfig.getDataSource().getConnection();

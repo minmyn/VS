@@ -41,14 +41,13 @@ public class RecordatorioRepository {
     }
 
     /**
-     * Recupera una lista de todos los recordatorios cuya fecha sea igual o posterior a la fecha actual.
+     * Recupera una lista de todos los recordatorios cuya fecha sea igual o posterior a la fecha actual (recordatorios activos).
      *
      * @return Una lista de objetos {@link Recordatorio} futuros o del día de hoy.
      * @throws SQLException Si ocurre un error de base de datos.
      */
     public List<Recordatorio> findAll() throws SQLException{
         List<Recordatorio> recordatorios = new ArrayList<>();
-        // Solo se muestran recordatorios activos (hoy o futuros)
         LocalDate hoy = LocalDate.now();
         String sql = "SELECT calendario_id, fecha FROM RECORDATORIO WHERE fecha >= ?";
         try(Connection connection = DatabaseConfig.getDataSource().getConnection();
@@ -70,8 +69,7 @@ public class RecordatorioRepository {
     /**
      * Busca un recordatorio existente por su fecha.
      * <p>
-     * Se utiliza para evitar duplicados si la misma fecha de recordatorio ya fue programada.
-     * Si lo encuentra, devuelve el ID del registro existente.
+     * Se utiliza para obtener el ID de un registro si la misma fecha de recordatorio ya existe.
      * </p>
      *
      * @param recordatorio El objeto {@link Recordatorio} que contiene la fecha a buscar.
@@ -86,7 +84,6 @@ public class RecordatorioRepository {
             statement.setDate(1, fechasql);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
-                    // Si se encuentra, se inyecta el ID al objeto pasado como parámetro
                     recordatorio.setIdRecordatorio(resultSet.getInt("calendario_id"));
                     return recordatorio;
                 }
