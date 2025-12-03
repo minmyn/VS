@@ -22,9 +22,6 @@ public class UsuarioRepository {
 
     /**
      * Persiste un nuevo usuario en la tabla USUARIO.
-     * <p>
-     * **Advertencia:** La clave debe estar hasheada antes de llamar a este método.
-     * </p>
      *
      * @param usuario El objeto {@link Usuario} a guardar.
      * @throws SQLException Si ocurre un error de base de datos o si no se afecta ninguna fila.
@@ -39,7 +36,7 @@ public class UsuarioRepository {
             statement.setString(3, usuario.getSexo());
             statement.setInt(4, usuario.getEdad());
             statement.setString(5, usuario.getEmail());
-            //statement.setString(6, usuario.getClave());
+            statement.setString(6, usuario.getClave());
             int affectedRows = statement.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("La inserción del usuario no afectó ninguna fila.");

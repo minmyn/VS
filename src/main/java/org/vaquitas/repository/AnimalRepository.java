@@ -226,7 +226,7 @@ public class AnimalRepository {
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, idArete);
             try (ResultSet resultSet = statement.executeQuery()) {
-                if (!resultSet.next())
+                if (!   resultSet.next())
                     return true; // Retorna true si no existe
                 String estado = resultSet.getString("estado");
                 return !"Activo".equalsIgnoreCase(estado); // Retorna true si es 'Muerto' o 'Vendido'

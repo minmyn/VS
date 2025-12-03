@@ -74,7 +74,7 @@ public class RecetaService {
                 int idArete = consulta.getGanado().getIdArete();
 
                 // 1. Validación de negocio: Ganado activo/existente
-                if (!animalRepository.validateCuidado(idArete))
+                if (animalRepository.validateCuidado(idArete))
                     throw new IllegalArgumentException("El ganado no existe ó no está activo.");
 
                 // 2. Manejar Recordatorio (Reutilizar si existe, o crear si es nuevo)
