@@ -12,7 +12,7 @@ import java.util.List;
  * Clase de servicio que implementa la lógica de negocio para la gestión de {@link Animal}.
  * <p>
  * Coordina las operaciones de validación, persistencia y recuperación de datos de ganado,
- * y maneja las reglas de negocio específicas (e.g., verificar la existencia de raza, arete duplicado).
+ * y maneja las reglas de negocio específicas (e.g., verificar la existencia de raza, arete duplicado, baja).
  * </p>
  *
  * @author VaquitaSoft
@@ -39,7 +39,7 @@ public class AnimalService {
      * <p>
      * Incluye las siguientes reglas de negocio:
      * <ul>
-     * <li>Verifica si la {@link Raza} proporcionada existe.</li>
+     * <li>Verifica si la {@link Raza} proporcionada existe y obtiene su ID.</li>
      * <li>Verifica que el {@code idArete} no esté duplicado.</li>
      * </ul>
      * </p>
@@ -53,12 +53,12 @@ public class AnimalService {
         Raza raza = razaRepository.findRaza(animal.getRaza());
         if (raza == null)
             throw new IllegalArgumentException("Raza no encontrada: El ID o nombre de la raza no existe.");
-        animal.setRaza(raza); // Asigna el objeto Raza completo
+        animal.setRaza(raza);
 
         // Regla 2: Verificar duplicidad del arete
-
         if (animalRepository.existsByIdArete(animal.getIdArete()))
             throw new IllegalArgumentException("Arete duplicado: El ganado con ID " + animal.getIdArete() + " ya existe.");
+
         animalRepository.save(animal);
     }
 
@@ -74,7 +74,7 @@ public class AnimalService {
     }
 
     /**
-     * Recupera una lista de todos los animales con estatus 'Muerto' o 'Vendido'.
+     * Recupera una lista de todos los animales con estatus 'Muerto' o 'Vendido' (no activos).
      *
      * @return Una lista de objetos {@link Animal} inactivos.
      * @throws SQLException Si ocurre un error de base de datos.
@@ -119,7 +119,7 @@ public class AnimalService {
      * <p>
      * Incluye las siguientes reglas de negocio:
      * <ul>
-     * <li>Verifica que el animal exista antes de intentar la baja.</li>
+     * <li>Verifica que el animal exista y obtiene la fecha de nacimiento.</li>
      * <li>Verifica que la {@code fechaBaja} no sea anterior a la {@code fechaNacimiento} del animal.</li>
      * </ul>
      * </p>

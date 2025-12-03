@@ -30,7 +30,8 @@ public class RecordatorioService {
     }
 
     /**
-     * Obtiene la lista completa de todos los recordatorios programados.
+     * Obtiene la lista completa de todos los recordatorios programados, cuya fecha
+     * sea igual o posterior al día actual (recordatorios activos).
      *
      * @return Una lista de objetos {@link Recordatorio}.
      * @throws SQLException Si ocurre un error de base de datos durante la consulta.

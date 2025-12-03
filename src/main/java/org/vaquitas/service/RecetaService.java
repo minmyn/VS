@@ -33,6 +33,11 @@ public class RecetaService {
 
     /**
      * Constructor que inyecta las dependencias de los repositorios.
+     *
+     * @param recetaRepository Repositorio de Receta.
+     * @param recordatorioRepository Repositorio de Recordatorio.
+     * @param consultaRepository Repositorio de Consulta.
+     * @param animalRepository Repositorio de Animal (para validaciones).
      */
     public RecetaService(RecetaRepository recetaRepository,
                          RecordatorioRepository recordatorioRepository,
@@ -63,12 +68,14 @@ public class RecetaService {
     public void guardarReceta(Receta receta) throws SQLException {
         // Inicia la transacción
         try (Connection connection = DatabaseConfig.getDataSource().getConnection()) {
-            connection.setAutoCommit(false);
+            connection.setAutoCommit(false); // Inicia la transacción
             try {
                 Consulta consulta = receta.getConsulta();
+                int idArete = consulta.getGanado().getIdArete();
 
-                // 1. Guardar Consulta
-                int idConsulta = consultaRepository.save(consulta);
+                // 1. Validación de negocio: Ganado activo/existente
+                if (!animalRepository.validateCuidado(idArete))
+                    throw new IllegalArgumentException("El ganado no existe ó no está activo.");
 
                 // 2. Manejar Recordatorio (Reutilizar si existe, o crear si es nuevo)
                 int idRecordatorio;
@@ -81,9 +88,8 @@ public class RecetaService {
                     idRecordatorio = recordatorioEncontrado.getIdRecordatorio();
                 }
 
-                // 3. Validación de negocio: Ganado activo
-                if (animalRepository.validateCuidado(consulta.getGanado().getIdArete()))
-                    throw new IllegalArgumentException("El ganado no existe ó no esta activo");
+                // 3. Guardar Consulta
+                int idConsulta = consultaRepository.save(consulta);
 
                 // 4. Guardar Receta
                 recetaRepository.save(receta, idConsulta, idRecordatorio);
@@ -95,13 +101,14 @@ public class RecetaService {
                 connection.rollback();
                 throw e;
             } finally {
-                connection.setAutoCommit(true);
+                connection.setAutoCommit(true); // Restablece el auto-commit
             }
         }
     }
 
     /**
-     * Recupera una lista de todos los detalles consolidados de las recetas registradas.
+     * Recupera una lista de todos los detalles consolidados de las recetas registradas
+     * (unión de Animal, Consulta, Receta, Medicamento y Recordatorio).
      *
      * @return Una lista de objetos {@link DTOdetalles} con la información completa.
      * @throws SQLException Si ocurre un error de base de datos.

@@ -24,6 +24,9 @@ public class UsuarioService {
 
     /**
      * Constructor que inyecta las dependencias de los repositorios y validadores.
+     *
+     * @param usuarioRepository Repositorio para operaciones de Usuario.
+     * @param usuarioValidator Validador para lógica de negocio de Usuario.
      */
     public UsuarioService (UsuarioRepository usuarioRepository, UsuarioValidator usuarioValidator){
         this.usuarioRepository = usuarioRepository;

@@ -21,6 +21,8 @@ public class RanchoService {
 
     /**
      * Constructor que inyecta la dependencia del repositorio.
+     *
+     * @param ranchoRepository El repositorio para operaciones CRUD de Rancho.
      */
     public RanchoService(RanchoRepository ranchoRepository) {
         this.ranchoRepository=ranchoRepository;
@@ -28,9 +30,6 @@ public class RanchoService {
 
     /**
      * Agrega un nuevo rancho después de verificar si el nombre está duplicado.
-     * <p>
-     * Lanza {@code IllegalArgumentException} si el nombre ya existe.
-     * </p>
      *
      * @param rancho El objeto {@link Rancho} a registrar.
      * @throws SQLException Si ocurre un error de base de datos.

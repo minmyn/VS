@@ -52,7 +52,7 @@ public class MedicamentoService {
     /**
      * Busca medicamentos por coincidencia de texto en el campo 'nombre'.
      *
-     * @param texto El fragmento de texto a buscar.
+     * @param texto El fragmento de texto a buscar (usualmente con comodines como `%texto%`).
      * @return Una lista de objetos {@link Medicamento} que coinciden con la búsqueda.
      * @throws SQLException Si ocurre un error de base de datos.
      */
