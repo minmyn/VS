@@ -12,6 +12,7 @@ import java.time.LocalDate;
  * @author VaquitaSoft
  * @version 1.0
  * @since 2025-10-19
+ * @
  */
 public class Alimento {
     /**

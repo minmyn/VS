@@ -1,10 +1,21 @@
 package org.vaquitas;
 import io.javalin.Javalin;
-import org.eclipse.jetty.http.HttpMethod;
 import org.vaquitas.config.Inicio;
-import org.vaquitas.controller.JwtMiddleware;
-import org.vaquitas.controller.TokenManager;
-
+/**
+ * Clase principal que inicializa y configura el servidor HTTP Javalin
+ * para la aplicación VaquitaSoft.
+ * <p>
+ * Se encarga de:
+ * <ul>
+ * <li>Configurar las reglas de CORS (Cross-Origin Resource Sharing).</li>
+ * <li>Habilitar la vista general de rutas.</li>
+ * <li>Definir el puerto (8548).</li>
+ * <li>Registrar todas las rutas (endpoints) de la aplicación a través de la clase {@link org.vaquitas.config.Inicio}.</li>
+ * </ul>
+ *
+ * @since 1.0
+ * @author VaquitaSoft
+ */
 public class Main {
     public static void main(String[] args) {
         Javalin app = Javalin.create( javalinConfig ->{
