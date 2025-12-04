@@ -42,15 +42,15 @@ public class JwtMiddleware {
      * @param app La instancia de {@link Javalin} de la aplicación.
      */
     public void apply(Javalin app) {
-        // Rutas protegidas (descomentar para aplicar la seguridad) :D
-        // app.before("/alimentos*", this::validateJwt);
-        // app.before("/ganado*", this::validateJwt);
-        // app.before("/usuarios", this::validateJwt);
-        // app.before("/usuarios/{id}", this::validateJwt);
-        // app.before("/receta*", this::validateJwt);
-        // app.before("/medicamentos*", this::validateJwt);
-        // app.before("/razas*", this::validateJwt);
-        // app.before("/ranchos*", this::validateJwt);
+         //Rutas protegidas :D
+         app.before("/alimentos*", this::validateJwt);
+         app.before("/ganado*", this::validateJwt);
+         app.before("/usuarios", this::validateJwt);
+         app.before("/usuarios/{id}", this::validateJwt);
+         app.before("/receta*", this::validateJwt);
+         app.before("/medicamentos*", this::validateJwt);
+         app.before("/razas*", this::validateJwt);
+         app.before("/ranchos*", this::validateJwt);
 
     }
 
