@@ -87,6 +87,16 @@ public class VentaControl {
         }
     }
 
+    /**
+     * Actualiza el precio de venta y el peso final de una venta.
+     *
+     * <p>
+     * Procesa la petición GET a {@code /ventas/{id]}}.
+     * </p>
+     *
+     * @param context El contexto de la petición HTTP de Javalin.
+     */
+
     public void actualizarVenta(Context context){
         try {
             int idVenta = Integer.parseInt(context.pathParam("id"));
