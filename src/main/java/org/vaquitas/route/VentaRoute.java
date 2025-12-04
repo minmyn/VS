@@ -41,5 +41,6 @@ public class VentaRoute {
     public void register (Javalin app){
         app.post("/ventas/{id}", ventaControl::registrarVenta);
         app.get("/ventas", ventaControl::verVentas);
+        app.patch("/ventas", ventaControl::actualizarVenta);
     }
 }

@@ -1,6 +1,7 @@
 package org.vaquitas.controller;
 
 import io.javalin.http.Context;
+import org.vaquitas.model.Alimento;
 import org.vaquitas.model.Animal;
 import org.vaquitas.model.Venta;
 import org.vaquitas.service.VentaService;
@@ -43,40 +44,26 @@ public class VentaControl {
      */
     public void registrarVenta(Context context){
         try{
-            // Extrae y valida el path parameter 'id'
             int idArete = Integer.parseInt(context.pathParam("id"));
-
-            // Mapea el cuerpo de la petición al objeto Venta
             Venta nuevaVenta = context.bodyAsClass(Venta.class);
             Animal animal = new Animal();
             animal.setIdArete(idArete);
-            nuevaVenta.setGanado(animal); // Asocia el ID del arete del path al objeto Venta
-
-            // Validación de campos del objeto Venta
+            nuevaVenta.setGanado(animal);
             VentaValidator ventaValidator = new VentaValidator();
             Map<String,String> errores = ventaValidator.validarVenta(nuevaVenta);
-
             if (!errores.isEmpty()){
                 context.status(400).json(Map.of("estado", false, "errores", errores));
                 return;
             }
-
-            // Lógica de negocio en la capa de servicio
             ventaService.registrarVenta(nuevaVenta);
-
-            // Respuesta exitosa
             context.status(201).json(Map.of("estado", true, "mensaje", "Venta registrada con éxito", "data", nuevaVenta));
         }catch (NumberFormatException e){
-            // Error al parsear el path parameter
             context.status(400).json(Map.of("estado", false, "mensaje", "El ID del arete debe ser un número entero válido."));
         } catch (IllegalArgumentException e){
-            // Manejo de errores de negocio (Ganado inexistente, vendido, fechas inválidas)
             context.status(404).json(Map.of("estado", false, "mensaje", e.getMessage()));
         } catch (SQLException e) {
-            // Error de conexión o consulta a la base de datos
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {
-            // Error inesperado
             context.status(500).json(Error.getApiServiceError());
         }
     }
@@ -93,6 +80,21 @@ public class VentaControl {
         try{
             List<Venta> ganadoVendido = ventaService.verVentas();
             context.status(200).json(ganadoVendido);
+        } catch (SQLException e) {
+            context.status(500).json(Error.getApiDatabaseError());
+        } catch (Exception e) {
+            context.status(500).json(Error.getApiServiceError());
+        }
+    }
+
+    public void actualizarVenta(Context context){
+        try {
+            int idVenta = Integer.parseInt(context.pathParam("id"));
+            Venta ventaActualizar = context.bodyAsClass(Venta.class);
+
+            ventaActualizar.setIdVenta(idVenta);
+            ventaService.actualizarVenta(ventaActualizar);
+
         } catch (SQLException e) {
             context.status(500).json(Error.getApiDatabaseError());
         } catch (Exception e) {

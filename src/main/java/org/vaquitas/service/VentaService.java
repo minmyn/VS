@@ -6,7 +6,6 @@ import org.vaquitas.repository.AnimalRepository;
 import org.vaquitas.repository.VentaRepository;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -55,22 +54,14 @@ public class VentaService {
      */
     public void registrarVenta(Venta venta) throws SQLException {
         int idArete = venta.getGanado().getIdArete();
-
-        // 1. Validación de existencia y obtención de datos base
         Animal animalBD = animalRepository.validateVenta(idArete);
         if (animalBD == null)
             throw new IllegalArgumentException("Ganado no encontrado con arete ID: " + idArete);
-
-        // 2. Validación de venta previa
         if (ventaRepository.findVendido(idArete)){
             throw new IllegalArgumentException("El ganado ya fue vendido previamente.");
         }
-
-        // 3. Regla de negocio: Validar que la fecha de baja no sea anterior a la de nacimiento
         if (venta.getFechaBaja().isBefore(animalBD.getFechaNacimiento()))
             throw new IllegalArgumentException("La fecha de baja no puede ser menor la fecha de nacimiento.");
-
-        // 4. Registrar Venta.
         ventaRepository.save(venta);
     }
 
@@ -82,5 +73,14 @@ public class VentaService {
      */
     public List<Venta> verVentas()throws SQLException{
         return ventaRepository.findVendidos();
+    }
+
+    /**
+     * Actualiza el precio de venta y el peso final de una venta.
+     *
+     * @throws SQLException Si ocurre un error de base de datos.
+     * */
+    public void actualizarVenta(Venta venta)throws SQLException {
+        ventaRepository.update(venta);
     }
 }
